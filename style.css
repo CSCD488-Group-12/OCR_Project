@@ -60,7 +60,6 @@ body {
 
 {box-sizing: border-box;}
 
-/* Button used to open the contact form - fixed at the bottom of the page */
 .btn-login {
   background-color: #555;
   color: white;
@@ -125,12 +124,10 @@ body {
   opacity: 0.8;
 }
 
-/* Add a red background color to the cancel button */
 .form-container .cancel {
   background-color: red;
 }
 
-/* Add some hover effects to buttons */
 .form-container .btn:hover, .open-button:hover {
   opacity: 1;
 }
