@@ -1,0 +1,82 @@
+<!DOCTYPE html>
+<link rel="stylesheet" href="style.css">
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <title>Noted - The Ultimate Note Conversion Tool</title>
+</head>
+
+<body>
+    <!--- Header -->
+    <div class = "topnav">
+        <a href="/userpage.html">Home</a>
+        <a href="#">Features</a>
+        <a href="#">About</a>
+        <button type="button" class="btn-login" onclick="openLoginForm()">Log In</button>
+        <button type="button" class="btn-createaccount" onclick="openCreateForm()">Create Account</button>
+
+    </div>
+
+    <!--- Welcome  -->
+    <div id = "welcome">
+        <label id="welcomemessage">Welcome!</label>
+    </div>
+
+    <!--- Log In Popup  -->
+    <div class="popup-form" id="login-form">
+        <form action="/action_page.php" class="form-container">
+            <h1>Log In</h1>
+
+            <label for="email">Email</label>
+            <input type="text" placeholder="Enter Email" name="email" required>
+
+            <label for="pwd">Password</label>
+            <input type="text" placeholder="Enter Password" name="pwd" required>
+            
+            <button type="submit" class="btn">Log In</button>
+            <button type="button" class="btn cancel" onclick="closeLoginForm()">Close</button>
+        </form>
+    </div>
+
+    <!--- Create Account Popup  -->
+    <div class="popup-form" id="create-form">
+        <form action="/action_page.php" class="form-container">
+            <h1>Create Account</h1>
+
+            <label for="email">Email</label>
+            <input type="text" placeholder="Enter Email" name="email" required>
+
+            <label for="pwd">Password</label>
+            <input type="text" placeholder="Enter Password" name="pwd" required>
+            
+            <button type="submit" class="btn">Create Account</button>
+            <button type="button" class="btn cancel" onclick="closeCreateForm()">Close</button>
+        </form>
+    </div>
+
+
+
+
+    <script>
+        function openLoginForm() {
+            document.getElementById("login-form").style.display = "block";
+          }
+          
+          function closeLoginForm() {
+            document.getElementById("login-form").style.display = "none";
+          }
+
+          function openCreateForm() {
+            document.getElementById("create-form").style.display = "block";
+          }
+          
+          function closeCreateForm() {
+            document.getElementById("create-form").style.display = "none";
+          }
+    </script>
+
+</body>
+
+
+</html>

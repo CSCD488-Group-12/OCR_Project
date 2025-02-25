@@ -1,0 +1,121 @@
+<!DOCTYPE html>
+<link rel="stylesheet" href="style.css">
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <title>Userpage</title>
+</head>
+
+<body>
+    <!--- Header -->
+    <div class = "topnav">
+        <a href="/index.html">Home</a>
+        <a href="/userpage.html">My Notes</a>
+        <a href="#">My Account</a>
+        <button type="button" class="btn-login" onclick="logOut()">Log Out</button>
+    
+    </div>
+
+    <!--- Main Body-->
+    <div class = "mainbody">
+        <!--- New Note-->
+        <div class = "new-note">
+            <button type="button" class="btn-newnote" id="newnote" onclick="changeUploadForm(), changeButton()">New Note</button>
+
+            <!-- Upload photo box-->
+            <div class="upload-form" id="new-note-form">
+                <form action="/action_page.php" class="form-container" id="upload-form">
+                    <!-- Upload section (left)-->
+                    <div class="upload" id="upload">
+                        <label>Drag and drop images to upload</label>
+                        <label>or</label>
+                        <input type="file" id="fileInput" accept="image/*">
+                    </div>
+
+                    <!-- Upload status (right)-->
+
+                    <div class="current-uploads" id="current-uploads">
+                        <h4>Uploads</h4>
+
+                  
+                    
+                    <button type="submit" class="btn-upload" onclick="uploadSelections()">Upload</button>
+
+                    </div>
+
+                    
+                </form>
+            </div>
+
+        </div>
+
+        <!--- Recent Notes-->
+        <div class = "recent-notes">
+            
+        </div>
+
+        <!--- Collections-->
+        <div class = "collections">
+            
+        </div>
+
+        <!--- All Notes -->
+        <div class = "all-notes">
+            
+        </div>
+
+
+
+
+
+
+    </div>
+
+
+
+
+
+
+
+
+
+
+
+
+
+    <script>
+        function logOut(){
+
+        }
+
+        function changeUploadForm() {
+            if (document.getElementById("newnote").textContent == 'New Note') {
+                document.getElementById("new-note-form").style.display = "block";
+            } else {
+                closeUploadForm();
+                
+            }
+          }
+
+        function closeUploadForm() {
+            document.getElementById("new-note-form").style.display = "none";
+        }
+
+        function changeButton() {
+            if (document.getElementById("newnote").textContent == 'New Note') {
+                document.querySelector('#newnote').textContent = 'Cancel';
+            } else {
+                document.querySelector('#newnote').textContent = 'New Note';
+            }
+            
+        }
+
+        function uploadSelections(){
+
+        }
+
+    </script>
+
+</body>
+</html>
