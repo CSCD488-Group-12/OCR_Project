@@ -40,7 +40,14 @@
 
                   
                     
-                    <button type="submit" class="btn-upload" onclick="uploadSelections()">Upload</button>
+                    <button type="submit" class="btn-upload" onclick="convertSelections()">Convert</button>
+
+                        <!-- Need window for image cropping -->
+                        <!-- <div class="imagecropping" id="imagecropping">
+
+
+                            <button type="submit" class="btn-upload" onclick="uploadSelections()">Convert</button>
+                        </div> -->
 
                     </div>
 
@@ -64,10 +71,6 @@
         <div class = "all-notes">
             
         </div>
-
-
-
-
 
 
     </div>
@@ -108,7 +111,10 @@
             } else {
                 document.querySelector('#newnote').textContent = 'New Note';
             }
-            
+        }
+
+        function convertSelections() {
+
         }
 
         function uploadSelections(){
