@@ -28,8 +28,8 @@
                 <form action="/action_page.php" class="form-container" id="upload-form">
                     <!-- Upload section (left)-->
                     <div class="upload" id="upload">
-                        <label>Drag and drop images to upload</label>
-                        <label>or</label>
+                        <label>Drag and drop images to upload</label><br>
+                        <label>or</label><br>
                         <input type="file" id="fileInput" accept="image/*">
                     </div>
 
@@ -37,10 +37,11 @@
 
                     <div class="current-uploads" id="current-uploads">
                         <h4>Uploads</h4>
+                        <div id="preview"></div>
 
                   
                     
-                    <button type="submit" class="btn-upload" onclick="convertSelections()">Convert</button>
+                        <button type="submit" class="btn-upload" onclick="convertSelections()">Convert</button>
 
                         <!-- Need window for image cropping -->
                         <!-- <div class="imagecropping" id="imagecropping">
@@ -114,12 +115,45 @@
         }
 
         function convertSelections() {
-
+            //send to Azure
         }
 
         function uploadSelections(){
 
         }
+
+
+        document.getElementById('fileInput').addEventListener('change', function(event) {
+            var files = event.target.files;
+            var preview = document.getElementById('preview');
+    
+            preview.innerHTML = '';
+    
+            for (var i = 0; i < files.length; i++) {
+              var file = files[i];
+    
+              if (!file.type.match('image.*')) {
+                continue;
+              }
+    
+              var imgContainer = document.createElement('div');
+              imgContainer.style.marginBottom = '1px';
+              imgContainer.style.height = '200px';
+
+              var img = document.createElement('img');
+              img.src = URL.createObjectURL(file);
+              img.style.height = '400px';
+              img.style.display = 'block';
+              img.style.marginBottom = '1px';
+
+              var fileInfo = document.createElement('p');
+              fileInfo.textContent = `File Name: ${file.name}, Type: ${file.type}, Size: ${file.size} bytes`;
+              fileInfo.style.fontSize = '14px';
+              fileInfo.style.marginTop = '0';
+    
+              preview.appendChild(imgContainer);
+            }
+          });
 
     </script>
 
