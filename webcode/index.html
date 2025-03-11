@@ -11,7 +11,6 @@
     <!--- Header -->
     <div class = "topnav">
         <a href="/index.html">Home</a>
-        <a href="/userpage.html">My Notes</a>
         <a href="#">My Account</a>
         <button type="button" class="btn-login" onclick="logOut()">Log Out</button>
     
@@ -25,43 +24,30 @@
 
             <!-- Upload photo box-->
             <div class="upload-form" id="new-note-form">
-                <form action="/action_page.php" class="form-container" id="upload-form">
+                
 
-                    <div id="img-preview"></div>
-
-                    <button id="crop-button" onclick="cropSelections()">Upload Photo</button>
-
+                    <canvas id="imageCanvas" class="hidden"></canvas>
+                    <canvas id="croppedCanvas" class="hidden"></canvas>
+                    <br>
+                    <button id="crop-button" onclick="document.getElementById('fileInput').click();">Upload Photo</button>
+                    <button id="submitBtn" class="hidden">Submit</button>
+                    <button id="undoBtn" class="hidden">Undo</button>
                     <button id="convert-button" onclick="convertSelections()">Convert File</button>
-                   
-                   <script>
+                    <input type="file" id="fileInput" accept="image/*" style="display:none">
 
-                    /*
-                    <!-- Upload section (left)-->
-                    <div class="upload" id="upload">
-                        <label>Drag and drop images to upload</label><br>
-                        <label>or</label><br>
-                        <input type="file" id="fileInput" accept="image/*">
-                    </div>
-
-                    <!-- Upload status (right)-->
-
-                    <div class="current-uploads" id="current-uploads">
-                        <h4>Uploads</h4>
-                        <div id="preview"></div>
-
-                        <button type="submit" class="btn-upload" onclick="convertSelections()">Upload Photo(s)</button>
-                        
-                        <!-- <button type="submit" class="btn-upload" onclick="convertSelections()">Convert</button> -->
-
-
-                    </div>
-                    */
-                </script>
-                   
-                    
-                </form>
             </div>
 
+        </div>
+
+        <div id="confirmationModal" class="modal hidden">
+            <div class="modal-content">
+                <span id="closeModal" class="close">&times;</span>
+                <p>Are you sure you'd like to use this image for the OCR?</p>
+                <img id="previewImage" src="" alt="Selected Image" style="max-width: 80%; max-height: 300px; margin: 10px 0;">
+                <br>
+                <button id="confirmBtn">Confirm</button>
+                <button id="cancelBtn">Cancel</button>
+            </div>
         </div>
 
         <!--- Recent Notes-->
@@ -109,21 +95,30 @@
         }
 
         function disableConvertButton() {
-            document.getElementById("convert-button").disabled = "disabled"
+            document.getElementById("convert-button").disabled = true;
         }
 
         function enableConvertButton() {
-            document.getElementById("convert-button").disabled = "false"
+            document.getElementById("convert-button").disabled = false;
         }
 
         function cropSelections() {
-            //run python script
+
+            
             enableConvertButton();
             
         }
 
-        function convertSelections() {
-            //send to Azure
+        function convertSelections(dataUrl, filename) {
+            if (!selectedImageData) {
+                alert("No image selected for conversion!");
+                return;
+            }
+
+            const link = document.createElement("a");
+            link.href = dataUrl;
+            link.download = filename;
+            link.click();
         }
 
         function uploadSelections(){
@@ -132,39 +127,138 @@
 
         disableConvertButton();
 
-        /*
-        document.getElementById('fileInput').addEventListener('change', function(event) {
-            var files = event.target.files;
-            var preview = document.getElementById('preview');
-    
-            preview.innerHTML = '';
-    
-            for (var i = 0; i < files.length; i++) {
-              var file = files[i];
-    
-              if (!file.type.match('image.*')) {
-                continue;
-              }
-    
-              var imgContainer = document.createElement('div');
-              imgContainer.style.marginBottom = '1px';
-              imgContainer.style.height = '200px';
+            const fileInput = document.getElementById("fileInput");
+            const imageCanvas = document.getElementById("imageCanvas");
+            const croppedCanvas = document.getElementById("croppedCanvas");
+            const submitBtn = document.getElementById("submitBtn");
+            const undoBtn = document.getElementById("undoBtn");
+            const ctx = imageCanvas.getContext("2d");
 
-              var img = document.createElement('img');
-              img.src = URL.createObjectURL(file);
-              img.style.height = '400px';
-              img.style.display = 'block';
-              img.style.marginBottom = '1px';
+            const confirmBtn = document.getElementById("confirmBtn"); //THIS CONFIRM BUTTON WILL BE USED TO SEND THE PHOTO TO THE OCR MODEL
+            const cancelBtn = document.getElementById("cancelBtn");
+            const confirmationModal = document.getElementById("confirmationModal");
+            const closeModal = document.getElementById("closeModal");
 
-              var fileInfo = document.createElement('p');
-              fileInfo.textContent = `File Name: ${file.name}, Type: ${file.type}, Size: ${file.size} bytes`;
-              fileInfo.style.fontSize = '14px';
-              fileInfo.style.marginTop = '0';
-    
-              preview.appendChild(imgContainer);
-            }
-          });
-          */
+
+            let img = new Image();
+            let startX, startY, endX, endY;
+            let isCropping = false;
+            let isCropped = false;
+            let originalImageData = null;
+
+            fileInput.addEventListener("change", (event) => {
+                const file = event.target.files[0];
+                if (file) {
+                    const reader = new FileReader();
+                    reader.onload = (e) => {
+                        img.onload = () => {  
+                            const maxWidth = 280;
+                            const maxHeight = 250;
+
+                            let scale = Math.min(maxWidth/img.width, maxHeight/img.height);
+                            imageCanvas.width = img.width * scale;
+                            imageCanvas.height = img.height * scale;
+
+                            ctx.drawImage(img, 0, 0, imageCanvas.width, imageCanvas.height);
+                            originalImageData = imageCanvas.toDataURL("image/png");
+                            imageCanvas.classList.remove("hidden");
+                            submitBtn.classList.remove("hidden");
+                            undoBtn.classList.remove("hidden");
+                            isCropped = false;
+                        };
+                        img.src = e.target.result;
+                    };
+                    reader.readAsDataURL(file);
+                }
+                cropSelections();
+            });
+    //=================================================================================================
+                imageCanvas.addEventListener("mousedown", (e) => {
+                const rect = imageCanvas.getBoundingClientRect();
+                startX = e.clientX - rect.left;
+                startY = e.clientY - rect.top;
+                isCropping = true;
+            });
+
+            imageCanvas.addEventListener("mousemove", (e) => {
+                if (isCropping) {
+                    const rect = imageCanvas.getBoundingClientRect();
+                    endX = e.clientX - rect.left;
+                    endY = e.clientY - rect.top;
+                    ctx.clearRect(0, 0, imageCanvas.width, imageCanvas.height);
+                    ctx.drawImage(img, 0, 0);
+                    ctx.strokeStyle = "green";
+                    ctx.lineWidth = 2;
+                    ctx.strokeRect(startX, startY, endX - startX, endY - startY);
+                }
+            });
+
+            imageCanvas.addEventListener("mouseup", () => {
+                isCropping = false;
+                const width = Math.abs(endX - startX);
+                const height = Math.abs(endY - startY);
+                const x = Math.min(startX, endX);
+                const y = Math.min(startY, endY);
+
+                if (width > 0 && height > 0) {
+                    // Create cropped image
+                    const croppedCtx = croppedCanvas.getContext("2d");
+                    croppedCanvas.width = img.width;  // Set to original size
+                    croppedCanvas.height = img.height; // Set to original size
+
+                    // Draw cropped area scaled to original size
+                    croppedCtx.drawImage(imageCanvas, x, y, width, height, 0, 0, img.width, img.height);
+                    croppedCanvas.classList.remove("hidden");
+                    isCropped = true; // Mark as cropped
+                }
+            });
+        //=============================================================================================================
+            let selectedImageData = null;
+
+        // Handle submit button click
+            submitBtn.addEventListener("click", () => {
+                if (isCropped) {
+                    // Save cropped image data for preview
+                    selectedImageData = croppedCanvas.toDataURL("image/png");
+            }   else {
+                    // Save original image data for preview
+                    selectedImageData = originalImageData;
+                }
+                // Show modal with selected image
+                const previewImage = document.getElementById("previewImage");
+                previewImage.src = selectedImageData;
+                document.getElementById("confirmationModal").classList.remove("hidden");
+            });
+        //=====================================================================================================================
+
+            // Handle undo button click
+            undoBtn.addEventListener("click", () => {
+                ctx.clearRect(0, 0, imageCanvas.width, imageCanvas.height);
+                ctx.drawImage(img, 0, 0);
+                croppedCanvas.classList.add("hidden");  // Hide the cropped canvas
+                croppedCanvas.width = 0;  // Clear cropped canvas
+                croppedCanvas.height = 0; // Clear cropped canvas
+                isCropped = false;
+            });
+
+
+            confirmBtn.addEventListener("click", () => {
+            // Proceed to download the selected image
+                downloadImage(selectedImageData, isCropped ? "cropped-image.png" : "original-image.png");
+                confirmationModal.classList.add("hidden");
+            });
+
+        // Handle cancel button click
+            cancelBtn.addEventListener("click", () => {
+                confirmationModal.classList.add("hidden");
+            });
+
+        // Handle close (X) button click
+            closeModal.addEventListener("click", () => {
+                    confirmationModal.classList.add("hidden");
+                });
+
+       
     </script>
 
 </body>
