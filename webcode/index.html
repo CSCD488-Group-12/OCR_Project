@@ -84,6 +84,7 @@
 
         function closeUploadForm() {
             document.getElementById("new-note-form").style.display = "none";
+            resetCanvas();
         }
 
         function changeButton() {
@@ -121,11 +122,122 @@
             link.click();
         }
 
-        function uploadSelections(){
+        function redrawImage() {
+            ctx.clearRect(0,0, imageCanvas.width, imageCanvas.height);
+            ctx.save();
+            ctx.translate(originX, originY);
+            ctx.scale(scale, scale);
+            ctx.drawImage(img, 0, 0, imageCanvas.width, imageCanvas.height);
+            ctx.restore();
+            
+            if (isCropping) {
+                cropperOutline();
+            }
+        }
+
+        // resets new note box
+        function resetCanvas() {
+            ctx.clearRect(0, 0, imageCanvas.width, imageCanvas.height);
+            imageCanvas.classList.add("hidden");
+            submitBtn.classList.add("hidden");
+            undoBtn.classList.add("hidden");
+            img.src = "";
+            fileInput.value = "";
+        }
+
+        function zoomAndPan() {
+            let isDragging = false;
+            let dragStartX, dragStartY;
+
+            imageCanvas.addEventListener('mousedown', (e) => {
+                if (isCropping) return;
+                isDragging = true;
+                dragStartX = e.clientX - originX;
+                dragStartY = e.clientY - originY;
+            });
+
+            imageCanvas.addEventListener('mousemove', (e) => {
+                if (isCropping || !isDragging) return;
+                originX = e.clientX - dragStartX;
+                originY = e.clientY - dragStartY;
+                redrawImage();
+            });
+
+            imageCanvas.addEventListener('mouseup', (e) => {
+                isDragging = false;
+            });
+
+            imageCanvas.addEventListener('wheel', (e) => {
+                e.preventDefault();
+                const zoomFactor = 0.05
+                const delta = e.deltaY > 0 ? -zoomFactor : zoomFactor;
+                const newScale = scale + delta;
+                
+                if (newScale > 0.2 && newScale < 5) {
+                    scale = newScale;
+                    redrawImage();
+                }
+            });
+
+            imageCanvas.addEventListener('touchstart', (e) => {
+                if (e.touches.length === 2) {
+                    e.preventDefault();
+                    dragStartX = e.touches[0].clientX - originX;
+                    dragStartY = e.touches[0].clientY - originY;
+                }
+            });
+
+            imageCanvas.addEventListener('touchmove', (e) => {
+                if (e.touches.length === 2) {
+                    e.preventDefault();
+                    originX = e.touches[0].clientX - dragStartX;
+                    originY = e.touches[0].clientY - dragStartY;
+                    redrawImage();
+                }
+            });
+
+            imageCanvas.addEventListener('gesturestart', (e) => {
+                e.preventDefault();
+            });
+
+            imageCanvas.addEventListener('gesturechange', (e) => {
+                e.preventDefault();
+                const zoomFactor = e.scale -1;
+                scale += zoomFactor * 0.1;
+                scale = Math.min(Math.max(0.2, scale), 5);
+                redrawImage();
+            });
 
         }
 
-        disableConvertButton();
+        function enableCropper() {
+            imageCanvas.addEventListener('mousedown', (e) => {
+                if (isCropping) return;
+                isCropping = true;
+                startX = (e.offsetX - originX)/scale;
+                startY = (e.offsetY - originY)/scale;
+            });
+
+            imageCanvas.addEventListener('mousemove', (e) => {
+                if (!isCropping) return;
+                endX = (e.offsetX - originX)/scale;
+                endY = (e.offsetY - originY)/scale;
+                redrawImage();
+                cropperOutline();
+            });
+
+            imageCanvas.addEventListener('mouseup', () => {
+                isCropping = false;
+            });
+        }
+
+        function cropperOutline() {
+            ctx.strokeStyle = 'green';
+            ctx.lineWidth = 2;
+            ctx.strokeRect(startX , startY, endX - startX, endY - startY);
+        }
+
+            disableConvertButton();
 
             const fileInput = document.getElementById("fileInput");
             const imageCanvas = document.getElementById("imageCanvas");
@@ -145,6 +257,9 @@
             let isCropping = false;
             let isCropped = false;
             let originalImageData = null;
+            let scale = 1;
+            let originX = 0;
+            let originY = 0;
 
             fileInput.addEventListener("change", (event) => {
                 const file = event.target.files[0];
@@ -165,6 +280,9 @@
                             submitBtn.classList.remove("hidden");
                             undoBtn.classList.remove("hidden");
                             isCropped = false;
+
+                            zoomAndPan();
+                            enableCropper();
                         };
                         img.src = e.target.result;
                     };
@@ -234,7 +352,7 @@
             // Handle undo button click
             undoBtn.addEventListener("click", () => {
                 ctx.clearRect(0, 0, imageCanvas.width, imageCanvas.height);
-                ctx.drawImage(img, 0, 0);
+                ctx.drawImage(img, 0, 0, imageCanvas.width, imageCanvas.height);
                 croppedCanvas.classList.add("hidden");  // Hide the cropped canvas
                 croppedCanvas.width = 0;  // Clear cropped canvas
                 croppedCanvas.height = 0; // Clear cropped canvas
