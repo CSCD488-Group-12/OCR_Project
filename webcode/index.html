@@ -105,14 +105,6 @@
             }
         }
 
-        function disableConvertButton() {
-            document.getElementById("convert-button").disabled = true;
-        }
-
-        function enableConvertButton() {
-            document.getElementById("convert-button").disabled = false;
-        }
-
         function convertSelections(dataUrl, filename) {
             if (!selectedImageData) {
                 alert("No image selected for conversion!");
@@ -153,7 +145,7 @@
             croppedCanvas.width = 0;
             croppedCanvas.height = 0;
             isCropped = false;
-            disableConvertButton();
+            
         }
 
         function zoomAndPan() {
