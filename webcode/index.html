@@ -4,16 +4,23 @@
 
 <head>
     <meta charset="UTF-8">
-    <title>Userpage</title>
+    <link href='https://fonts.googleapis.com/css?family=Inter' rel='stylesheet'>
+    <style>
+        body {
+            font-family: 'Inter';font-size: 22px;
+        }
+    </style>
+    <title>OCR Note Converter</title>
 </head>
 
 <body>
     <!--- Header -->
     <div class = "topnav">
         <a href="/index.html">Home</a>
+        <div class="topnav-right">
         <a href="#">My Account</a>
         <button type="button" class="btn-login" onclick="logOut()">Log Out</button>
-    
+        </div>
     </div>
 
     <!--- Main Body-->
@@ -68,6 +75,10 @@
 
     </div>
 
+    <div class="footer">
+        Uicons by <a href="https://www.flaticon.com/uicons">Flaticon</a>
+    </div>
+
     <script>
         function logOut(){
 
@@ -103,13 +114,6 @@
             document.getElementById("convert-button").disabled = false;
         }
 
-        function cropSelections() {
-
-            
-            enableConvertButton();
-            
-        }
-
         function convertSelections(dataUrl, filename) {
             if (!selectedImageData) {
                 alert("No image selected for conversion!");
@@ -143,6 +147,14 @@
             undoBtn.classList.add("hidden");
             img.src = "";
             fileInput.value = "";
+
+            const croppedCtx = croppedCanvas.getContext("2d");
+            croppedCtx.clearRect(0,0, croppedCanvas.width, croppedCanvas.height);
+            croppedCanvas.classList.add("hidden");
+            croppedCanvas.width = 0;
+            croppedCanvas.height = 0;
+            isCropped = false;
+            disableConvertButton();
         }
 
         function zoomAndPan() {
@@ -251,7 +263,6 @@
             const confirmationModal = document.getElementById("confirmationModal");
             const closeModal = document.getElementById("closeModal");
 
-
             let img = new Image();
             let startX, startY, endX, endY;
             let isCropping = false;
@@ -288,7 +299,7 @@
                     };
                     reader.readAsDataURL(file);
                 }
-                cropSelections();
+                enableConvertButton();
             });
     //=================================================================================================
                 imageCanvas.addEventListener("mousedown", (e) => {
@@ -321,11 +332,11 @@
                 if (width > 0 && height > 0) {
                     // Create cropped image
                     const croppedCtx = croppedCanvas.getContext("2d");
-                    croppedCanvas.width = img.width;  // Set to original size
-                    croppedCanvas.height = img.height; // Set to original size
+                    croppedCanvas.width = width;  // Set to original size
+                    croppedCanvas.height = height; // Set to original size
 
                     // Draw cropped area scaled to original size
-                    croppedCtx.drawImage(imageCanvas, x, y, width, height, 0, 0, img.width, img.height);
+                    croppedCtx.drawImage(imageCanvas, x, y, width, height, 0, 0, width, height);
                     croppedCanvas.classList.remove("hidden");
                     isCropped = true; // Mark as cropped
                 }
