@@ -229,3 +229,12 @@ body {
   font-size: small;
 }
   
+#account-details-box{
+  position:absolute;
+  width: 80%;
+  height: 70%;
+  left: 20;
+  top: 20;
+  border-radius: 2;
+  border-color: #000000;
+}
