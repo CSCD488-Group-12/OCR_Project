@@ -228,13 +228,43 @@ body {
   text-align: center;
   font-size: small;
 }
-  
-#account-details-box{
-  position:absolute;
+
+.account-details-box{
+  position:fixed;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%,-50%);
   width: 80%;
   height: 70%;
   left: 20;
   top: 20;
-  border-radius: 2;
+  border: 2px solid #2038aa;
   border-color: #000000;
 }
+
+.vl{
+  border-left: 2px solid #2038aa;
+  top: 10%;
+  position: absolute;
+  height: 70%;
+  margin: 0 auto;
+  transform: rotate(180deg);
+  left: 25%;
+}
+
+.accountnav{
+  position: absolute;
+  top: 50%;
+  left: 0%;
+}
+
+.user-details{
+  position: absolute;
+  left: 40%;
+}
+
+.userid{
+  font-family: Inter;
+  font-size: xx-large;
+}
+  
