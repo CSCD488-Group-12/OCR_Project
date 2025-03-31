@@ -1,54 +1,39 @@
 <!DOCTYPE html>
-<link rel="stylesheet" href="style.css">
 <html lang="en">
-
-    <head>
-        <meta charset="UTF-8">
-        <link href='https://fonts.googleapis.com/css?family=Inter' rel='stylesheet'>
-        <style>
-            body {
-                font-family: 'Inter';font-size: 22px;
-            }
-        </style>
-        <title>OCR Note Converter</title>
-    </head>
-
-
-
+<head>
+    <meta charset="UTF-8">
+    <title>My Account</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="styles.css">
+    <link href='https://fonts.googleapis.com/css?family=Inter' rel='stylesheet'>
+</head>
 <body>
-    <!--- Header -->
-    <div class = "topnav">
-        <a href="/index.html">Home</a>
+    <div class="topnav">
+        <a href="index.html" class="logo">OCR Note Taker</a>
         <div class="topnav-right">
             <a href="account.html">My Account</a>
-            <button type="button" class="btn-login" onclick="logOut()">Log Out</button>
+            <button class="btn-login" onclick="logOut()">Log Out</button>
         </div>
     </div>
-
 
     <div class="account-details-box">
         <div class="account-nav">
-
-            <a href="">Account Details</a><br>
-            <a href="">Note Settings</a><br>
-            <a href="">Note Settings</a><br>
-            <a href="">Delete Account</a>
+            <a href="#">Account Details</a>
+            <a href="#">Note Settings</a>
+            <a href="#">Delete Account</a>
         </div>
-
-        <div class="vl"></div>
         <div class="user-details">
-            <label class="userid">Username</label><br>
-            <label id="username">Username</label><input id="username-box"><br>
-            <label id="email">Email</label><input id="email-box"><br>
-            <label id="password">Password</label><input id="password-box"><br>
+            <label class="userid">Username</label>
+            <input id="username-box" placeholder="Enter your username">
+            <label>Email</label>
+            <input id="email-box" placeholder="Enter your email">
+            <label>Password</label>
+            <input id="password-box" type="password" placeholder="Enter your password">
         </div>
     </div>
-
 
     <div class="footer">
         Uicons by <a href="https://www.flaticon.com/uicons">Flaticon</a>
     </div>
-
-
 </body>
 </html>
