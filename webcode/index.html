@@ -86,6 +86,7 @@
 
         function closeUploadForm() {
             document.getElementById("new-note-form").style.display = "none";
+            changeButton();
             resetCanvas();
         }
 
@@ -232,8 +233,6 @@
             ctx.strokeRect(startX , startY, endX - startX, endY - startY);
         }
 
-           
-
             const fileInput = document.getElementById("fileInput");
             const imageCanvas = document.getElementById("imageCanvas");
             const croppedCanvas = document.getElementById("croppedCanvas");
@@ -372,10 +371,8 @@
             
                 // Optional: reset everything after confirm
                 ctx.clearRect(0, 0, imageCanvas.width, imageCanvas.height);
-                imageCanvas.classList.add("hidden");
-                croppedCanvas.classList.add("hidden");
-                submitBtn.classList.add("hidden");
-                undoBtn.classList.add("hidden");
+                closeUploadForm();
+                
                 selectedImageData = null;
             });
 
