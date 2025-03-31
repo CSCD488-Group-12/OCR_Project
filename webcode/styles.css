@@ -1,0 +1,204 @@
+* {
+    box-sizing: border-box;
+    font-family: 'Inter', sans-serif;
+  }
+  
+  body {
+    margin: 0;
+    background: radial-gradient(ellipse at top, #101020, #0c0c1a);
+    color: #f0f0f0;
+  }
+  
+  /* NAVBAR */
+  .topnav {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    background: rgba(30, 30, 60, 0.8);
+    padding: 14px 24px;
+    backdrop-filter: blur(10px);
+  }
+  
+  .topnav a, .topnav .logo {
+    color: #fff;
+    font-weight: bold;
+    text-decoration: none;
+    margin-right: 16px;
+    font-size: 1rem;
+  }
+  
+  .btn-login {
+    background: linear-gradient(135deg, #5f0f80, #3c00d6);
+    border: none;
+    padding: 10px 18px;
+    border-radius: 6px;
+    color: white;
+    cursor: pointer;
+    font-weight: 600;
+  }
+  
+  /* HERO */
+  .homepage-wrapper {
+    text-align: center;
+    padding: 80px 20px;
+  }
+  
+  .hero-section {
+    max-width: 800px;
+    margin: 0 auto;
+    background: rgba(255,255,255,0.05);
+    border-radius: 12px;
+    padding: 40px;
+    backdrop-filter: blur(15px);
+  }
+  
+  .hero-title {
+    font-size: 2.8rem;
+    color: #a5b4fc;
+  }
+  
+  .hero-subtitle {
+    font-size: 1.2rem;
+    color: #ccc;
+    margin-bottom: 40px;
+  }
+  
+  .btn-hero {
+    background: linear-gradient(135deg, #5f0f80, #3c00d6);
+    border: none;
+    padding: 14px 28px;
+    border-radius: 8px;
+    color: white;
+    font-weight: 600;
+    cursor: pointer;
+  }
+  
+  /* UPLOAD FORM */
+  .upload-form {
+    margin: 30px auto;
+    max-width: 90%;
+    background: rgba(255,255,255,0.05);
+    border: 2px dashed rgba(255,255,255,0.2);
+    padding: 20px;
+    border-radius: 12px;
+    text-align: center;
+    display: none;
+    color: #ccc;
+  }
+  
+  .upload-form canvas {
+    max-width: 100%;
+    max-height: 250px;
+    margin: 10px auto;
+  }
+  
+  /* MODAL */
+  .modal {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    position: fixed;
+    z-index: 1000;
+    left: 0; top: 0;
+    width: 100%; height: 100%;
+    background-color: rgba(0, 0, 0, 0.6);
+    animation: fadeIn 0.3s ease-in-out;
+  }
+  
+  .modal-content {
+    background-color: rgba(20, 20, 40, 0.95);
+    padding: 30px;
+    border-radius: 12px;
+    text-align: center;
+    animation: slideIn 0.4s ease-in-out;
+  }
+  
+  .modal-content img {
+    max-width: 80%;
+    max-height: 300px;
+    margin: 20px 0;
+  }
+  
+  .btn-confirm, .btn-cancel {
+    padding: 10px 20px;
+    margin: 10px 8px;
+    border: none;
+    border-radius: 6px;
+    font-weight: bold;
+    cursor: pointer;
+  }
+  
+  .btn-confirm { background: #1db954; color: white; }
+  .btn-cancel { background: #e53935; color: white; }
+  
+  .hidden { display: none !important; }
+  
+  /* ACCOUNT PAGE */
+  .account-details-box {
+    max-width: 900px;
+    margin: 80px auto;
+    padding: 30px;
+    display: flex;
+    flex-wrap: wrap;
+    gap: 40px;
+    background: rgba(255,255,255,0.05);
+    border-radius: 12px;
+  }
+  
+  .account-nav {
+    flex: 1;
+    min-width: 200px;
+  }
+  
+  .account-nav a {
+    display: block;
+    margin: 10px 0;
+    color: #a5b4fc;
+  }
+  
+  .user-details {
+    flex: 2;
+    min-width: 250px;
+  }
+  
+  .user-details label {
+    display: block;
+    margin-top: 10px;
+    color: #ccc;
+  }
+  
+  .user-details input {
+    width: 100%;
+    padding: 10px;
+    margin-bottom: 12px;
+    background: rgba(255,255,255,0.1);
+    border: 1px solid rgba(255,255,255,0.2);
+    border-radius: 8px;
+    color: white;
+  }
+  
+  /* FOOTER */
+  .footer {
+    position: fixed;
+    left: 0;
+    bottom: 0;
+    width: 100%;
+    text-align: center;
+    padding: 20px;
+    background: rgba(20,20,20,0.9);
+    color: #aaa;
+    font-size: 0.8em;
+  }
+  
+  /* ANIMATIONS */
+  @keyframes fadeIn { from {opacity: 0;} to {opacity: 1;} }
+  @keyframes slideIn { from {transform: translateY(-20px); opacity: 0;} to {transform: translateY(0); opacity: 1;} }
+  
+  /* RESPONSIVE */
+  @media screen and (max-width: 768px) {
+    .topnav { flex-direction: column; align-items: flex-start; }
+    .hero-title { font-size: 2rem; }
+    .account-details-box { flex-direction: column; }
+    .upload-form { width: 95%; }
+  }
+  
