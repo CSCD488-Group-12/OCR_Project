@@ -39,6 +39,16 @@
                 <span id="closeModal" class="close">&times;</span>
                 <p>Are you sure you'd like to use this image for OCR?</p>
                 <img id="previewImage" src="" alt="Selected Image" style="max-width: 80%; max-height: 300px; margin: 10px 0;">
+                <div id="loadingSpinner" class="hidden">
+                    <p>Processing image, please wait...</p>
+                    <div class="spinner"></div>
+                </div>
+                
+                <div id="ocrResult" class="hidden">
+                    <p>Extracted Text:</p>
+                    <pre id="ocrTextOutput"></pre>
+                    <button id="shareBtn" class="btn-confirm">Share</button>
+                </div>
                 <br>
                 <button id="confirmBtn" class="btn-confirm">Confirm</button>
                 <button id="cancelBtn" class="btn-cancel">Cancel</button>
@@ -364,16 +374,44 @@
                     alert("No image selected.");
                     return;
                 }
-            
-                // You could upload it, send it to backend, etc.
-                alert("Image submitted for OCR!");
-                confirmationModal.classList.add("hidden");
-            
-                // Optional: reset everything after confirm
-                ctx.clearRect(0, 0, imageCanvas.width, imageCanvas.height);
-                closeUploadForm();
+
+                confirmBtn.classList.add("hidden");
+                cancelBtn.classList.add("hidden");
+                document.getElementById("loadingSpinner").classList.remove("hidden");
                 
-                selectedImageData = null;
+                // replace this part with connection to network
+                setTimeout(() => {
+                    const fakeText = `This is a simulated OCR result.\n\n(Your backend isn't connected yet.)`;
+                    
+                    document.getElementById("loadingSpinner").classList.add("hidden");
+                    document.getElementById("ocrResult").classList.remove("hidden");
+                    document.getElementById("ocrTextOutput").textContent = fakeText;
+                }, 2000);
+
+               
+            });
+
+            document.getElementById("shareBtn").addEventListener("click", async () => {
+                const text = document.getElementById("ocrTextOutput").textContent;
+            
+                if (navigator.share) {
+                    try {
+                        await navigator.share({
+                            title: 'OCR Extracted Text',
+                            text: text
+                        });
+                    } catch (err) {
+                        console.error("Sharing failed:", err);
+                    }
+                } else {
+                    // Fallback: Copy to clipboard
+                    try {
+                        await navigator.clipboard.writeText(text);
+                        alert("Text copied to clipboard!");
+                    } catch (err) {
+                        alert("Could not copy text.");
+                    }
+                }
             });
 
         // Handle cancel button click
@@ -384,6 +422,11 @@
         // Handle close (X) button click
             closeModal.addEventListener("click", () => {
                     confirmationModal.classList.add("hidden");
+                    document.getElementById("ocrResult").classList.add("hidden");
+                    document.getElementById("ocrTextOutput").textContent = "";
+                    confirmBtn.classList.remove("hidden");
+                    cancelBtn.classList.remove("hidden");
+                    closeUploadForm();
                 });
 
        
