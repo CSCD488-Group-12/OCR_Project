@@ -91,6 +91,43 @@
     max-height: 250px;
     margin: 10px auto;
   }
+
+  .image-preview-row {
+    display: flex;
+    justify-content: center;
+    align-items: flex-start;
+    gap: 20px;
+    margin-top: 20px;
+    flex-wrap: wrap; 
+  }
+
+  .original-image, .cropped-image {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    flex: 1 1 45%;
+    max-width: 500px;
+    min-height: 100%;
+  }
+
+  .original-image label,
+  .cropped-image label {
+    min-height: 24px;
+    font-weight: bold;
+    margin-bottom: 10px;
+  }
+
+  canvas {
+    max-width: 100%;
+    height: auto;
+    border: 1px solid #ccc;
+  }
+
+  #imageCanvas {
+    max-width: 100%;
+    height: auto;
+    border: 1px solid #ccc;
+}
   
   /* MODAL */
   .modal {
