@@ -341,7 +341,8 @@
             
                 // ✅ CHANGE THIS URL TO MATCH YOUR DEPLOYED FUNCTION ENDPOINT
                 const functionEndpoint = OCR_FUNCTION_URL; // 🔁 UPDATE THIS
-            
+
+                console.log("Sending image to Azure Function...");
                 fetch(functionEndpoint, {
                     method: "POST",
                     headers: {
@@ -363,6 +364,7 @@
             
                     document.getElementById("ocrTextOutput").textContent = lines.join("\n");
                 })
+                console.log("Received response from Azure Function:", data);
                 .catch(err => {
                     document.getElementById("loadingSpinner").classList.add("hidden");
                     document.getElementById("ocrResult").classList.remove("hidden");
