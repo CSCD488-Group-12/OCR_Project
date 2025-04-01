@@ -352,16 +352,21 @@
                         image: selectedImageData
                     })
                 })
-                .then(response => response.json())
+                .then(async response => {
+                    if (!response.ok) {
+                        const errorText = await response.text();
+                        throw new Error(`Server responded with ${response.status}: ${errorText}`);
+                    }
+                    return response.json();
+                })
                 .then(data => {
                     document.getElementById("loadingSpinner").classList.add("hidden");
                     document.getElementById("ocrResult").classList.remove("hidden");
-            
-                    // ✅ Extract text lines from Azure OCR result
-                    const lines = data.regions?.flatMap(region =>
-                        region.lines.map(line => line.words.map(word => word.text).join(" "))
+                
+                    const lines = data.readResults?.flatMap(page =>
+                        page.lines.map(line => line.text)
                     ) || ["No text found."];
-            
+                
                     document.getElementById("ocrTextOutput").textContent = lines.join("\n");
                 })
                 .catch(err => {
@@ -369,9 +374,6 @@
                     document.getElementById("ocrResult").classList.remove("hidden");
                     document.getElementById("ocrTextOutput").textContent = "Error: " + err.message;
                 });
-                console.log("Received response from Azure Function:", data);
-            });
-
 
             document.getElementById("shareBtn").addEventListener("click", async () => {
                 const text = document.getElementById("ocrTextOutput").textContent;
