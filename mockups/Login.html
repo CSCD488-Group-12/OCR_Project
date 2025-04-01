@@ -1,0 +1,152 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Login Page</title>
+  <style>
+    body {
+      margin: 0;
+      padding: 0;
+      background-color: #0f0f1a;
+      font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+      color: #fff;
+    }
+
+    .navbar {
+      width: 100%;
+      height: 50px;
+      background-color: #191932;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 0 20px;
+      box-sizing: border-box;
+      font-size: 14px;
+    }
+
+    .navbar a {
+      color: white;
+      text-decoration: none;
+      font-weight: 600;
+    }
+
+    .navbar a:hover {
+      opacity: 0.8;
+    }
+
+    .logout-btn {
+      margin-left: 15px;
+      background: linear-gradient(to right, #8b2be2, #4f46e5);
+      padding: 10px 20px;
+      border-radius: 9999px;
+      color: white;
+      font-weight: bold;
+      text-decoration: none;
+      font-size: 14px;
+    }
+
+    .container {
+      background-color: #141425;
+      max-width: 360px;
+      margin: 120px auto;
+      padding: 30px 20px;
+      border-radius: 10px;
+      box-shadow: 0 0 15px rgba(0, 0, 0, 0.3);
+      text-align: center;
+    }
+
+    .container h2 {
+      margin-bottom: 25px;
+      font-size: 24px;
+      color: #b9b9ff;
+    }
+
+    .input-field {
+      width: 100%;
+      box-sizing: border-box;
+      padding: 12px;
+      margin: 10px 0;
+      border: 1px solid #30305c;
+      background-color: #1f1f3b;
+      border-radius: 6px;
+      color: #fff;
+    }
+
+    .input-field::placeholder {
+      color: #888;
+    }
+
+    .btn {
+      width: 100%;
+      padding: 12px 20px;
+      background: linear-gradient(to right, #8b2be2, #4f46e5);
+      color: white;
+      border: none;
+      border-radius: 9999px;
+      cursor: pointer;
+      font-size: 16px;
+      font-weight: bold;
+      margin-top: 15px;
+      transition: opacity 0.3s ease;
+    }
+
+    .btn:hover {
+      opacity: 0.9;
+    }
+
+    .forgot-password {
+      display: block;
+      margin-top: 12px;
+      font-size: 13px;
+      text-decoration: none;
+      color: #b9b9ff;
+    }
+
+    .forgot-password:hover {
+      text-decoration: underline;
+    }
+
+    .signup-btn {
+      width: 100%;
+      padding: 12px;
+      background-color: transparent;
+      color: #6c2bd9;
+      border: 2px solid #6c2bd9;
+      border-radius: 6px;
+      cursor: pointer;
+      font-size: 16px;
+      margin-top: 12px;
+      font-weight: bold;
+      transition: all 0.3s ease;
+    }
+
+    .signup-btn:hover {
+      background-color: #6c2bd9;
+      color: white;
+    }
+  </style>
+</head>
+<body>
+
+  <div class="navbar">
+    <a href="#">OCR Note Taker</a>
+    <div>
+      <a href="#">My Account</a>
+      <a href="#" class="logout-btn">Log Out</a>
+    </div>
+  </div>
+
+  <div class="container">
+    <h2>Login</h2>
+    <form>
+      <input type="email" placeholder="Email" class="input-field" required />
+      <input type="password" placeholder="Password" class="input-field" required />
+      <button type="submit" class="btn">Login</button>
+      <a href="#" class="forgot-password">Forgot Password?</a>
+      <button type="button" class="signup-btn">No account? Sign-up</button>
+    </form>
+  </div>
+
+</body>
+</html>
