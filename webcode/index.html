@@ -340,7 +340,7 @@
                 document.getElementById("loadingSpinner").classList.remove("hidden");
             
                 // ✅ CHANGE THIS URL TO MATCH YOUR DEPLOYED FUNCTION ENDPOINT
-                const functionEndpoint = OCR_FUNCTION_URL; // 🔁 UPDATE THIS
+                const functionEndpoint = "/api/ocr"; // 🔁 UPDATE THIS
 
                 console.log("Sending image to Azure Function...");
                 fetch(functionEndpoint, {
