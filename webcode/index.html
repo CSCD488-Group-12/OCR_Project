@@ -340,7 +340,7 @@
                 document.getElementById("loadingSpinner").classList.remove("hidden");
             
                 // ✅ CHANGE THIS URL TO MATCH YOUR DEPLOYED FUNCTION ENDPOINT
-                const functionEndpoint = "https://OCR-notetaker-function-app.azurewebsites.net/api/HttpTrigger1"; // 🔁 UPDATE THIS
+                const functionEndpoint = OCR_FUNCTION_URL; // 🔁 UPDATE THIS
             
                 fetch(functionEndpoint, {
                     method: "POST",
