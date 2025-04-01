@@ -364,12 +364,12 @@
             
                     document.getElementById("ocrTextOutput").textContent = lines.join("\n");
                 })
-                console.log("Received response from Azure Function:", data);
                 .catch(err => {
                     document.getElementById("loadingSpinner").classList.add("hidden");
                     document.getElementById("ocrResult").classList.remove("hidden");
                     document.getElementById("ocrTextOutput").textContent = "Error: " + err.message;
                 });
+                console.log("Received response from Azure Function:", data);
             });
 
 
