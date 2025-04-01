@@ -330,27 +330,46 @@
 
 
             confirmBtn.addEventListener("click", () => {
-            // Proceed to download the selected image
                 if (!selectedImageData) {
                     alert("No image selected.");
                     return;
                 }
-
+            
                 confirmBtn.classList.add("hidden");
                 cancelBtn.classList.add("hidden");
                 document.getElementById("loadingSpinner").classList.remove("hidden");
-                
-                // replace this part with connection to network
-                setTimeout(() => {
-                    const fakeText = `This is a simulated OCR result.`;
-                    
+            
+                // ✅ CHANGE THIS URL TO MATCH YOUR DEPLOYED FUNCTION ENDPOINT
+                const functionEndpoint = "https://OCR-notetaker-function-app.azurewebsites.net/api/HttpTrigger1"; // 🔁 UPDATE THIS
+            
+                fetch(functionEndpoint, {
+                    method: "POST",
+                    headers: {
+                        "Content-Type": "application/json"
+                    },
+                    body: JSON.stringify({
+                        image: selectedImageData
+                    })
+                })
+                .then(response => response.json())
+                .then(data => {
                     document.getElementById("loadingSpinner").classList.add("hidden");
                     document.getElementById("ocrResult").classList.remove("hidden");
-                    document.getElementById("ocrTextOutput").textContent = fakeText;
-                }, 2000);
-
-               
+            
+                    // ✅ Extract text lines from Azure OCR result
+                    const lines = data.regions?.flatMap(region =>
+                        region.lines.map(line => line.words.map(word => word.text).join(" "))
+                    ) || ["No text found."];
+            
+                    document.getElementById("ocrTextOutput").textContent = lines.join("\n");
+                })
+                .catch(err => {
+                    document.getElementById("loadingSpinner").classList.add("hidden");
+                    document.getElementById("ocrResult").classList.remove("hidden");
+                    document.getElementById("ocrTextOutput").textContent = "Error: " + err.message;
+                });
             });
+
 
             document.getElementById("shareBtn").addEventListener("click", async () => {
                 const text = document.getElementById("ocrTextOutput").textContent;
