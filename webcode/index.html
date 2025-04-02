@@ -357,9 +357,10 @@
                     document.getElementById("ocrResult").classList.remove("hidden");
             
                     // ✅ Extract text lines from Azure OCR result
-                    const lines = data.regions?.flatMap(region =>
-                        region.lines.map(line => line.words.map(word => word.text).join(" "))
+                    const lines = data?.analyzeResult?.readResults?.flatMap(page =>
+                        page.lines.map(line => line.text)
                     ) || ["No text found."];
+
             
                     document.getElementById("ocrTextOutput").textContent = lines.join("\n");
                 })
