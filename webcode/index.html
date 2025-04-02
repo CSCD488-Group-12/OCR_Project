@@ -355,18 +355,12 @@
                 .then(data => {
                     document.getElementById("loadingSpinner").classList.add("hidden");
                     document.getElementById("ocrResult").classList.remove("hidden");
-
-                    console.log("Full OCR response from backend:", data);
-            
-                    // ✅ Extract text lines from Azure OCR result
-                    const lines = data?.analyzeResult?.readResults?.flatMap(page =>
-                      page.lines.map(line => line.text)
-                    );
-                    
-                    const extractedText = (lines && lines.length > 0) ? lines : ["No text found."];
-                    
-                    document.getElementById("ocrTextOutput").textContent = extractedText.join("\n");
-                    console.log("Extracted lines:", extractedText);
+                
+                    // 👇 Print the raw JSON from the OCR function
+                    console.log("RAW OCR JSON:", data);
+                
+                    // 👇 Display it as pretty-formatted JSON on the page
+                    document.getElementById("ocrTextOutput").textContent = JSON.stringify(data, null, 2);
                 })
                 .catch(err => {
                     document.getElementById("loadingSpinner").classList.add("hidden");
