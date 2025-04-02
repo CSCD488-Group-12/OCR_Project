@@ -360,12 +360,13 @@
             
                     // ✅ Extract text lines from Azure OCR result
                     const lines = data?.analyzeResult?.readResults?.flatMap(page =>
-                        page.lines.map(line => line.text)
-                    ) || ["No text found."];
-
-                    console.log("Extracted lines:", lines); 
-            
-                    document.getElementById("ocrTextOutput").textContent = lines.join("\n");
+                      page.lines.map(line => line.text)
+                    );
+                    
+                    const extractedText = (lines && lines.length > 0) ? lines : ["No text found."];
+                    
+                    document.getElementById("ocrTextOutput").textContent = extractedText.join("\n");
+                    console.log("Extracted lines:", extractedText);
                 })
                 .catch(err => {
                     document.getElementById("loadingSpinner").classList.add("hidden");
