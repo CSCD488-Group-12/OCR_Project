@@ -20,7 +20,7 @@
         <div class="hero-section">
             <h1 class="hero-title">Capture. Convert. Create.</h1>
             <p class="hero-subtitle">Upload and crop your image, then extract text with ease.</p>
-            <button type="button" class="btn-hero" id="newnote" onclick="changeUploadForm(), changeButton()">New Note</button>
+            <button type="button" class="btn-hero" id="newnote" onclick="changeUploadForm()">New Note</button>
         </div>
 
         <div class="upload-form" id="new-note-form" ondrop="handleDrop(event)" ondragover="handleDragOver(event)">
@@ -340,7 +340,7 @@
                 document.getElementById("loadingSpinner").classList.remove("hidden");
             
                 // ✅ CHANGE THIS URL TO MATCH YOUR DEPLOYED FUNCTION ENDPOINT
-                const functionEndpoint = OCR_FUNCTION_URL; // 🔁 UPDATE THIS
+                const functionEndpoint = "https://ocr-notetaker-function-app.azurewebsites.net/api/ocr?code=MgPRdNP8lAvX5yjvUZe4lRsaNNcV_nlC00bWPLFNwmDpAzFu41Op5A==";
 
                 fetch(functionEndpoint, {
                     method: "POST",
@@ -355,13 +355,19 @@
                 .then(data => {
                     document.getElementById("loadingSpinner").classList.add("hidden");
                     document.getElementById("ocrResult").classList.remove("hidden");
-            
-                    // ✅ Extract text lines from Azure OCR result
-                    const lines = data.regions?.flatMap(region =>
-                        region.lines.map(line => line.words.map(word => word.text).join(" "))
-                    ) || ["No text found."];
-            
-                    document.getElementById("ocrTextOutput").textContent = lines.join("\n");
+                
+                    // ✅ This is where the actual lines are
+                    const lines = data?.readResults?.flatMap(page =>
+                        (page.lines || []).map(line => line.text)
+                    ) || [];
+                
+                    const output = lines.length > 0 ? lines.join("\n") : "No text found.";
+                
+                    // ✅ Show only extracted text
+                    document.getElementById("ocrTextOutput").textContent = output;
+                
+                    // ✅ Log just to confirm
+                    // console.log("Extracted lines:", lines);
                 })
                 .catch(err => {
                     document.getElementById("loadingSpinner").classList.add("hidden");
