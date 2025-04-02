@@ -1,0 +1,20 @@
+# Node.js
+node_modules/
+npm-debug.log*
+
+# Azure Functions Core Tools local settings
+local.settings.json
+
+# Environment variables
+.env
+.env.*
+
+# Logs
+*.log
+
+# VS Code
+.vscode/
+
+# OS junk
+.DS_Store
+Thumbs.db
