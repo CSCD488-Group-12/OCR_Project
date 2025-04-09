@@ -57,6 +57,8 @@
                     <p>Extracted Text:</p>
                     <textarea id="ocrTextOutput" class = "editable-area" rows="10"></textarea>
                     <button id="shareBtn" class="btn-confirm">Share</button>
+                    <button id="downloadTxtBtn" class="btn-confirm">Download .txt</button>
+                    <button id="downloadPdfBtn" class="btn-confirm">Download .pdf</button>
                 </div>
                 <br>
                 <button id="confirmBtn" class="btn-confirm">Confirm</button>
@@ -172,8 +174,12 @@
             isCropped = false;
             
         }
-        
+        let cropperEnabled = false;
+
         function enableCropper() {
+            if (cropperEnabled) return;
+            cropperEnabled = true;
+
             imageCanvas.addEventListener('mousedown', (e) => {
                 if (isCropping) return;
                 isCropping = true;
@@ -278,47 +284,6 @@
                 displayDisclaimer();
             };
             
-    //=================================================================================================
-                imageCanvas.addEventListener("mousedown", (e) => {
-                const rect = imageCanvas.getBoundingClientRect();
-                startX = e.clientX - rect.left;
-                startY = e.clientY - rect.top;
-                isCropping = true;
-            });
-
-            imageCanvas.addEventListener("mousemove", (e) => {
-                if (isCropping) {
-                    const rect = imageCanvas.getBoundingClientRect();
-                    endX = e.clientX - rect.left;
-                    endY = e.clientY - rect.top;
-                    ctx.clearRect(0, 0, imageCanvas.width, imageCanvas.height);
-                    ctx.drawImage(img, 0, 0);
-                    ctx.strokeStyle = "green";
-                    ctx.lineWidth = 2;
-                    ctx.strokeRect(startX, startY, endX - startX, endY - startY);
-                }
-            });
-
-            imageCanvas.addEventListener("mouseup", () => {
-                isCropping = false;
-                const width = Math.abs(endX - startX);
-                const height = Math.abs(endY - startY);
-                const x = Math.min(startX, endX);
-                const y = Math.min(startY, endY);
-
-                if (width > 0 && height > 0) {
-                    // Create cropped image
-                    const croppedCtx = croppedCanvas.getContext("2d");
-                    croppedCanvas.width = width;  // Set to original size
-                    croppedCanvas.height = height; // Set to original size
-
-                    // Draw cropped area scaled to original size
-                    croppedCtx.drawImage(imageCanvas, x, y, width, height, 0, 0, width, height);
-                    croppedLabel.classList.remove("hidden");
-                    croppedCanvas.classList.remove("hidden");
-                    isCropped = true; // Mark as cropped
-                }
-            });
         //=============================================================================================================
             let selectedImageData = null;
 
@@ -356,7 +321,7 @@
                 cancelBtn.classList.add("hidden");
                 document.getElementById("loadingSpinner").classList.remove("hidden");
             
-                // ✅ CHANGE THIS URL TO MATCH YOUR DEPLOYED FUNCTION ENDPOINT
+                // FUNCTION ENDPOINT
                 const functionEndpoint = "https://ocr-notetaker-function-app.azurewebsites.net/api/ocr?code=MgPRdNP8lAvX5yjvUZe4lRsaNNcV_nlC00bWPLFNwmDpAzFu41Op5A==";
 
                 fetch(functionEndpoint, {
@@ -433,6 +398,32 @@
                 });
 
        
+    </script>
+
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
+    
+    <script>
+        // Download functionality
+        // TXT download
+        document.getElementById("downloadTxtBtn").addEventListener("click", () => {
+            const text = document.getElementById("ocrTextOutput").value;
+            const blob = new Blob([text], { type: "text/plain" });
+            const link = document.createElement("a");
+            link.href = URL.createObjectURL(blob);
+            link.download = "ocr_result.txt";
+            link.click();
+        });
+
+        // PDF download
+        document.getElementById("downloadPdfBtn").addEventListener("click", async () => {
+            const { jsPDF } = window.jspdf;
+            const doc = new jsPDF();
+            const text = document.getElementById("ocrTextOutput").value;
+
+            const lines = doc.splitTextToSize(text, 180);
+            doc.text(lines, 10, 10);
+            doc.save("ocr_result.pdf");
+        });
     </script>
 
   
