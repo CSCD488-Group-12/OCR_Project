@@ -94,6 +94,21 @@
 
         }
 
+        function displayDisclaimer() {
+            const uploadInfo = document.getElementById("upload-info");
+            const uploadedImage = document.getElementById("imageCanvas");
+            const newNoteButton = document.getElementById("newnote");
+        
+            const imageIsVisible = !uploadedImage.classList.contains("hidden");
+            const buttonIsCancel = newNoteButton.textContent === "Cancel";
+        
+            if (!imageIsVisible && buttonIsCancel) {
+                uploadInfo.textContent = "Drag and drop an image here or click the upload button";
+            } else {
+                uploadInfo.textContent = "The OCR works best with a clear image focused on the text. Consider cropping your image for more accurate results.";
+            }
+        }
+
         function changeUploadForm() {
             const uploadForm = document.getElementById("new-note-form");
             const newNoteButton = document.getElementById("newnote");
@@ -104,6 +119,7 @@
                 uploadForm.style.display = "block";
                 newNoteButton.textContent = "Cancel";
             }
+            displayDisclaimer();
         }
         
         function closeUploadForm() {
@@ -259,6 +275,7 @@
                 undoBtn.classList.remove("hidden");
                 imageLabel.classList.remove("hidden");
                 enableCropper();
+                displayDisclaimer();
             };
             
     //=================================================================================================
