@@ -55,7 +55,7 @@
                 
                 <div id="ocrResult" class="hidden">
                     <p>Extracted Text:</p>
-                    <pre id="ocrTextOutput"></pre>
+                    <textarea id="ocrTextOutput" class = "editable-area" rows="10"></textarea>
                     <button id="shareBtn" class="btn-confirm">Share</button>
                 </div>
                 <br>
@@ -381,7 +381,7 @@
                     const output = lines.length > 0 ? lines.join("\n") : "No text found.";
                 
                     // ✅ Show only extracted text
-                    document.getElementById("ocrTextOutput").textContent = output;
+                    document.getElementById("ocrTextOutput").value = output;
                 
                     // ✅ Log just to confirm
                     // console.log("Extracted lines:", lines);
@@ -389,13 +389,13 @@
                 .catch(err => {
                     document.getElementById("loadingSpinner").classList.add("hidden");
                     document.getElementById("ocrResult").classList.remove("hidden");
-                    document.getElementById("ocrTextOutput").textContent = "Error: " + err.message;
+                    document.getElementById("ocrTextOutput").value = "Error: " + err.message;
                 });
             });
 
 
             document.getElementById("shareBtn").addEventListener("click", async () => {
-                const text = document.getElementById("ocrTextOutput").textContent;
+                const text = document.getElementById("ocrTextOutput").value;
             
                 if (navigator.share) {
                     try {
