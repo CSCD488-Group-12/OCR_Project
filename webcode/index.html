@@ -333,7 +333,19 @@
                         image: selectedImageData
                     })
                 })
-                .then(response => response.json())
+                .then(async response => {
+                    const text = await response.text();
+                
+                    if (!response.ok) {
+                        throw new Error(`Server Error (${response.status}): ${text}`);
+                    }
+                
+                    try {
+                        return JSON.parse(text); // Handles JSON even if content-type is wrong
+                    } catch (err) {
+                        throw new Error(`Unexpected response format: ${text}`);
+                    }
+                })
                 .then(data => {
                     document.getElementById("loadingSpinner").classList.add("hidden");
                     document.getElementById("ocrResult").classList.remove("hidden");
@@ -351,6 +363,7 @@
                     // ✅ Log just to confirm
                     // console.log("Extracted lines:", lines);
                 })
+
                 .catch(err => {
                     document.getElementById("loadingSpinner").classList.add("hidden");
                     document.getElementById("ocrResult").classList.remove("hidden");
