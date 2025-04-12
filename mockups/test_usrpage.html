@@ -1,0 +1,507 @@
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>OCR Note Taker</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="styles.css">
+    <link href='https://fonts.googleapis.com/css?family=Inter' rel='stylesheet'>
+<!--NEW MICROSOFT STUFF HERE-->
+    <script src="https://alcdn.msauth.net/browser/2.38.0/js/msal-browser.min.js"></script>
+
+<!--END OF NEW MICROSOFT STUFF-->
+</head>
+<body>
+    <div class="topnav">
+        <a href="index.html" class="logo">OCR Note Taker</a>
+        <div class="topnav-right">
+            <!--CHANGED THIS BUTTON TO DO SOMETHING-->
+            <a href="#" onclick="login()">Log In</a>
+            <button type="button" class="btn-login" onclick="logOut()">Log Out</button>
+        </div>
+    </div>
+
+    <div class="homepage-wrapper">
+        <div class="hero-section">
+            <h1 class="hero-title">Capture. Convert. Create.</h1>
+            <p class="hero-subtitle">Upload and crop your image, then extract text with ease.</p>
+            <button type="button" class="btn-hero" id="newnote" onclick="changeUploadForm()">New Note</button>
+        </div>
+
+        <div class="upload-form" id="new-note-form" ondrop="handleDrop(event)" ondragover="handleDragOver(event)">
+            <p id="upload-info">Drag and drop an image here or click the upload button</p>
+            <div class="image-preview-row">
+                <div class="original-image">
+                    <label id="uploadedImageLabel" class="hidden">Original Image</label><br>
+                    <canvas id="imageCanvas" class="hidden"></canvas>
+                </div>
+                <div class="cropped-image">
+                    <label id="croppedImageLabel" class="hidden">Cropped Image</label><br>
+                    <canvas id="croppedCanvas" class="hidden"></canvas>
+                </div>
+            </div>
+            
+            <br>
+            <button id="crop-button" onclick="document.getElementById('fileInput').click();">Upload Photo</button>
+            <button id="undoBtn" class="hidden">Undo</button>
+            <button id="submitBtn" class="hidden">Submit</button>
+            <input type="file" id="fileInput" accept="image/*" style="display:none">
+        </div>
+
+        <div id="confirmationModal" class="modal hidden">
+            <div class="modal-content">
+                <span id="closeModal" class="close">&times;</span>
+                <p>Are you sure you'd like to use this image for OCR?</p>
+                <img id="previewImage" src="" alt="Selected Image" style="max-width: 80%; max-height: 300px; margin: 10px 0;">
+                <div id="loadingSpinner" class="hidden">
+                    <p>Processing image, please wait...</p>
+                    <div class="spinner"></div>
+                </div>
+                
+                <div id="ocrResult" class="hidden">
+                    <p>Extracted Text:</p>
+                    <textarea id="ocrTextOutput" class = "editable-area" rows="10"></textarea>
+                    <button id="shareBtn" class="btn-confirm">Share</button>
+                    <button id="downloadTxtBtn" class="btn-confirm">Download .txt</button>
+                    <button id="downloadPdfBtn" class="btn-confirm">Download .pdf</button>
+                </div>
+                <br>
+                <button id="confirmBtn" class="btn-confirm">Confirm</button>
+                <button id="cancelBtn" class="btn-cancel">Cancel</button>
+            </div>
+        </div>
+    </div>
+
+
+     <!--- Recent Notes-->
+     <div class = "recent-notes">
+            
+    </div>
+
+    <!--- Collections-->
+    <div class = "collections">
+        
+    </div>
+
+    <!--- All Notes -->
+    <div class = "all-notes">
+        
+    </div>
+
+
+
+    <div class="footer">
+        Uicons by <a href="https://www.flaticon.com/uicons">Flaticon</a>
+    </div>
+
+<!--ACTUAL MICROSOFT STUFF-->
+<script>
+    const msalConfig = {
+        auth: {
+            clientId: "8cd1c3ca-756b-4ddc-ad39-f403faf56489",
+            authority: "https://ocrmodelusethis.b2clogin.com/ocrmodelusethis.onmicrosoft.com/b2c_1_ocr_note_taker_signin_signup",
+            knownAuthorities: ["ocrmodelusethis.b2clogin.com"],
+            redirectUri: "https://kind-stone-06683921e.6.azurestaticapps.net/" //CHANGE THIS TO THE REAL AZURE SITE LINK
+        }
+    };
+
+    const msalInstance = new msal.PublicClientApplication(msalConfig);
+
+    function login() {
+        console.log("Login button clicked");
+        try {
+            msalInstance.loginRedirect();
+        } catch (e) {
+            console.error("Login redirect error:", e);
+        }
+    }
+
+    function logOut() {
+        msalInstance.logoutRedirect();
+    }
+
+    msalInstance.handleRedirectPromise().then((response) => {
+        if (response) {
+            const account = response.account;
+            console.log("Logged in as:", account.username);
+        } else {
+            const currentAccounts = msalInstance.getAllAccounts();
+            if (currentAccounts.length > 0) {
+                console.log("Already logged in:", currentAccounts[0].username);
+            }
+        }
+    }).catch((err) => {
+        console.error("Login error:", err);
+    });
+</script>
+
+
+
+<!--NEW MICROSOFT STUFF-->
+    <script>
+        msalInstance.handleRedirectPromise().then((response) => {
+            if (response) {
+                const account = response.account;
+                console.log("Logged in as:", account.username);
+            } else {
+                const currentAccounts = msalInstance.getAllAccounts();
+                if (currentAccounts.length > 0) {
+                    console.log("Already logged in:", currentAccounts[0].username);
+                }
+            }
+        }).catch((err) => {
+            console.error("Login error:", err);
+        });
+    </script>
+<!--END OF MICROSOFT STUFF-->
+
+
+    <script>
+
+        function displayDisclaimer() {
+            const uploadInfo = document.getElementById("upload-info");
+            const uploadedImage = document.getElementById("imageCanvas");
+            const newNoteButton = document.getElementById("newnote");
+        
+            const imageIsVisible = !uploadedImage.classList.contains("hidden");
+            const buttonIsCancel = newNoteButton.textContent === "Cancel";
+        
+            if (!imageIsVisible && buttonIsCancel) {
+                uploadInfo.textContent = "Drag and drop an image here or click the upload button";
+            } else {
+                uploadInfo.textContent = "The OCR works best with a clear image focused on the text. Consider cropping your image for more accurate results.";
+            }
+        }
+
+        function changeUploadForm() {
+            const uploadForm = document.getElementById("new-note-form");
+            const newNoteButton = document.getElementById("newnote");
+        
+            if (uploadForm.style.display === "block") {
+                closeUploadForm();
+            } else {
+                uploadForm.style.display = "block";
+                newNoteButton.textContent = "Cancel";
+            }
+            displayDisclaimer();
+        }
+        
+        function closeUploadForm() {
+            document.getElementById("new-note-form").style.display = "none";
+            document.getElementById("newnote").textContent = "New Note";
+            resetCanvas();
+        }
+
+        function convertSelections(dataUrl, filename) {
+            if (!selectedImageData) {
+                alert("No image selected for conversion!");
+                return;
+            }
+
+            const link = document.createElement("a");
+            link.href = dataUrl;
+            link.download = filename;
+            link.click();
+        }
+
+        function redrawImage() {
+            ctx.clearRect(0,0, imageCanvas.width, imageCanvas.height);
+            ctx.save();
+            ctx.translate(originX, originY);
+            ctx.scale(scale, scale);
+            ctx.drawImage(img, 0, 0, imageCanvas.width, imageCanvas.height);
+            ctx.restore();
+            
+            if (isCropping) {
+                cropperOutline();
+            }
+        }
+
+        // resets new note box
+        function resetCanvas() {
+            ctx.clearRect(0, 0, imageCanvas.width, imageCanvas.height);
+            imageCanvas.classList.add("hidden");
+            submitBtn.classList.add("hidden");
+            undoBtn.classList.add("hidden");
+            imageLabel.classList.add("hidden");
+            croppedLabel.classList.add("hidden");
+            img.src = "";
+            fileInput.value = "";
+
+            const croppedCtx = croppedCanvas.getContext("2d");
+            croppedCtx.clearRect(0,0, croppedCanvas.width, croppedCanvas.height);
+            croppedCanvas.classList.add("hidden");
+            croppedCanvas.width = 0;
+            croppedCanvas.height = 0;
+            isCropped = false;
+            
+        }
+        let cropperEnabled = false;
+
+        function enableCropper() {
+            if (cropperEnabled) return;
+            cropperEnabled = true;
+
+            imageCanvas.addEventListener('mousedown', (e) => {
+                if (isCropping) return;
+                isCropping = true;
+                const rect = imageCanvas.getBoundingClientRect();
+                startX = (e.clientX - rect.left) * (imageCanvas.width/rect.width);
+                startY = (e.clientY - rect.top) * (imageCanvas.height/rect.height);
+            });
+
+            imageCanvas.addEventListener('mousemove', (e) => {
+                if (!isCropping) return;
+                const rect = imageCanvas.getBoundingClientRect();
+                endX = (e.clientX- rect.left) * (imageCanvas.width/rect.width);
+                endY = (e.clientY - rect.top) * (imageCanvas.height/rect.height);
+                redrawImage();
+                cropperOutline();
+            });
+
+            imageCanvas.addEventListener('mouseup', () => {
+                isCropping = false;
+
+                const width = Math.abs(endX - startX);
+                const height = Math.abs(endY - startY);
+                const x = Math.min(startX, endX);
+                const y = Math.min(startY, endY);
+
+                if (width > 0 && height > 0) {
+                    const croppedCtx = croppedCanvas.getContext("2d");
+                    croppedCanvas.width = width;
+                    croppedCanvas.height = height;
+
+                    croppedCtx.drawImage(img, x, y, width, height, 0, 0, width, height);
+                    croppedCanvas.classList.remove("hidden");
+                    isCropped = true;
+                }
+            });
+        }
+
+        function cropperOutline() {
+            ctx.strokeStyle = 'green';
+            ctx.lineWidth = 2;
+            ctx.strokeRect(startX , startY, endX - startX, endY - startY);
+        }
+
+            const fileInput = document.getElementById("fileInput");
+            const imageCanvas = document.getElementById("imageCanvas");
+            const croppedCanvas = document.getElementById("croppedCanvas");
+            const imageLabel = document.getElementById("uploadedImageLabel");
+            const croppedLabel = document.getElementById("croppedImageLabel");
+            const submitBtn = document.getElementById("submitBtn");
+            const undoBtn = document.getElementById("undoBtn");
+            const ctx = imageCanvas.getContext("2d");
+
+            const confirmBtn = document.getElementById("confirmBtn"); //THIS CONFIRM BUTTON WILL BE USED TO SEND THE PHOTO TO THE OCR MODEL
+            const cancelBtn = document.getElementById("cancelBtn");
+            const confirmationModal = document.getElementById("confirmationModal");
+            const closeModal = document.getElementById("closeModal");
+
+            let img = new Image();
+            let startX, startY, endX, endY;
+            let isCropping = false;
+            let isCropped = false;
+            let originalImageData = null;
+            let scale = 1;
+            let originX = 0;
+            let originY = 0;
+
+            fileInput.addEventListener("change", (event) => {
+                if (event.target.files[0]) {
+                    handleFiles(event.target.files[0]);
+                }
+            });
+            
+            function handleDrop(e) {
+                e.preventDefault();
+                if (e.dataTransfer.files.length > 0) {
+                    handleFiles(e.dataTransfer.files[0]);
+                }
+            }
+            
+            function handleDragOver(e) {
+                e.preventDefault();
+            }
+            
+            function handleFiles(file) {
+                const reader = new FileReader();
+                reader.onload = (e) => {
+                    img.src = e.target.result;
+                };
+                reader.readAsDataURL(file);
+            }
+            
+            // Set this outside to attach cropper + canvas logic
+            img.onload = () => {
+                imageCanvas.width = img.naturalWidth;
+                imageCanvas.height = img.naturalHeight;
+                ctx.drawImage(img, 0, 0);
+                imageCanvas.classList.remove("hidden");
+                submitBtn.classList.remove("hidden");
+                undoBtn.classList.remove("hidden");
+                imageLabel.classList.remove("hidden");
+                enableCropper();
+                displayDisclaimer();
+            };
+            
+        //=============================================================================================================
+            let selectedImageData = null;
+
+        // Handle submit button click
+            submitBtn.addEventListener("click", () => {
+                if (!croppedCanvas.classList.contains("hidden")) {
+                    selectedImageData = croppedCanvas.toDataURL("image/png");
+                } else {
+                    selectedImageData = imageCanvas.toDataURL("image/png");
+                }
+
+                previewImage.src = selectedImageData;
+                confirmationModal.classList.remove("hidden");
+            });
+        //=====================================================================================================================
+
+            // Handle undo button click
+            undoBtn.addEventListener("click", () => {
+                ctx.clearRect(0, 0, imageCanvas.width, imageCanvas.height);
+                ctx.drawImage(img, 0, 0, imageCanvas.width, imageCanvas.height);
+                croppedCanvas.classList.add("hidden");  // Hide the cropped canvas
+                croppedCanvas.width = 0;  // Clear cropped canvas
+                croppedCanvas.height = 0; // Clear cropped canvas
+                isCropped = false;
+            });
+
+
+            confirmBtn.addEventListener("click", () => {
+                if (!selectedImageData) {
+                    alert("No image selected.");
+                    return;
+                }
+            
+                confirmBtn.classList.add("hidden");
+                cancelBtn.classList.add("hidden");
+                document.getElementById("loadingSpinner").classList.remove("hidden");
+            
+                // FUNCTION ENDPOINT
+                const functionEndpoint = "https://ocr-notetaker-function-app.azurewebsites.net/api/ocr?code=MgPRdNP8lAvX5yjvUZe4lRsaNNcV_nlC00bWPLFNwmDpAzFu41Op5A==";
+
+                fetch(functionEndpoint, {
+                    method: "POST",
+                    headers: {
+                        "Content-Type": "application/json"
+                    },
+                    body: JSON.stringify({
+                        image: selectedImageData
+                    })
+                })
+                .then(async response => {
+                    const text = await response.text();
+                
+                    if (!response.ok) {
+                        throw new Error(`Server Error (${response.status}): ${text}`);
+                    }
+                
+                    try {
+                        return JSON.parse(text); // Handles JSON even if content-type is wrong
+                    } catch (err) {
+                        throw new Error(`Unexpected response format: ${text}`);
+                    }
+                })
+                .then(data => {
+                    document.getElementById("loadingSpinner").classList.add("hidden");
+                    document.getElementById("ocrResult").classList.remove("hidden");
+                
+                    // ✅ This is where the actual lines are
+                    const lines = data?.readResults?.flatMap(page =>
+                        (page.lines || []).map(line => line.text)
+                    ) || [];
+                
+                    const output = lines.length > 0 ? lines.join("\n") : "No text found.";
+                
+                    // ✅ Show only extracted text
+                    document.getElementById("ocrTextOutput").value = output;
+                
+                    // ✅ Log just to confirm
+                    // console.log("Extracted lines:", lines);
+                })
+
+                .catch(err => {
+                    document.getElementById("loadingSpinner").classList.add("hidden");
+                    document.getElementById("ocrResult").classList.remove("hidden");
+                    document.getElementById("ocrTextOutput").value = "Error: " + err.message;
+                });
+            });
+
+
+            document.getElementById("shareBtn").addEventListener("click", async () => {
+                const text = document.getElementById("ocrTextOutput").value;
+            
+                if (navigator.share) {
+                    try {
+                        await navigator.share({
+                            title: 'OCR Extracted Text',
+                            text: text
+                        });
+                    } catch (err) {
+                        console.error("Sharing failed:", err);
+                    }
+                } else {
+                    // Fallback: Copy to clipboard
+                    try {
+                        await navigator.clipboard.writeText(text);
+                        alert("Text copied to clipboard!");
+                    } catch (err) {
+                        alert("Could not copy text.");
+                    }
+                }
+            });
+
+        // Handle cancel button click
+            cancelBtn.addEventListener("click", () => {
+                confirmationModal.classList.add("hidden");
+            });
+
+        // Handle close (X) button click
+            closeModal.addEventListener("click", () => {
+                    confirmationModal.classList.add("hidden");
+                    document.getElementById("ocrResult").classList.add("hidden");
+                    document.getElementById("ocrTextOutput").textContent = "";
+                    confirmBtn.classList.remove("hidden");
+                    cancelBtn.classList.remove("hidden");
+                    closeUploadForm();
+                });
+
+       
+    </script>
+
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
+    
+    <script>
+        // Download functionality
+        // TXT download
+        document.getElementById("downloadTxtBtn").addEventListener("click", () => {
+            const text = document.getElementById("ocrTextOutput").value;
+            const blob = new Blob([text], { type: "text/plain" });
+            const link = document.createElement("a");
+            link.href = URL.createObjectURL(blob);
+            link.download = "ocr_result.txt";
+            link.click();
+        });
+
+        // PDF download
+        document.getElementById("downloadPdfBtn").addEventListener("click", async () => {
+            const { jsPDF } = window.jspdf;
+            const doc = new jsPDF();
+            const text = document.getElementById("ocrTextOutput").value;
+
+            const lines = doc.splitTextToSize(text, 180);
+            doc.text(lines, 10, 10);
+            doc.save("ocr_result.pdf");
+        });
+    </script>
+
+  
+</body>
+</html>
