@@ -1,3 +1,4 @@
+
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -6,12 +7,17 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <link rel="stylesheet" href="styles.css">
     <link href='https://fonts.googleapis.com/css?family=Inter' rel='stylesheet'>
+<!--NEW MICROSOFT STUFF HERE-->
+    <script src="https://alcdn.msauth.net/browser/2.38.0/js/msal-browser.min.js"></script>
+
+<!--END OF NEW MICROSOFT STUFF-->
 </head>
 <body>
     <div class="topnav">
         <a href="index.html" class="logo">OCR Note Taker</a>
         <div class="topnav-right">
-            <a href="account.html">Log In</a>
+            <!--CHANGED THIS BUTTON TO DO SOMETHING-->
+            <a href="#" onclick="login()">Log In</a>
             <button type="button" class="btn-login" onclick="logOut()">Log Out</button>
         </div>
     </div>
@@ -89,12 +95,69 @@
         Uicons by <a href="https://www.flaticon.com/uicons">Flaticon</a>
     </div>
 
+<!--ACTUAL MICROSOFT STUFF-->
+<script>
+    const msalConfig = {
+        auth: {
+            clientId: "8cd1c3ca-756b-4ddc-ad39-f403faf56489",
+            authority: "https://ocrmodelusethis.b2clogin.com/ocrmodelusethis.onmicrosoft.com/b2c_1_ocr_note_taker_signin_signup",
+            knownAuthorities: ["ocrmodelusethis.b2clogin.com"],
+            redirectUri: "https://kind-stone-06683921e.6.azurestaticapps.net/" //CHANGE THIS TO THE REAL AZURE SITE LINK
+        }
+    };
+
+    const msalInstance = new msal.PublicClientApplication(msalConfig);
+
+    function login() {
+        console.log("Login button clicked");
+        try {
+            msalInstance.loginRedirect();
+        } catch (e) {
+            console.error("Login redirect error:", e);
+        }
+    }
+
+    function logOut() {
+        msalInstance.logoutRedirect();
+    }
+
+    msalInstance.handleRedirectPromise().then((response) => {
+        if (response) {
+            const account = response.account;
+            console.log("Logged in as:", account.username);
+        } else {
+            const currentAccounts = msalInstance.getAllAccounts();
+            if (currentAccounts.length > 0) {
+                console.log("Already logged in:", currentAccounts[0].username);
+            }
+        }
+    }).catch((err) => {
+        console.error("Login error:", err);
+    });
+</script>
+
+
+
+<!--NEW MICROSOFT STUFF-->
+    <script>
+        msalInstance.handleRedirectPromise().then((response) => {
+            if (response) {
+                const account = response.account;
+                console.log("Logged in as:", account.username);
+            } else {
+                const currentAccounts = msalInstance.getAllAccounts();
+                if (currentAccounts.length > 0) {
+                    console.log("Already logged in:", currentAccounts[0].username);
+                }
+            }
+        }).catch((err) => {
+            console.error("Login error:", err);
+        });
+    </script>
+<!--END OF MICROSOFT STUFF-->
 
 
     <script>
-        function logOut(){
-
-        }
 
         function displayDisclaimer() {
             const uploadInfo = document.getElementById("upload-info");
