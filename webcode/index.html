@@ -248,19 +248,6 @@
             }
         }
 
-        /* function changeUploadForm() {
-            const uploadForm = document.getElementById("new-note-form");
-            const newNoteButton = document.getElementById("newnote");
-        
-            if (uploadForm.style.display === "block") {
-                closeUploadForm();
-            } else {
-                uploadForm.style.display = "block";
-                newNoteButton.textContent = "Cancel";
-            }
-            displayDisclaimer();
-        } */
-
         function changeUploadForm() {
             const uploadForm = document.getElementById("new-note-form");
             const heroNewNoteBtn = document.getElementById("newnote");
@@ -681,79 +668,79 @@
         //Load logged in user's entire history of notes (saved to the database)
         let currentView = "list"; // default
 
-function renderAllNotes(notes) {
-    const container = document.querySelector(".all-notes");
-    container.innerHTML = ""; // Clear existing
+        function renderAllNotes(notes) {
+            const container = document.querySelector(".all-notes");
+            container.innerHTML = ""; // Clear existing
 
-    const searchBar = document.createElement("div");
-    searchBar.className = "search-bar";
-    searchBar.innerHTML = `
-        <input type="text" placeholder="Search notes" id="noteSearch" value="${document.getElementById("noteSearch")?.value || ''}" />
-        <div class="view-toggle-group">
-          <button id="listViewBtn" class="view-toggle ${currentView === 'list' ? 'active' : ''}">List View</button>
-          <button id="gridViewBtn" class="view-toggle ${currentView === 'grid' ? 'active' : ''}">Grid View</button>
-        </div>
-    `;
-    container.appendChild(searchBar);
+            const searchBar = document.createElement("div");
+            searchBar.className = "search-bar";
+            searchBar.innerHTML = `
+                <input type="text" placeholder="Search notes" id="noteSearch" value="${document.getElementById("noteSearch")?.value || ''}" />
+                <div class="view-toggle-group">
+                <button id="listViewBtn" class="view-toggle ${currentView === 'list' ? 'active' : ''}">List View</button>
+                <button id="gridViewBtn" class="view-toggle ${currentView === 'grid' ? 'active' : ''}">Grid View</button>
+                </div>
+            `;
+            container.appendChild(searchBar);
 
-    if (notes.length === 0) {
-        const noResults = document.createElement("p");
-        noResults.textContent = "No notes found.";
-        noResults.style.textAlign = "center";
-        noResults.style.color = "#ccc";
-        noResults.style.marginTop = "40px";
-        noResults.style.fontSize = "1.1rem";
-        container.appendChild(noResults);
-        return;
-    }
+            if (notes.length === 0) {
+                const noResults = document.createElement("p");
+                noResults.textContent = "No notes found.";
+                noResults.style.textAlign = "center";
+                noResults.style.color = "#ccc";
+                noResults.style.marginTop = "40px";
+                noResults.style.fontSize = "1.1rem";
+                container.appendChild(noResults);
+                return;
+            }
 
-    const list = document.createElement("div");
-    list.className = currentView === "grid" ? "all-notes-grid" : "all-notes-list";
+            const list = document.createElement("div");
+            list.className = currentView === "grid" ? "all-notes-grid" : "all-notes-list";
 
 
-    notes.forEach(note => {
-        const card = document.createElement("div");
-        card.className = `note-history-card ${currentView === "grid" ? "grid" : ""}`;
+            notes.forEach(note => {
+                const card = document.createElement("div");
+                card.className = `note-history-card ${currentView === "grid" ? "grid" : ""}`;
 
-        card.innerHTML = `
-            <div class="note-header">
-                <h3>${note.title}</h3>
-                <span class="note-category">${note.category || "Uncategorized"}</span>
-            </div>
-            <p class="note-preview">${note.preview}</p>
-            <p class="note-date">${note.date}</p>
-        `;
+                card.innerHTML = `
+                    <div class="note-header">
+                        <h3>${note.title}</h3>
+                        <span class="note-category">${note.category || "Uncategorized"}</span>
+                    </div>
+                    <p class="note-preview">${note.preview}</p>
+                    <p class="note-date">${note.date}</p>
+                `;
 
-        card.addEventListener("click", () => {
-            alert(`Open full note: ${note.title}`);
+                card.addEventListener("click", () => {
+                    alert(`Open full note: ${note.title}`);
+                });
+
+                list.appendChild(card);
+            });
+
+            container.appendChild(list);
+
+        document.getElementById("noteSearch").addEventListener("input", function () {
+            const query = this.value.toLowerCase().trim();
+            const filteredNotes = allUserNotes.filter(note =>
+                note.title.toLowerCase().includes(query) ||
+                note.preview.toLowerCase().includes(query) ||
+                (note.category || "").toLowerCase().includes(query)
+            );
+            renderAllNotes(filteredNotes);
         });
 
-        list.appendChild(card);
-    });
 
-    container.appendChild(list);
+        document.getElementById("listViewBtn").addEventListener("click", () => {
+            currentView = "list";
+            renderAllNotes(notes);
+        });
 
-    document.getElementById("noteSearch").addEventListener("input", function () {
-        const query = this.value.toLowerCase().trim();
-        const filteredNotes = allUserNotes.filter(note =>
-            note.title.toLowerCase().includes(query) ||
-            note.preview.toLowerCase().includes(query) ||
-            (note.category || "").toLowerCase().includes(query)
-        );
-        renderAllNotes(filteredNotes);
-    });
-
-
-    document.getElementById("listViewBtn").addEventListener("click", () => {
-        currentView = "list";
-        renderAllNotes(notes);
-    });
-
-    document.getElementById("gridViewBtn").addEventListener("click", () => {
-        currentView = "grid";
-        renderAllNotes(notes);
-    });
-}
+        document.getElementById("gridViewBtn").addEventListener("click", () => {
+            currentView = "grid";
+            renderAllNotes(notes);
+        });
+    }
 
 
         document.getElementById("noteSearch").addEventListener("input", function () {
