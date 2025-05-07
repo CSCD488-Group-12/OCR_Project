@@ -59,11 +59,11 @@
                 <p>Are you sure you'd like to use this image for OCR?</p>
                 <img id="previewImage" src="" alt="Selected Image" style="max-width: 80%; max-height: 300px; margin: 10px 0;">
                 
-                <div class="combo-box-container">
-                    <label for="categoryComboBox">Category:</label>
-                    <div class="combo-box">
-                        <input type="text" id="categoryComboBoxInput" placeholder="Start typing or select..." oninput="filterComboOptions()" onfocus="showComboOptions()" />
-                        <ul id="comboBoxOptions" class="combo-options hidden"></ul>
+                <div class="combo-box-container requires-login">
+                    <label for="categoryComboBox" class="requires-login">Category:</label>
+                    <div class="combo-box requires-login">
+                        <input type="text" id="categoryComboBoxInput" class = "requires-login" placeholder="Start typing or select..." oninput="filterComboOptions()" onfocus="showComboOptions()" />
+                        <ul id="comboBoxOptions" class="combo-options requires-login hidden"></ul>
                     </div>
                 </div>
                 
@@ -105,7 +105,13 @@
     <!-- Kat: This appears to be a list view. Add tile view as well (and buttons to swap between them) -->
     <div class="all-notes requires-login hidden">
         <h2 class="all-notes-label requires-login hidden">All Notes</h2>
-        <input type="text" placeholder="Search notes" id="noteSearch">
+        <div class="search-bar">
+            <input type="text" placeholder="Search your notes..." id="noteSearch" />
+          </div>
+          <div class="view-toggle-group">
+            <button id="listViewBtn" class="view-toggle active">List View</button>
+            <button id="gridViewBtn" class="view-toggle">Grid View</button>
+          </div>
             <!-- Add sorting/filter buttons here -->
         <!-- Notes go here -->
     </div>
@@ -204,8 +210,6 @@
         lastEdited: "Last Edited: Apr 15, 2025"
     }
 ];
-
-        const testCategories = ["Math", "Science", "English", "Personal", "History"];
 
         const allUserNotes = [
     {
@@ -588,7 +592,7 @@
                 });
           
         // User-made categories population        
-        const allCategories = ["Math", "Science", "English", "Personal", "History"]; // Or use testCategories
+        const allCategories = ["Math", "Science", "English", "Personal", "History"];
 
         function populateComboBoxOptions(categories) {
             const optionsList = document.getElementById("comboBoxOptions");
@@ -680,40 +684,80 @@
         }
 
         //Load logged in user's entire history of notes (saved to the database)
-        function renderAllNotes(notes) {
-            const container = document.querySelector(".all-notes");
-            
-            // Clear any previous content except the search bar
-            const searchBar = container.querySelector(".search-bar");
-            container.innerHTML = ""; 
-            if (searchBar) container.appendChild(searchBar);
+        let currentView = "list"; // default
+
+function renderAllNotes(notes) {
+    const container = document.querySelector(".all-notes");
+    container.innerHTML = ""; // Clear existing
+
+    const searchBar = document.createElement("div");
+    searchBar.className = "search-bar";
+    searchBar.innerHTML = `
+        <input type="text" placeholder="Search notes" id="noteSearch" value="${document.getElementById("noteSearch")?.value || ''}" />
+        <div class="view-toggle-group">
+          <button id="listViewBtn" class="view-toggle ${currentView === 'list' ? 'active' : ''}">List View</button>
+          <button id="gridViewBtn" class="view-toggle ${currentView === 'grid' ? 'active' : ''}">Grid View</button>
+        </div>
+    `;
+    container.appendChild(searchBar);
+
+    const list = document.createElement("div");
+    list.className = currentView === "grid" ? "all-notes-grid" : "all-notes-list";
+
+    notes.forEach(note => {
+        const card = document.createElement("div");
+        card.className = `note-history-card ${currentView === "grid" ? "grid" : ""}`;
+
+        card.innerHTML = `
+            <div class="note-header">
+                <h3>${note.title}</h3>
+                <span class="note-category">${note.category || "Uncategorized"}</span>
+            </div>
+            <p class="note-preview">${note.preview}</p>
+            <p class="note-date">${note.date}</p>
+        `;
+
+        card.addEventListener("click", () => {
+            alert(`Open full note: ${note.title}`);
+        });
+
+        list.appendChild(card);
+    });
+
+    container.appendChild(list);
+
+    document.getElementById("noteSearch").addEventListener("input", function () {
+        const query = this.value.toLowerCase().trim();
+        const filteredNotes = allUserNotes.filter(note =>
+            note.title.toLowerCase().includes(query) ||
+            note.preview.toLowerCase().includes(query) ||
+            (note.category || "").toLowerCase().includes(query)
+        );
+        renderAllNotes(filteredNotes);
+    });
+
+    document.getElementById("listViewBtn").addEventListener("click", () => {
+        currentView = "list";
+        renderAllNotes(notes);
+    });
+
+    document.getElementById("gridViewBtn").addEventListener("click", () => {
+        currentView = "grid";
+        renderAllNotes(notes);
+    });
+}
+
+
+        document.getElementById("noteSearch").addEventListener("input", function () {
+            const query = this.value.toLowerCase().trim();
+            const filteredNotes = allUserNotes.filter(note =>
+                note.title.toLowerCase().includes(query) ||
+                note.preview.toLowerCase().includes(query) ||
+                (note.category || "").toLowerCase().includes(query)
+            );
         
-            const list = document.createElement("div");
-            list.className = "all-notes-list";
-        
-            notes.forEach(note => {
-                const card = document.createElement("div");
-                card.className = "note-history-card";
-        
-                card.innerHTML = `
-                    <div class="note-header">
-                        <h3>${note.title}</h3>
-                        <span class="note-category">${note.category || "Uncategorized"}</span>
-                    </div>
-                    <p class="note-preview">${note.preview}</p>
-                    <p class="note-date">${note.date}</p>
-                `;
-        
-                card.addEventListener("click", () => {
-                    // TODO: Open full note view
-                    alert(`Open full note: ${note.title}`);
-                });
-        
-                list.appendChild(card);
-            });
-        
-            container.appendChild(list);
-        }
+            renderAllNotes(filteredNotes);
+        });
         
 
         
