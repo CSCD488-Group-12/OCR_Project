@@ -16,9 +16,7 @@
     <!-- Navigation Bar -->
     <div class="topnav">
         <a href="index.html" class="logo">OCR Note Taker</a>
-        <span id="userGreeting" class="requires-login hidden" style="margin-left: 10px;"></span>
         <div class="topnav-right">
-            <span id="userGreeting" class="requires-login hidden" style="margin-left: 10px;"></span>
             <button type="button" class="btn-login requires-logout" onclick="login()">Log In</button>
             <button type="button" class="btn-login requires-login hidden" onclick="logOut()">Log Out</button>
         </div>
@@ -172,7 +170,6 @@
         console.log("User is logged in:", loggedInUser.username);
         document.querySelectorAll(".requires-login").forEach(el => el.classList.remove("hidden"));
         document.querySelectorAll(".requires-logout").forEach(el => el.classList.add("hidden"));
-        document.getElementById("userGreeting").textContent = `Hello, ${loggedInUser.username}`;
         
         renderRecentNotes(testNotes);
         renderCollections(testCategories);
@@ -183,7 +180,6 @@
         console.log("User is not logged in");
         document.querySelectorAll(".requires-login").forEach(el => el.classList.add("hidden"));
         document.querySelectorAll(".requires-logout").forEach(el => el.classList.remove("hidden"));
-        document.getElementById("userGreeting").textContent = "";
     }
 </script>
 <!--END OF MICROSOFT STUFF-->
