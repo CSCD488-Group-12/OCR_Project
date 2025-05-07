@@ -16,9 +16,9 @@
     <div class="topnav">
         <a href="index.html" class="logo">OCR Note Taker</a>
         <div class="topnav-right">
-            <!--CHANGED THIS BUTTON TO DO SOMETHING-->
-            <a href="#" onclick="login()">Log In</a>
-            <button type="button" class="btn-login" onclick="logOut()">Log Out</button>
+            <span id="userGreeting" class="requires-login hidden" style="margin-left: 10px;"></span>
+            <button type="button" class="btn-login requires-logout" onclick="login()">Log In</button>
+            <button type="button" class="btn-login requires-login hidden" onclick="logOut()">Log Out</button>
         </div>
     </div>
 
@@ -54,11 +54,24 @@
                 <span id="closeModal" class="close">&times;</span>
                 <p>Are you sure you'd like to use this image for OCR?</p>
                 <img id="previewImage" src="" alt="Selected Image" style="max-width: 80%; max-height: 300px; margin: 10px 0;">
+                
+                <div id="noteCategorySection" class="requires-login hidden">
+                    <label for="noteCategoryInput">Category:</label>
+                    <input type="text" id="noteCategoryInput" placeholder="Enter new category" />
+                
+                    <label for="existingCategories">Or select an existing category:</label>
+                    <select id="existingCategories">
+                        <option value="">-- Select --</option>
+                        <!-- DB options go here -->
+                    </select>
+                </div>
+                
                 <div id="loadingSpinner" class="hidden">
                     <p>Processing image, please wait...</p>
                     <div class="spinner"></div>
                 </div>
-                
+
+            
                 <div id="ocrResult" class="hidden">
                     <p>Extracted Text:</p>
                     <textarea id="ocrTextOutput" class = "editable-area" rows="10"></textarea>
@@ -74,19 +87,21 @@
     </div>
 
 
-     <!--- Recent Notes-->
-     <div class = "recent-notes">
-            
+    <!-- Recent Notes -->
+    <div class="recent-notes requires-login hidden">
+    <!-- Recent notes content here -->
     </div>
 
-    <!--- Collections-->
-    <div class = "collections">
-        
+    <!-- Collections -->
+    <div class="collections requires-login hidden">
+    <!-- Your collections content here -->
     </div>
 
-    <!--- All Notes -->
-    <div class = "all-notes">
-        
+    <!-- All Notes and Search -->
+    <div class="all-notes requires-login hidden">
+        <input type="text" placeholder="Search notes" id="noteSearch">
+            <!-- Add sorting/filter buttons here -->
+        <!-- Notes go here -->
     </div>
 
 
@@ -121,44 +136,92 @@
         msalInstance.logoutRedirect();
     }
 
+    let loggedInUser = null;
+
     msalInstance.handleRedirectPromise().then((response) => {
-        if (response) {
-            const account = response.account;
-            console.log("Logged in as:", account.username);
+        if (response && response.account) {
+            loggedInUser = response.account;
+            onUserLogin();
         } else {
-            const currentAccounts = msalInstance.getAllAccounts();
-            if (currentAccounts.length > 0) {
-                console.log("Already logged in:", currentAccounts[0].username);
+            const accounts = msalInstance.getAllAccounts();
+            if (accounts.length > 0) {
+                loggedInUser = accounts[0];
+                onUserLogin();
+            } else {
+                onUserLogout();
             }
         }
     }).catch((err) => {
         console.error("Login error:", err);
+        onUserLogout();
     });
+
+    function onUserLogin() {
+        console.log("User is logged in:", loggedInUser.username);
+        document.querySelectorAll(".requires-login").forEach(el => el.classList.remove("hidden"));
+        document.querySelectorAll(".requires-logout").forEach(el => el.classList.add("hidden"));
+        document.getElementById("userGreeting").textContent = `Hello, ${loggedInUser.username}`;
+        
+        renderRecentNotes(testNotes);
+        renderCollections(testCategories);
+        renderAllNotes(allUserNotes);
+    }
+
+    function onUserLogout() {
+        console.log("User is not logged in");
+        document.querySelectorAll(".requires-login").forEach(el => el.classList.add("hidden"));
+        document.querySelectorAll(".requires-logout").forEach(el => el.classList.remove("hidden"));
+        document.getElementById("userGreeting").textContent = "";
+    }
 </script>
-
-
-
-<!--NEW MICROSOFT STUFF-->
-    <script>
-        msalInstance.handleRedirectPromise().then((response) => {
-            if (response) {
-                const account = response.account;
-                console.log("Logged in as:", account.username);
-            } else {
-                const currentAccounts = msalInstance.getAllAccounts();
-                if (currentAccounts.length > 0) {
-                    console.log("Already logged in:", currentAccounts[0].username);
-                }
-            }
-        }).catch((err) => {
-            console.error("Login error:", err);
-        });
-    </script>
 <!--END OF MICROSOFT STUFF-->
 
 
     <script>
 
+        //Testing data
+        const testNotes = [
+    {
+        title: "Intro to Calculus",
+        image: "https://via.placeholder.com/300x180.png?text=Note+1",
+        lastEdited: "Last Edited: Apr 20, 2025"
+    },
+    {
+        title: "World War II Summary",
+        image: "https://via.placeholder.com/300x180.png?text=Note+2",
+        lastEdited: "Last Edited: Apr 18, 2025"
+    },
+    {
+        title: "Photosynthesis Notes",
+        image: "https://via.placeholder.com/300x180.png?text=Note+3",
+        lastEdited: "Last Edited: Apr 15, 2025"
+    }
+];
+
+        const testCategories = ["Math", "Science", "English", "Personal", "History"];
+
+        const allUserNotes = [
+    {
+        title: "Algebra Summary",
+        category: "Math",
+        preview: "This note explains factoring, the quadratic formula, and examples from homework...",
+        date: "Saved on Apr 3, 2025"
+    },
+    {
+        title: "Cold War Timeline",
+        category: "History",
+        preview: "Outlined events from 1945–1991, including Cuban Missile Crisis and Berlin Wall...",
+        date: "Saved on Mar 27, 2025"
+    },
+    {
+        title: "Poetry Analysis",
+        category: "English",
+        preview: "Discussed metaphors and mood in Robert Frost's work, focusing on 'The Road Not Taken'...",
+        date: "Saved on Mar 14, 2025"
+    }
+];
+
+        // end testing data
         function displayDisclaimer() {
             const uploadInfo = document.getElementById("upload-info");
             const uploadedImage = document.getElementById("imageCanvas");
@@ -334,7 +397,6 @@
                 reader.readAsDataURL(file);
             }
             
-            // Set this outside to attach cropper + canvas logic
             img.onload = () => {
                 imageCanvas.width = img.naturalWidth;
                 imageCanvas.height = img.naturalHeight;
@@ -360,6 +422,12 @@
 
                 previewImage.src = selectedImageData;
                 confirmationModal.classList.remove("hidden");
+                confirmBtn.classList.remove("hidden");
+                cancelBtn.classList.remove("hidden");
+
+                if (loggedInUser) {
+                    document.getElementById("noteCategorySection").classList.remove("hidden");
+                }
             });
         //=====================================================================================================================
 
@@ -383,7 +451,17 @@
                 confirmBtn.classList.add("hidden");
                 cancelBtn.classList.add("hidden");
                 document.getElementById("loadingSpinner").classList.remove("hidden");
-            
+                
+
+                //DB STUFF
+                const manualCategory = document.getElementById("noteCategoryInput").value;
+                const selectedCategory = document.getElementById("existingCategories").value;
+                const finalCategory = manualCategory || selectedCategory;
+
+                console.log("Note category:", finalCategory); // send this category the database
+                //END DB STUFF
+
+
                 // FUNCTION ENDPOINT
                 const functionEndpoint = "https://ocr-notetaker-function-app.azurewebsites.net/api/ocr?code=MgPRdNP8lAvX5yjvUZe4lRsaNNcV_nlC00bWPLFNwmDpAzFu41Op5A==";
 
@@ -461,6 +539,10 @@
         // Handle cancel button click
             cancelBtn.addEventListener("click", () => {
                 confirmationModal.classList.add("hidden");
+
+                document.getElementById("noteCategoryInput").value = "";
+                document.getElementById("existingCategories").value = "";
+                document.getElementById("noteCategorySection").classList.add("hidden");
             });
 
         // Handle close (X) button click
@@ -470,10 +552,113 @@
                     document.getElementById("ocrTextOutput").textContent = "";
                     confirmBtn.classList.remove("hidden");
                     cancelBtn.classList.remove("hidden");
+
+                    document.getElementById("noteCategoryInput").value = "";
+                    document.getElementById("existingCategories").value = "";
+                    document.getElementById("noteCategorySection").classList.add("hidden");
                     closeUploadForm();
                 });
-
+          
+        // User-made categories population        
+        function populateExistingCategories(categories) {
+            const dropdown = document.getElementById("existingCategories");
+            dropdown.innerHTML = '<option value="">-- Select --</option>';
+            categories.forEach(cat => {
+                const opt = document.createElement("option");
+                opt.value = cat;
+                opt.textContent = cat;
+                dropdown.appendChild(opt);
+            });
+        }
+                
+        // EXAMPLE FOR TESTING
+        // REMOVE LATER
+        populateExistingCategories(["Physics", "History", "Letters", "Math"]);
        
+
+        // Load logged in user's most recent notes
+        function renderRecentNotes(notes) {
+            const container = document.querySelector(".recent-notes");
+            container.innerHTML = ""; // Clear previous
+        
+            notes.forEach(note => {
+                const card = document.createElement("div");
+                card.className = "note-card";
+        
+                card.innerHTML = `
+                    <img src="${note.image}" alt="Note image" />
+                    <div class="note-overlay">
+                        <p class="note-title">${note.title}</p>
+                        <p class="note-date">${note.lastEdited}</p>
+                    </div>
+                `;
+        
+                card.addEventListener("click", () => {
+                    // TODO: Open full note view or editor
+                    alert(`Open note: ${note.title}`);
+                });
+        
+                container.appendChild(card);
+            });
+        }
+
+        //Load logged in user's collections
+        function renderCollections(categories) {
+            const container = document.querySelector(".collections");
+            container.innerHTML = "";
+        
+            categories.forEach(cat => {
+                const item = document.createElement("div");
+                item.className = "collection-card";
+                item.textContent = cat;
+        
+                item.addEventListener("click", () => {
+                    // TODO: Filter notes by this category
+                    alert(`Filter notes by: ${cat}`);
+                });
+        
+                container.appendChild(item);
+            });
+        }
+
+        //Load logged in user's entire history of notes (saved to the database)
+        function renderAllNotes(notes) {
+            const container = document.querySelector(".all-notes");
+            
+            // Clear any previous content except the search bar
+            const searchBar = container.querySelector(".search-bar");
+            container.innerHTML = ""; 
+            if (searchBar) container.appendChild(searchBar);
+        
+            const list = document.createElement("div");
+            list.className = "all-notes-list";
+        
+            notes.forEach(note => {
+                const card = document.createElement("div");
+                card.className = "note-history-card";
+        
+                card.innerHTML = `
+                    <div class="note-header">
+                        <h3>${note.title}</h3>
+                        <span class="note-category">${note.category || "Uncategorized"}</span>
+                    </div>
+                    <p class="note-preview">${note.preview}</p>
+                    <p class="note-date">${note.date}</p>
+                `;
+        
+                card.addEventListener("click", () => {
+                    // TODO: Open full note view
+                    alert(`Open full note: ${note.title}`);
+                });
+        
+                list.appendChild(card);
+            });
+        
+            container.appendChild(list);
+        }
+        
+
+        
     </script>
 
     <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>

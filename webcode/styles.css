@@ -174,49 +174,174 @@
   
   .hidden { display: none !important; }
   
-  /* ACCOUNT PAGE */
-  .account-details-box {
-    max-width: 900px;
-    margin: 80px auto;
-    padding: 30px;
+  /* Recent Notes */
+  .recent-notes {
     display: flex;
+    gap: 20px;
     flex-wrap: wrap;
-    gap: 40px;
-    background: rgba(255,255,255,0.05);
+    justify-content: center;
+    margin: 40px 0;
+  }
+  
+  .note-card {
+    position: relative;
+    width: 280px;
+    height: 180px;
     border-radius: 12px;
+    overflow: hidden;
+    background-color: #1e1e2f;
+    box-shadow: 0 4px 10px rgba(0,0,0,0.3);
+    cursor: pointer;
+    transition: transform 0.3s ease;
   }
   
-  .account-nav {
-    flex: 1;
-    min-width: 200px;
+  .note-card:hover {
+    transform: scale(1.03);
   }
   
-  .account-nav a {
-    display: block;
-    margin: 10px 0;
+  .note-card img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    filter: brightness(0.7);
+  }
+  
+  .note-card .note-overlay {
+    position: absolute;
+    bottom: 0;
+    width: 100%;
+    padding: 12px;
+    background: linear-gradient(to top, rgba(0,0,0,0.7), transparent);
+    color: #f0f0f0;
+  }
+  
+  .note-card .note-title {
+    font-weight: bold;
+    font-size: 1rem;
+    margin: 0;
+  }
+  
+  .note-card .note-date {
+    font-size: 0.85rem;
+    color: #bbb;
+  }
+
+  /* Collections*/
+  .collections {
+    display: flex;
+    gap: 16px;
+    flex-wrap: wrap;
+    justify-content: center;
+    margin: 40px auto;
+    max-width: 1000px;
+  }
+  
+  .collection-card {
+    background: linear-gradient(135deg, #3c00d6, #5f0f80);
+    color: white;
+    padding: 16px 24px;
+    border-radius: 30px;
+    font-weight: bold;
+    cursor: pointer;
+    transition: transform 0.2s ease;
+    min-width: 120px;
+    text-align: center;
+  }
+  
+  .collection-card:hover {
+    transform: scale(1.05);
+  }
+
+  /*All Notes Section*/
+  .all-notes {
+    max-width: 1000px;
+    margin: 40px auto;
+    padding: 0 20px;
+  }
+  
+  .search-bar {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    margin-bottom: 20px;
+    flex-wrap: wrap;
+    justify-content: center;
+  }
+  
+  #noteSearch {
+    padding: 10px 16px;
+    border-radius: 8px;
+    border: 1px solid #444;
+    background: rgba(255,255,255,0.05);
+    color: #fff;
+    flex: 1 1 300px;
+  }
+  
+  .view-toggle, .filter-btn {
+    background: rgba(255,255,255,0.1);
+    border: none;
+    padding: 10px 14px;
+    border-radius: 8px;
+    color: #fff;
+    cursor: pointer;
+  }
+
+  .all-notes-list {
+    display: flex;
+    flex-direction: column;
+    gap: 16px;
+    margin-top: 20px;
+  }
+  
+  .note-history-card {
+    background: rgba(255,255,255,0.04);
+    padding: 20px;
+    border-radius: 10px;
+    border: 1px solid rgba(255,255,255,0.1);
+    transition: background 0.2s ease;
+    cursor: pointer;
+  }
+  
+  .note-history-card:hover {
+    background: rgba(255,255,255,0.08);
+  }
+  
+  .note-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+  }
+  
+  .note-header h3 {
+    margin: 0;
+    font-size: 1.2rem;
     color: #a5b4fc;
   }
   
-  .user-details {
-    flex: 2;
-    min-width: 250px;
-  }
-  
-  .user-details label {
-    display: block;
-    margin-top: 10px;
+  .note-category {
+    font-size: 0.85rem;
+    background: rgba(90,90,255,0.2);
+    padding: 4px 10px;
+    border-radius: 20px;
     color: #ccc;
   }
   
-  .user-details input {
-    width: 100%;
-    padding: 10px;
-    margin-bottom: 12px;
-    background: rgba(255,255,255,0.1);
-    border: 1px solid rgba(255,255,255,0.2);
-    border-radius: 8px;
-    color: white;
+  .note-preview {
+    color: #ddd;
+    margin: 10px 0;
+    font-size: 0.95rem;
+    line-height: 1.4;
   }
+  
+  .note-date {
+    font-size: 0.8rem;
+    color: #999;
+    text-align: right;
+  }  
+  
+
+  
+  
 
   .spinner {
     border: 4px solid rgba(255, 255, 255, 0.1);
