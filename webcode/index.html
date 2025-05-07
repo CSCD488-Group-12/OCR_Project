@@ -461,7 +461,7 @@
                 cancelBtn.classList.remove("hidden");
 
                 if (loggedInUser) {
-                    document.getElementById("noteCategorySection").classList.remove("hidden");
+                    document.querySelectorAll(".combo-box-container .requires-login").forEach(el => el.classList.remove("hidden"));
                 }
             });
         //=====================================================================================================================
@@ -701,8 +701,20 @@ function renderAllNotes(notes) {
     `;
     container.appendChild(searchBar);
 
+    if (notes.length === 0) {
+        const noResults = document.createElement("p");
+        noResults.textContent = "No notes found.";
+        noResults.style.textAlign = "center";
+        noResults.style.color = "#ccc";
+        noResults.style.marginTop = "40px";
+        noResults.style.fontSize = "1.1rem";
+        container.appendChild(noResults);
+        return;
+    }
+
     const list = document.createElement("div");
     list.className = currentView === "grid" ? "all-notes-grid" : "all-notes-list";
+
 
     notes.forEach(note => {
         const card = document.createElement("div");
@@ -735,6 +747,7 @@ function renderAllNotes(notes) {
         );
         renderAllNotes(filteredNotes);
     });
+
 
     document.getElementById("listViewBtn").addEventListener("click", () => {
         currentView = "list";

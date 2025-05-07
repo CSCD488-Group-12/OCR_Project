@@ -336,6 +336,10 @@
     margin: 40px auto;
     padding: 0 20px;
   }
+
+  .all-notes p {
+    animation: fadeIn 0.3s ease;
+  }
   
   .search-bar {
     display: flex;
@@ -461,6 +465,51 @@
   font-family: 'Inter', sans-serif;
   font-size: 1rem;
 }
+
+.view-toggle-group {
+  display: flex;
+  gap: 10px;
+  justify-content: center;
+  margin-top: 10px;
+}
+
+.view-toggle {
+  padding: 10px 16px;
+  border: none;
+  border-radius: 8px;
+  background: rgba(255,255,255,0.1);
+  color: white;
+  font-weight: 600;
+  cursor: pointer;
+  transition: background 0.2s ease;
+}
+
+.view-toggle.active {
+  background: linear-gradient(135deg, #5f0f80, #3c00d6);
+}
+
+/* Grid-style notes */
+.all-notes-grid {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 20px;
+  justify-content: center;
+  margin-top: 20px;
+}
+
+.note-history-card.grid {
+  width: 280px;
+  height: auto;
+  background: rgba(255,255,255,0.05);
+  border-radius: 12px;
+  padding: 20px;
+  transition: transform 0.2s ease;
+}
+
+.note-history-card.grid:hover {
+  transform: scale(1.03);
+}
+
 
 
   
