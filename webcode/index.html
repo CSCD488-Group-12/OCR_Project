@@ -59,16 +59,12 @@
                 <p>Are you sure you'd like to use this image for OCR?</p>
                 <img id="previewImage" src="" alt="Selected Image" style="max-width: 80%; max-height: 300px; margin: 10px 0;">
                 
-                <!-- Kat: Make category input also a dropdown, no need for both -->
-                <div id="noteCategorySection" class="requires-login hidden">
-                    <label for="noteCategoryInput">Category:</label>
-                    <input type="text" id="noteCategoryInput" placeholder="Enter new category" />
-                
-                    <label for="existingCategories">Or select an existing category:</label>
-                    <select id="existingCategories">
-                        <option value="">-- Select --</option>
-                        <!-- DB options go here -->
-                    </select>
+                <div class="combo-box-container">
+                    <label for="categoryComboBox">Category:</label>
+                    <div class="combo-box">
+                        <input type="text" id="categoryComboBoxInput" placeholder="Start typing or select..." oninput="filterComboOptions()" onfocus="showComboOptions()" />
+                        <ul id="comboBoxOptions" class="combo-options hidden"></ul>
+                    </div>
                 </div>
                 
                 <div id="loadingSpinner" class="hidden">
@@ -487,12 +483,9 @@
                 cancelBtn.classList.add("hidden");
                 document.getElementById("loadingSpinner").classList.remove("hidden");
                 
-
+                const finalCategory = document.getElementById("categoryComboBoxInput").value.trim();
+                
                 //DB STUFF
-                const manualCategory = document.getElementById("noteCategoryInput").value;
-                const selectedCategory = document.getElementById("existingCategories").value;
-                const finalCategory = manualCategory || selectedCategory;
-
                 console.log("Note category:", finalCategory); // send this category the database
                 //END DB STUFF
 
@@ -595,20 +588,50 @@
                 });
           
         // User-made categories population        
-        function populateExistingCategories(categories) {
-            const dropdown = document.getElementById("existingCategories");
-            dropdown.innerHTML = '<option value="">-- Select --</option>';
+        const allCategories = ["Math", "Science", "English", "Personal", "History"]; // Or use testCategories
+
+        function populateComboBoxOptions(categories) {
+            const optionsList = document.getElementById("comboBoxOptions");
+            optionsList.innerHTML = "";
             categories.forEach(cat => {
-                const opt = document.createElement("option");
-                opt.value = cat;
-                opt.textContent = cat;
-                dropdown.appendChild(opt);
+                const li = document.createElement("li");
+                li.textContent = cat;
+                li.addEventListener("click", () => {
+                    document.getElementById("categoryComboBoxInput").value = cat;
+                    hideComboOptions();
+                });
+                optionsList.appendChild(li);
             });
         }
-                
-        // EXAMPLE FOR TESTING
-        // REMOVE LATER
-        populateExistingCategories(["Physics", "History", "Letters", "Math"]);
+
+        function filterComboOptions() {
+            const input = document.getElementById("categoryComboBoxInput").value.toLowerCase();
+            const options = document.querySelectorAll("#comboBoxOptions li");
+            options.forEach(option => {
+                const match = option.textContent.toLowerCase().includes(input);
+                option.style.display = match ? "block" : "none";
+            });
+            showComboOptions();
+        }
+
+        function showComboOptions() {
+            document.getElementById("comboBoxOptions").classList.add("visible");
+            document.getElementById("comboBoxOptions").classList.remove("hidden");
+        }
+
+        function hideComboOptions() {
+            document.getElementById("comboBoxOptions").classList.remove("visible");
+            document.getElementById("comboBoxOptions").classList.add("hidden");
+        }
+
+        document.addEventListener("click", function (event) {
+            const comboBox = document.querySelector(".combo-box");
+            if (!comboBox.contains(event.target)) {
+                hideComboOptions();
+            }
+        });
+
+        populateComboBoxOptions(allCategories);
        
 
         // Load logged in user's most recent notes

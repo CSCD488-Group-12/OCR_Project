@@ -75,7 +75,7 @@
 
   .floating-newnote {
     position: fixed;
-    top: 20px;
+    top: 40px;
     left: 20px;
     z-index: 100;
     background: linear-gradient(135deg, #5f0f80, #3c00d6);
@@ -90,7 +90,6 @@
     transition: all 0.3s ease;
   }
   
-  /* Animate spacing when the upload form opens */
   .upload-form.expanded {
     display: block;
     animation: expandDown 0.3s ease forwards;
@@ -197,6 +196,56 @@
     font-weight: bold;
     cursor: pointer;
   }
+
+  .combo-box-container {
+    position: relative;
+    width: 100%;
+    max-width: 300px;
+    margin-bottom: 1em;
+}
+
+.combo-box {
+    position: relative;
+}
+
+.combo-box input {
+    width: 100%;
+    padding: 8px;
+    border-radius: 4px;
+    border: 1px solid #ccc;
+}
+
+.combo-options {
+    list-style: none;
+    margin: 0;
+    padding: 0;
+    position: absolute;
+    width: 100%;
+    background: white;
+    border: 1px solid #ccc;
+    max-height: 150px;
+    overflow-y: auto;
+    z-index: 10;
+    opacity: 0;
+    transform: scaleY(0);
+    transform-origin: top;
+    transition: all 0.2s ease;
+}
+
+.combo-options li {
+    padding: 8px;
+    cursor: pointer;
+}
+
+.combo-options li:hover {
+    background-color: #f0f0f0;
+}
+
+.combo-options.visible {
+    opacity: 1;
+    transform: scaleY(1);
+}
+
   
   .btn-confirm { background: #1db954; color: white; }
   .btn-cancel { background: #e53935; color: white; }
