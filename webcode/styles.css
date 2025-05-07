@@ -72,6 +72,35 @@
     font-weight: 600;
     cursor: pointer;
   }
+
+  .floating-newnote {
+    position: fixed;
+    top: 20px;
+    left: 20px;
+    z-index: 100;
+    background: linear-gradient(135deg, #5f0f80, #3c00d6);
+    color: white;
+    padding: 12px 20px;
+    border: none;
+    border-radius: 8px;
+    font-weight: bold;
+    font-size: 1rem;
+    cursor: pointer;
+    box-shadow: 0 4px 10px rgba(0,0,0,0.3);
+    transition: all 0.3s ease;
+  }
+  
+  /* Animate spacing when the upload form opens */
+  .upload-form.expanded {
+    display: block;
+    animation: expandDown 0.3s ease forwards;
+  }
+  
+  @keyframes expandDown {
+    from { opacity: 0; transform: scaleY(0.95); }
+    to { opacity: 1; transform: scaleY(1); }
+  }
+  
   
   /* UPLOAD FORM */
   .upload-form {
