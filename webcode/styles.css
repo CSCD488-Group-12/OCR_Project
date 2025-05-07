@@ -240,7 +240,7 @@
     background: linear-gradient(135deg, #3c00d6, #5f0f80);
     color: white;
     padding: 16px 24px;
-    border-radius: 30px;
+    border-radius: 20px;
     font-weight: bold;
     cursor: pointer;
     transition: transform 0.2s ease;

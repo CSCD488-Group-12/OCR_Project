@@ -1,4 +1,3 @@
-
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -12,7 +11,9 @@
 
 <!--END OF NEW MICROSOFT STUFF-->
 </head>
+
 <body>
+    <!-- Navigation Bar -->
     <div class="topnav">
         <a href="index.html" class="logo">OCR Note Taker</a>
         <span id="userGreeting" class="requires-login hidden" style="margin-left: 10px;"></span>
@@ -23,13 +24,16 @@
         </div>
     </div>
 
+    <!-- Hero Section -->
+    <!-- Should only be visible when user is not logged in -->
     <div class="homepage-wrapper">
         <div class="hero-section">
             <h1 class="hero-title">Capture. Convert. Create.</h1>
             <p class="hero-subtitle">Upload and crop your image, then extract text with ease.</p>
-            <button type="button" class="btn-hero" id="newnote" onclick="changeUploadForm()">New Note</button>
+            <button type="button" class="btn-hero requires-logout" id="newnote" onclick="changeUploadForm()">New Note</button>
         </div>
 
+        <!-- Upload Form -->
         <div class="upload-form" id="new-note-form" ondrop="handleDrop(event)" ondragover="handleDragOver(event)">
             <p id="upload-info">Drag and drop an image here or click the upload button</p>
             <div class="image-preview-row">
@@ -50,12 +54,14 @@
             <input type="file" id="fileInput" accept="image/*" style="display:none">
         </div>
 
+        <!-- Confirmation Window -->
         <div id="confirmationModal" class="modal hidden">
             <div class="modal-content">
                 <span id="closeModal" class="close">&times;</span>
                 <p>Are you sure you'd like to use this image for OCR?</p>
                 <img id="previewImage" src="" alt="Selected Image" style="max-width: 80%; max-height: 300px; margin: 10px 0;">
                 
+                <!-- Kat: Make category input also a dropdown, no need for both -->
                 <div id="noteCategorySection" class="requires-login hidden">
                     <label for="noteCategoryInput">Category:</label>
                     <input type="text" id="noteCategoryInput" placeholder="Enter new category" />
@@ -72,7 +78,8 @@
                     <div class="spinner"></div>
                 </div>
 
-            
+            <!-- OCR results -->
+            <!-- Kat: Add copy to clipboard button -->
                 <div id="ocrResult" class="hidden">
                     <p>Extracted Text:</p>
                     <textarea id="ocrTextOutput" class = "editable-area" rows="10"></textarea>
@@ -97,13 +104,17 @@
     <div class="collections requires-login hidden">
     <!-- Your collections content here -->
     </div>
-
+    
     <!-- All Notes and Search -->
+    <!-- Kat: This appears to be a list view. Add tile view as well (and buttons to swap between them) -->
     <div class="all-notes requires-login hidden">
         <input type="text" placeholder="Search notes" id="noteSearch">
             <!-- Add sorting/filter buttons here -->
         <!-- Notes go here -->
     </div>
+
+    <!-- Floating button for logged-in users -->
+    <button id="floatingNewNoteBtn" class="floating-newnote requires-login hidden" onclick="changeUploadForm()">+ New Note</button>
 
 
 
@@ -238,7 +249,7 @@
             }
         }
 
-        function changeUploadForm() {
+        /* function changeUploadForm() {
             const uploadForm = document.getElementById("new-note-form");
             const newNoteButton = document.getElementById("newnote");
         
@@ -249,7 +260,30 @@
                 newNoteButton.textContent = "Cancel";
             }
             displayDisclaimer();
+        } */
+
+        function changeUploadForm() {
+            const uploadForm = document.getElementById("new-note-form");
+            const heroNewNoteBtn = document.getElementById("newnote");
+            const floatingNewNoteBtn = document.getElementById("floatingNewNoteBtn");
+        
+            const isOpen = uploadForm.style.display === "block";
+        
+            if (isOpen) {
+                uploadForm.style.display = "none";
+                uploadForm.classList.remove("expanded");
+                heroNewNoteBtn.textContent = "New Note";
+                floatingNewNoteBtn.textContent = "+ New Note";
+            } else {
+                uploadForm.style.display = "block";
+                uploadForm.classList.add("expanded");
+                heroNewNoteBtn.textContent = "Cancel";
+                floatingNewNoteBtn.textContent = "Cancel";
+            }
+        
+            displayDisclaimer();
         }
+        
         
         function closeUploadForm() {
             document.getElementById("new-note-form").style.display = "none";
