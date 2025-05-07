@@ -80,6 +80,9 @@
                     <button id="shareBtn" class="btn-confirm">Share</button>
                     <button id="downloadTxtBtn" class="btn-confirm">Download .txt</button>
                     <button id="downloadPdfBtn" class="btn-confirm">Download .pdf</button>
+                    <button id="copyToClipboardBtn" class="btn-confirm">Copy to Clipboard</button>
+                    <button id="shareBtn" class="btn-confirm">Share</button>
+
                 </div>
                 <br>
                 <button id="confirmBtn" class="btn-confirm">Confirm</button>
@@ -119,7 +122,19 @@
     <!-- Floating button for logged-in users -->
     <button id="floatingNewNoteBtn" class="floating-newnote requires-login hidden" onclick="changeUploadForm()">+ New Note</button>
 
+    <!-- Open full note -->
+    <div id="noteDetailModal" class="modal hidden requires-login">
+        <div class="modal-content note-modal-content">
+          <span id="closeNoteModal" class="close">&times;</span>
+          <img id="noteDetailImage" src="" alt="Note Image" />
+          <h2 id="noteDetailTitle"></h2>
+          <p id="noteDetailCategory" class="note-category"></p>
+          <p id="noteDetailText"></p>
+          <p id="noteDetailDate" class="note-date"></p>
+        </div>
+      </div>
 
+      <div id="toast" class="toast hidden">Copied to clipboard!</div>
 
     <div class="footer">
         Uicons by <a href="https://www.flaticon.com/uicons">Flaticon</a>
@@ -174,6 +189,7 @@
     function onUserLogin() {
         console.log("User is logged in:", loggedInUser.username);
         document.querySelectorAll(".requires-login").forEach(el => el.classList.remove("hidden"));
+        document.querySelectorAll("h2.requires-login").forEach(el => el.classList.remove("hidden"));
         document.querySelectorAll(".requires-logout").forEach(el => el.classList.add("hidden"));
         
         renderRecentNotes(testNotes);
@@ -674,13 +690,28 @@
 
             const searchBar = document.createElement("div");
             searchBar.className = "search-bar";
-            searchBar.innerHTML = `
-                <input type="text" placeholder="Search notes" id="noteSearch" value="${document.getElementById("noteSearch")?.value || ''}" />
-                <div class="view-toggle-group">
-                <button id="listViewBtn" class="view-toggle ${currentView === 'list' ? 'active' : ''}">List View</button>
-                <button id="gridViewBtn" class="view-toggle ${currentView === 'grid' ? 'active' : ''}">Grid View</button>
-                </div>
-            `;
+            if (currentView === "grid") {
+                card.innerHTML = `
+                    <div class="note-card-grid-image-wrapper">
+                        <img src="${note.image || 'https://via.placeholder.com/280x180?text=Note'}" alt="Note image" class="note-card-grid-img" />
+                        <div class="note-overlay">
+                        <p class="note-title">${note.title}</p>
+                        <p class="note-category">${note.category || "Uncategorized"}</p>
+                        <p class="note-date">${note.date}</p>
+                        </div>
+                    </div>
+                `;
+            } else {
+                card.innerHTML = `
+                    <div class="note-header">
+                        <h3>${note.title}</h3>
+                        <span class="note-category">${note.category || "Uncategorized"}</span>
+                    </div>
+                    <p class="note-preview">${note.preview}</p>
+                    <p class="note-date">${note.date}</p>
+                `;
+            }
+            
             container.appendChild(searchBar);
 
             if (notes.length === 0) {
@@ -741,6 +772,28 @@
             renderAllNotes(notes);
         });
     }   
+
+    document.getElementById("copyToClipboardBtn").addEventListener("click", async () => {
+        const text = document.getElementById("ocrTextOutput").value;
+      
+        try {
+          await navigator.clipboard.writeText(text);
+          showToast("Copied to clipboard!");
+        } catch (err) {
+          showToast("Failed to copy.", true);
+        }
+      });
+      
+      function showToast(message, isError = false) {
+        const toast = document.getElementById("toast");
+        toast.textContent = message;
+        toast.style.background = isError ? "#e53935" : "#1db954";
+        toast.classList.add("visible");
+      
+        setTimeout(() => {
+          toast.classList.remove("visible");
+        }, 2000);
+      }
 
         
     </script>
