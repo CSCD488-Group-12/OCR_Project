@@ -740,20 +740,7 @@
             currentView = "grid";
             renderAllNotes(notes);
         });
-    }
-
-
-        document.getElementById("noteSearch").addEventListener("input", function () {
-            const query = this.value.toLowerCase().trim();
-            const filteredNotes = allUserNotes.filter(note =>
-                note.title.toLowerCase().includes(query) ||
-                note.preview.toLowerCase().includes(query) ||
-                (note.category || "").toLowerCase().includes(query)
-            );
-        
-            renderAllNotes(filteredNotes);
-        });
-        
+    }   
 
         
     </script>
