@@ -177,7 +177,7 @@
         document.querySelectorAll(".requires-logout").forEach(el => el.classList.add("hidden"));
         
         renderRecentNotes(testNotes);
-        renderCollections(testCategories);
+        renderCollections(allCategories);
         renderAllNotes(allUserNotes);
     }
 
@@ -193,44 +193,44 @@
     <script>
 
         //Testing data
-        const testNotes = [
-    {
-        title: "Intro to Calculus",
-        image: "https://via.placeholder.com/300x180.png?text=Note+1",
-        lastEdited: "Last Edited: Apr 20, 2025"
-    },
-    {
-        title: "World War II Summary",
-        image: "https://via.placeholder.com/300x180.png?text=Note+2",
-        lastEdited: "Last Edited: Apr 18, 2025"
-    },
-    {
-        title: "Photosynthesis Notes",
-        image: "https://via.placeholder.com/300x180.png?text=Note+3",
-        lastEdited: "Last Edited: Apr 15, 2025"
-    }
-];
+            const testNotes = [
+        {
+            title: "Intro to Calculus",
+            image: "https://via.placeholder.com/300x180.png?text=Note+1",
+            lastEdited: "Last Edited: Apr 20, 2025"
+        },
+        {
+            title: "World War II Summary",
+            image: "https://via.placeholder.com/300x180.png?text=Note+2",
+            lastEdited: "Last Edited: Apr 18, 2025"
+        },
+        {
+            title: "Photosynthesis Notes",
+            image: "https://via.placeholder.com/300x180.png?text=Note+3",
+            lastEdited: "Last Edited: Apr 15, 2025"
+        }
+    ];
 
-        const allUserNotes = [
-    {
-        title: "Algebra Summary",
-        category: "Math",
-        preview: "This note explains factoring, the quadratic formula, and examples from homework...",
-        date: "Saved on Apr 3, 2025"
-    },
-    {
-        title: "Cold War Timeline",
-        category: "History",
-        preview: "Outlined events from 1945–1991, including Cuban Missile Crisis and Berlin Wall...",
-        date: "Saved on Mar 27, 2025"
-    },
-    {
-        title: "Poetry Analysis",
-        category: "English",
-        preview: "Discussed metaphors and mood in Robert Frost's work, focusing on 'The Road Not Taken'...",
-        date: "Saved on Mar 14, 2025"
-    }
-];
+            const allUserNotes = [
+        {
+            title: "Algebra Summary",
+            category: "Math",
+            preview: "This note explains factoring, the quadratic formula, and examples from homework...",
+            date: "Saved on Apr 3, 2025"
+        },
+        {
+            title: "Cold War Timeline",
+            category: "History",
+            preview: "Outlined events from 1945–1991, including Cuban Missile Crisis and Berlin Wall...",
+            date: "Saved on Mar 27, 2025"
+        },
+        {
+            title: "Poetry Analysis",
+            category: "English",
+            preview: "Discussed metaphors and mood in Robert Frost's work, focusing on 'The Road Not Taken'...",
+            date: "Saved on Mar 14, 2025"
+        }
+    ];
 
         // end testing data
         function displayDisclaimer() {
