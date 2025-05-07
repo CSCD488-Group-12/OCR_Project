@@ -95,17 +95,20 @@
 
     <!-- Recent Notes -->
     <div class="recent-notes requires-login hidden">
+        <h2 class="recent-notes-label requires-login hidden">Recent Notes</h2>
     <!-- Recent notes content here -->
     </div>
 
     <!-- Collections -->
     <div class="collections requires-login hidden">
+        <h2 class="collections-label requires-login hidden">Your Collections</h2>
     <!-- Your collections content here -->
     </div>
     
     <!-- All Notes and Search -->
     <!-- Kat: This appears to be a list view. Add tile view as well (and buttons to swap between them) -->
     <div class="all-notes requires-login hidden">
+        <h2 class="all-notes-label requires-login hidden">All Notes</h2>
         <input type="text" placeholder="Search notes" id="noteSearch">
             <!-- Add sorting/filter buttons here -->
         <!-- Notes go here -->
@@ -284,6 +287,7 @@
         function closeUploadForm() {
             document.getElementById("new-note-form").style.display = "none";
             document.getElementById("newnote").textContent = "New Note";
+            document.getElementById("floatingNewNoteBtn").textContent = "+ New Note";
             resetCanvas();
         }
 
