@@ -74,8 +74,8 @@
   }
 
   .floating-newnote {
-    position: fixed;
-    top: 12%;
+    position: sticky;
+    top: 80px;
     left: 20px;
     z-index: 100;
     background: linear-gradient(135deg, #5f0f80, #3c00d6);
@@ -361,14 +361,24 @@
   }
   
   .view-toggle {
-    background: rgba(255,255,255,0.1);
-    border: none;
-    padding: 10px 14px;
-    border-radius: 8px;
-    color: #fff;
-    cursor: pointer;
     display: flex;
     align-items: center;
+    justify-content: center;
+    gap: 8px;
+    padding: 10px 16px;
+    border: none;
+    border-radius: 8px;
+    background: rgba(255, 255, 255, 0.1);
+    color: white;
+    font-weight: 600;
+    cursor: pointer;
+    transition: background 0.2s ease;
+  }
+  
+  .view-toggle img {
+    width: 18px;
+    height: 18px;
+    object-fit: contain;
   }
 
  .filter-btn {

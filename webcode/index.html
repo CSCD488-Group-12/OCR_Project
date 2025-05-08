@@ -669,6 +669,8 @@
         }
 
         function openNoteDetailModal(note) {
+            if (!note || !note.image) return;
+            
             const modal = document.getElementById("noteDetailModal");
             document.getElementById("noteDetailTitle").textContent = note.title || "Untitled Note";
             document.getElementById("noteDetailCategory").textContent = note.category || "Uncategorized";
