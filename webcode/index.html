@@ -583,7 +583,7 @@
                     document.getElementById("ocrTextOutput").textContent = "";
                     confirmBtn.classList.remove("hidden");
                     cancelBtn.classList.remove("hidden");
-                    
+
                     closeUploadForm();
                 });
           
@@ -683,32 +683,17 @@
 
         function renderAllNotes(notes) {
             const container = document.querySelector(".all-notes");
-            container.innerHTML = ""; // Clear existing
+            container.innerHTML = ""; 
 
             const searchBar = document.createElement("div");
             searchBar.className = "search-bar";
-            if (currentView === "grid") {
-                card.innerHTML = `
-                    <div class="note-card-grid-image-wrapper">
-                        <img src="${note.image || 'https://via.placeholder.com/280x180?text=Note'}" alt="Note image" class="note-card-grid-img" />
-                        <div class="note-overlay">
-                        <p class="note-title">${note.title}</p>
-                        <p class="note-category">${note.category || "Uncategorized"}</p>
-                        <p class="note-date">${note.date}</p>
-                        </div>
-                    </div>
-                `;
-            } else {
-                card.innerHTML = `
-                    <div class="note-header">
-                        <h3>${note.title}</h3>
-                        <span class="note-category">${note.category || "Uncategorized"}</span>
-                    </div>
-                    <p class="note-preview">${note.preview}</p>
-                    <p class="note-date">${note.date}</p>
-                `;
-            }
-            
+
+            const searchInput = document.createElement("input");
+            searchInput.type = "text";
+            searchInput.placeholder = "Search your notes...";
+            searchInput.id = "noteSearch";
+
+            searchBar.appendChild(searchInput);
             container.appendChild(searchBar);
 
             if (notes.length === 0) {
@@ -725,19 +710,31 @@
             const list = document.createElement("div");
             list.className = currentView === "grid" ? "all-notes-grid" : "all-notes-list";
 
-
             notes.forEach(note => {
                 const card = document.createElement("div");
                 card.className = `note-history-card ${currentView === "grid" ? "grid" : ""}`;
 
-                card.innerHTML = `
-                    <div class="note-header">
-                        <h3>${note.title}</h3>
-                        <span class="note-category">${note.category || "Uncategorized"}</span>
-                    </div>
-                    <p class="note-preview">${note.preview}</p>
-                    <p class="note-date">${note.date}</p>
-                `;
+                if (currentView === "grid") {
+                    card.innerHTML = `
+                        <div class="note-card-grid-image-wrapper">
+                            <img src="${note.image || 'https://via.placeholder.com/280x180?text=Note'}" alt="Note image" class="note-card-grid-img" />
+                            <div class="note-overlay">
+                                <p class="note-title">${note.title}</p>
+                                <p class="note-category">${note.category || "Uncategorized"}</p>
+                                <p class="note-date">${note.date}</p>
+                            </div>
+                        </div>
+                    `;
+                } else {
+                    card.innerHTML = `
+                        <div class="note-header">
+                            <h3>${note.title}</h3>
+                            <span class="note-category">${note.category || "Uncategorized"}</span>
+                        </div>
+                        <p class="note-preview">${note.preview}</p>
+                        <p class="note-date">${note.date}</p>
+                    `;
+                }
 
                 card.addEventListener("click", () => {
                     alert(`Open full note: ${note.title}`);
@@ -748,27 +745,28 @@
 
             container.appendChild(list);
 
-        document.getElementById("noteSearch").addEventListener("input", function () {
-            const query = this.value.toLowerCase().trim();
-            const filteredNotes = allUserNotes.filter(note =>
-                note.title.toLowerCase().includes(query) ||
-                note.preview.toLowerCase().includes(query) ||
-                (note.category || "").toLowerCase().includes(query)
-            );
-            renderAllNotes(filteredNotes);
-        });
+            // ✅ Event listeners for filtering and view switching
+            searchInput.addEventListener("input", function () {
+                const query = this.value.toLowerCase().trim();
+                const filteredNotes = allUserNotes.filter(note =>
+                    note.title.toLowerCase().includes(query) ||
+                    note.preview.toLowerCase().includes(query) ||
+                    (note.category || "").toLowerCase().includes(query)
+                );
+                renderAllNotes(filteredNotes);
+            });
 
+            document.getElementById("listViewBtn").addEventListener("click", () => {
+                currentView = "list";
+                renderAllNotes(notes);
+            });
 
-        document.getElementById("listViewBtn").addEventListener("click", () => {
-            currentView = "list";
-            renderAllNotes(notes);
-        });
-
-        document.getElementById("gridViewBtn").addEventListener("click", () => {
-            currentView = "grid";
-            renderAllNotes(notes);
-        });
-    }   
+            document.getElementById("gridViewBtn").addEventListener("click", () => {
+                currentView = "grid";
+                renderAllNotes(notes);
+            });
+        }
+  
 
        /* document.getElementById("copyToClipboardBtn").addEventListener("click", async () => {
             const text = document.getElementById("ocrTextOutput").value;
