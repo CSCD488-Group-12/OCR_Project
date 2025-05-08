@@ -248,6 +248,9 @@
         }
     ];
 
+        // User-made categories population        
+        const allCategories = ["Math", "Science", "English", "Personal", "History"];
+
         // end testing data
         function displayDisclaimer() {
             const uploadInfo = document.getElementById("upload-info");
@@ -589,8 +592,7 @@
                     closeUploadForm();
                 });
           
-        // User-made categories population        
-        const allCategories = ["Math", "Science", "English", "Personal", "History"];
+        
 
         function populateComboBoxOptions(categories) {
             const optionsList = document.getElementById("comboBoxOptions");
@@ -773,26 +775,40 @@
         });
     }   
 
-    document.getElementById("copyToClipboardBtn").addEventListener("click", async () => {
-        const text = document.getElementById("ocrTextOutput").value;
-      
-        try {
-          await navigator.clipboard.writeText(text);
-          showToast("Copied to clipboard!");
-        } catch (err) {
-          showToast("Failed to copy.", true);
+       /* document.getElementById("copyToClipboardBtn").addEventListener("click", async () => {
+            const text = document.getElementById("ocrTextOutput").value;
+        
+            try {
+            await navigator.clipboard.writeText(text);
+            showToast("Copied to clipboard!");
+            } catch (err) {
+            showToast("Failed to copy.", true);
+            }
+        }); */
+
+        const copyBtn = document.getElementById("copyToClipboardBtn");
+            if (copyBtn) {
+                copyBtn.addEventListener("click", async () => {
+                    const text = document.getElementById("ocrTextOutput").value;
+
+                    try {
+                        await navigator.clipboard.writeText(text);
+                        showToast("Copied to clipboard!");
+                    } catch (err) {
+                        showToast("Failed to copy.", true);
+                    }
+                });
         }
-      });
       
-      function showToast(message, isError = false) {
-        const toast = document.getElementById("toast");
-        toast.textContent = message;
-        toast.style.background = isError ? "#e53935" : "#1db954";
-        toast.classList.add("visible");
-      
-        setTimeout(() => {
-          toast.classList.remove("visible");
-        }, 2000);
+        function showToast(message, isError = false) {
+            const toast = document.getElementById("toast");
+            toast.textContent = message;
+            toast.style.background = isError ? "#e53935" : "#1db954";
+            toast.classList.add("visible");
+        
+            setTimeout(() => {
+            toast.classList.remove("visible");
+            }, 2000);
       }
 
         
