@@ -651,13 +651,25 @@
                 `;
         
                 card.addEventListener("click", () => {
-                    // TODO: Open full note view or editor
-                    alert(`Open note: ${note.title}`);
+                    openNoteDetailModal(note);
                 });
+                
         
                 container.appendChild(card);
             });
         }
+
+        function openNoteDetailModal(note) {
+            const modal = document.getElementById("noteDetailModal");
+            document.getElementById("noteDetailTitle").textContent = note.title;
+            document.getElementById("noteDetailCategory").textContent = note.category || "Uncategorized";
+            document.getElementById("noteDetailText").textContent = note.preview || "";
+            document.getElementById("noteDetailDate").textContent = note.date || "";
+            document.getElementById("noteDetailImage").src = note.image || "";
+        
+            modal.classList.remove("hidden");
+        }
+        
 
         //Load logged in user's collections
         function renderCollections(categories) {
@@ -773,19 +785,11 @@
                 gridBtn.dataset.listenerAdded = "true";
             }
         }
+ 
+        document.getElementById("closeNoteModal").addEventListener("click", () => {
+            document.getElementById("noteDetailModal").classList.add("hidden");
+        });
         
-  
-
-       /* document.getElementById("copyToClipboardBtn").addEventListener("click", async () => {
-            const text = document.getElementById("ocrTextOutput").value;
-        
-            try {
-            await navigator.clipboard.writeText(text);
-            showToast("Copied to clipboard!");
-            } catch (err) {
-            showToast("Failed to copy.", true);
-            }
-        }); */
 
         const copyBtn = document.getElementById("copyToClipboardBtn");
         if (copyBtn) {
