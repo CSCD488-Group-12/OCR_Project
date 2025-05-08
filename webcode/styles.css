@@ -360,7 +360,18 @@
     flex: 1 1 300px;
   }
   
-  .view-toggle, .filter-btn {
+  .view-toggle {
+    background: rgba(255,255,255,0.1);
+    border: none;
+    padding: 10px 14px;
+    border-radius: 8px;
+    color: #fff;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+  }
+
+ .filter-btn {
     background: rgba(255,255,255,0.1);
     border: none;
     padding: 10px 14px;
