@@ -583,10 +583,7 @@
                     document.getElementById("ocrTextOutput").textContent = "";
                     confirmBtn.classList.remove("hidden");
                     cancelBtn.classList.remove("hidden");
-
-                    document.getElementById("noteCategoryInput").value = "";
-                    document.getElementById("existingCategories").value = "";
-                    document.getElementById("noteCategorySection").classList.add("hidden");
+                    
                     closeUploadForm();
                 });
           
@@ -785,17 +782,17 @@
         }); */
 
         const copyBtn = document.getElementById("copyToClipboardBtn");
-            if (copyBtn) {
-                copyBtn.addEventListener("click", async () => {
-                    const text = document.getElementById("ocrTextOutput").value;
+        if (copyBtn) {
+            copyBtn.addEventListener("click", async () => {
+                const text = document.getElementById("ocrTextOutput").value;
 
-                    try {
-                        await navigator.clipboard.writeText(text);
-                        showToast("Copied to clipboard!");
-                    } catch (err) {
-                        showToast("Failed to copy.", true);
-                    }
-                });
+                try {
+                    await navigator.clipboard.writeText(text);
+                    showToast("Copied to clipboard!");
+                } catch (err) {
+                    showToast("Failed to copy.", true);
+                }
+            });
         }
       
         function showToast(message, isError = false) {
