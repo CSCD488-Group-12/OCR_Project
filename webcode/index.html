@@ -207,14 +207,14 @@
     <script>
 
         //Testing data
-            const testNotes = [
-            {
-                title: "Intro to Calculus",
-                image: "https://via.placeholder.com/300x180.png?text=Note+1",
-                category: "Math",
-                preview: "Limits, derivatives, and functions introduction.",
-                date: "Last Edited: Apr 20, 2025"
-              },
+        const testNotes = [
+        {
+            title: "Intro to Calculus",
+            image: "https://via.placeholder.com/300x180.png?text=Note+1",
+            category: "Math",
+            preview: "Limits, derivatives, and functions introduction.",
+            date: "Last Edited: Apr 20, 2025"
+        },
         {
             title: "World War II Summary",
             image: "https://via.placeholder.com/300x180.png?text=Note+2",
@@ -753,7 +753,7 @@
                 }
         
                 card.addEventListener("click", () => {
-                    alert(`Open full note: ${note.title}`);
+                   openNoteDetailModal(note)
                 });
         
                 list.appendChild(card);

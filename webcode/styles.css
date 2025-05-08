@@ -75,7 +75,7 @@
 
   .floating-newnote {
     position: fixed;
-    top: 40px;
+    top: 12%;
     left: 20px;
     z-index: 100;
     background: linear-gradient(135deg, #5f0f80, #3c00d6);
