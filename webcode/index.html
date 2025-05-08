@@ -100,8 +100,21 @@
     <!-- Collections -->
     <div class="collections requires-login hidden">
         <label class="collections-label requires-login hidden">Your Collections</h2>
-    <!-- Your collections content here -->
+
+            <button class="btn-new-collection" onclick="openNewCollectionModal()">+ New Collection</button>
     </div>
+
+    <div id="newCollectionModal" class="modal hidden">
+        <div class="modal-content">
+          <span class="close" onclick="closeNewCollectionModal()">&times;</span>
+          <h2>Create New Collection</h2>
+          <input type="text" id="newCollectionInput" placeholder="Enter collection name..." />
+          <br><br>
+          <button class="btn-confirm" onclick="addNewCollection()">Add Collection</button>
+          <button class="btn-cancel" onclick="closeNewCollectionModal()">Cancel</button>
+        </div>
+      </div>
+
     
     <!-- All Notes and Search -->
     <div class="all-notes requires-login hidden">
@@ -674,7 +687,7 @@
             const modal = document.getElementById("noteDetailModal");
 
             if (!modal.classList.contains("hidden")) return;
-            
+
             document.getElementById("noteDetailTitle").textContent = note.title || "Untitled Note";
             document.getElementById("noteDetailCategory").textContent = note.category || "Uncategorized";
             document.getElementById("noteDetailText").textContent = note.preview || "Sample note content goes here.";
@@ -844,7 +857,26 @@
             }
         });
         
-
+        function openNewCollectionModal() {
+            document.getElementById("newCollectionModal").classList.remove("hidden");
+        }
+        
+        function closeNewCollectionModal() {
+            document.getElementById("newCollectionModal").classList.add("hidden");
+            document.getElementById("newCollectionInput").value = "";
+        }
+        
+        function addNewCollection() {
+            const name = document.getElementById("newCollectionInput").value.trim();
+            if (!name) return alert("Please enter a collection name.");
+        
+            // Add to allCategories (simulating DB save)
+            allCategories.push(name);
+            renderCollections(allCategories);
+        
+            closeNewCollectionModal();
+        }
+        
         
     </script>
 

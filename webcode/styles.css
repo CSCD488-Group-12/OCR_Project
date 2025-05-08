@@ -650,6 +650,31 @@
   flex-shrink: 0;
 }
 
+.btn-new-collection {
+  background: linear-gradient(135deg, #1db954, #1ea954);
+  color: white;
+  border: none;
+  padding: 12px 20px;
+  border-radius: 10px;
+  font-weight: bold;
+  cursor: pointer;
+  margin-bottom: 20px;
+  transition: transform 0.2s ease;
+}
+
+.btn-new-collection:hover {
+  transform: scale(1.05);
+}
+
+#newCollectionInput {
+  padding: 10px;
+  width: 80%;
+  border-radius: 8px;
+  border: 1px solid #ccc;
+  font-size: 1rem;
+}
+
+
 
 
   
