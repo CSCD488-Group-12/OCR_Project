@@ -702,7 +702,14 @@
         //Load logged in user's collections
         function renderCollections(categories) {
             const container = document.querySelector(".collections");
+
+            const header = document.querySelector(".collections-label");
+            const newBtn = document.getElementById("newCollectionBtn");
+
             container.innerHTML = "";
+            if (header) container.appendChild(header);
+            if (newBtn) container.appendChild(newBtn);
+
         
             categories.forEach(cat => {
                 const item = document.createElement("div");
