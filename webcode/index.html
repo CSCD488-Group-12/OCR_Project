@@ -679,23 +679,18 @@
         }
 
         //Load logged in user's entire history of notes (saved to the database)
-        let currentView = "list"; // default
+        let currentView = "grid"; // default
 
         function renderAllNotes(notes) {
             const container = document.querySelector(".all-notes");
-            container.innerHTML = ""; 
 
-            const searchBar = document.createElement("div");
-            searchBar.className = "search-bar";
-
-            const searchInput = document.createElement("input");
-            searchInput.type = "text";
-            searchInput.placeholder = "Search your notes...";
-            searchInput.id = "noteSearch";
-
-            searchBar.appendChild(searchInput);
-            container.appendChild(searchBar);
-
+            const existingSearchBar = container.querySelector(".search-bar");
+            const existingViewToggle = container.querySelector(".view-toggle-group");
+        
+            container.innerHTML = "";
+            if (existingSearchBar) container.appendChild(existingSearchBar);
+            if (existingViewToggle) container.appendChild(existingViewToggle);
+        
             if (notes.length === 0) {
                 const noResults = document.createElement("p");
                 noResults.textContent = "No notes found.";
@@ -706,18 +701,18 @@
                 container.appendChild(noResults);
                 return;
             }
-
+        
             const list = document.createElement("div");
             list.className = currentView === "grid" ? "all-notes-grid" : "all-notes-list";
-
+        
             notes.forEach(note => {
                 const card = document.createElement("div");
                 card.className = `note-history-card ${currentView === "grid" ? "grid" : ""}`;
-
+        
                 if (currentView === "grid") {
                     card.innerHTML = `
                         <div class="note-card-grid-image-wrapper">
-                            <img src="${note.image || 'https://via.placeholder.com/280x180?text=Note'}" alt="Note image" class="note-card-grid-img" />
+                            <img src="${note.image || 'https://via.placeholder.com/280x180?text=Note'}" class="note-card-grid-img" />
                             <div class="note-overlay">
                                 <p class="note-title">${note.title}</p>
                                 <p class="note-category">${note.category || "Uncategorized"}</p>
@@ -735,37 +730,50 @@
                         <p class="note-date">${note.date}</p>
                     `;
                 }
-
+        
                 card.addEventListener("click", () => {
                     alert(`Open full note: ${note.title}`);
                 });
-
+        
                 list.appendChild(card);
             });
-
+        
             container.appendChild(list);
-
-            // ✅ Event listeners for filtering and view switching
-            searchInput.addEventListener("input", function () {
-                const query = this.value.toLowerCase().trim();
-                const filteredNotes = allUserNotes.filter(note =>
-                    note.title.toLowerCase().includes(query) ||
-                    note.preview.toLowerCase().includes(query) ||
-                    (note.category || "").toLowerCase().includes(query)
-                );
-                renderAllNotes(filteredNotes);
-            });
-
-            document.getElementById("listViewBtn").addEventListener("click", () => {
-                currentView = "list";
-                renderAllNotes(notes);
-            });
-
-            document.getElementById("gridViewBtn").addEventListener("click", () => {
-                currentView = "grid";
-                renderAllNotes(notes);
-            });
+        
+            const searchInput = document.getElementById("noteSearch");
+            if (searchInput && !searchInput.dataset.listenerAdded) {
+                searchInput.addEventListener("input", function () {
+                    const query = this.value.toLowerCase().trim();
+                    const filteredNotes = allUserNotes.filter(note =>
+                        note.title.toLowerCase().includes(query) ||
+                        note.preview.toLowerCase().includes(query) ||
+                        (note.category || "").toLowerCase().includes(query)
+                    );
+                    renderAllNotes(filteredNotes);
+                });
+                searchInput.dataset.listenerAdded = "true";
+            }
+        
+            const listBtn = document.getElementById("listViewBtn");
+            const gridBtn = document.getElementById("gridViewBtn");
+        
+            if (listBtn && !listBtn.dataset.listenerAdded) {
+                listBtn.addEventListener("click", () => {
+                    currentView = "list";
+                    renderAllNotes(notes);
+                });
+                listBtn.dataset.listenerAdded = "true";
+            }
+        
+            if (gridBtn && !gridBtn.dataset.listenerAdded) {
+                gridBtn.addEventListener("click", () => {
+                    currentView = "grid";
+                    renderAllNotes(notes);
+                });
+                gridBtn.dataset.listenerAdded = "true";
+            }
         }
+        
   
 
        /* document.getElementById("copyToClipboardBtn").addEventListener("click", async () => {
