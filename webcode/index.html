@@ -670,8 +670,11 @@
 
         function openNoteDetailModal(note) {
             if (!note || !note.image) return;
-            
+
             const modal = document.getElementById("noteDetailModal");
+
+            if (!modal.classList.contains("hidden")) return;
+            
             document.getElementById("noteDetailTitle").textContent = note.title || "Untitled Note";
             document.getElementById("noteDetailCategory").textContent = note.category || "Uncategorized";
             document.getElementById("noteDetailText").textContent = note.preview || "Sample note content goes here.";
@@ -826,6 +829,21 @@
             toast.classList.remove("visible");
             }, 2000);
       }
+
+        const floatingBtn = document.getElementById("floatingNewNoteBtn");
+        const navbar = document.querySelector(".topnav");
+        
+        window.addEventListener("scroll", () => {
+            const scrollY = window.scrollY;
+            const navbarHeight = navbar.offsetHeight;
+        
+            if (scrollY > navbarHeight + 20) {
+            floatingBtn.classList.add("sticky-mode");
+            } else {
+            floatingBtn.classList.remove("sticky-mode");
+            }
+        });
+        
 
         
     </script>
