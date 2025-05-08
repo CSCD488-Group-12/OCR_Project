@@ -189,7 +189,6 @@
     function onUserLogin() {
         console.log("User is logged in:", loggedInUser.username);
         document.querySelectorAll(".requires-login").forEach(el => el.classList.remove("hidden"));
-        document.querySelectorAll("h2.requires-login").forEach(el => el.classList.remove("hidden"));
         document.querySelectorAll(".requires-logout").forEach(el => el.classList.add("hidden"));
         
         renderRecentNotes(testNotes);
