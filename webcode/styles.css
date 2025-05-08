@@ -605,6 +605,23 @@
   transform: scale(1.03);
 }
 
+.search-and-toggle {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: 10px;
+  margin-bottom: 20px;
+}
+
+.search-and-toggle .search-bar {
+  flex: 1 1 auto;
+}
+
+.search-and-toggle .view-toggle-group {
+  flex-shrink: 0;
+}
+
 
 
   
