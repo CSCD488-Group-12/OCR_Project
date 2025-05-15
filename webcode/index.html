@@ -860,7 +860,8 @@
             });
         
             container.appendChild(list);
-        
+            
+            /*
             const searchInput = document.getElementById("noteSearch");
             if (searchInput && !searchInput.dataset.listenerAdded) {
                 searchInput.addEventListener("input", function () {
@@ -874,6 +875,7 @@
                 });
                 searchInput.dataset.listenerAdded = "true";
             }
+            */
         
             const listBtn = document.getElementById("listViewBtn");
             const gridBtn = document.getElementById("gridViewBtn");
@@ -1047,6 +1049,31 @@
             document.getElementById("filterDropdown").classList.add("hidden");
         }
 
+
+        // improved search bar
+        function debounce(func, delay = 300) {
+            let timer;
+            return (...args) => {
+                clearTimeout(timer);
+                timer = setTimeout(() => func.apply(this, args), delay);
+            };
+        }
+        
+        document.addEventListener("DOMContentLoaded", () => {
+            const searchInput = document.getElementById("noteSearch");
+            if (searchInput) {
+                searchInput.addEventListener("input", debounce(function () {
+                    const query = this.value.toLowerCase().trim();
+                    const filteredNotes = allUserNotes.filter(note =>
+                        note.title.toLowerCase().includes(query) ||
+                        note.preview.toLowerCase().includes(query) ||
+                        (note.category || "").toLowerCase().includes(query)
+                    );
+                    renderAllNotes(filteredNotes);
+                }, 250));
+            }
+        });
+        
 
         
     </script>
