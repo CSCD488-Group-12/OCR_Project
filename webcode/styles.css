@@ -739,8 +739,6 @@
 }
 
 
-
-
 .btn-new-collection {
   background: linear-gradient(135deg, #1db954, #1ea954);
   color: white;
@@ -836,6 +834,17 @@
 .note-card:hover {
   box-shadow: 0 8px 24px rgba(0, 0, 0, 0.4);
 }
+
+.recent-notes-label,
+.collections-label,
+.all-notes-label {
+    font-size: 1.5rem;
+    font-weight: bold;
+    margin-bottom: 16px;
+    text-align: left;
+    color: #a5b4fc;
+}
+
 
 
 
