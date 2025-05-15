@@ -371,7 +371,6 @@
     display: flex;
     align-items: center;
     gap: 10px;
-    margin-bottom: 20px;
     flex-wrap: wrap;
     justify-content: center;
   }
@@ -612,10 +611,10 @@
 }
 
 .view-toggle-group {
+  margin: 0;
   display: flex;
   gap: 10px;
   justify-content: center;
-  margin-top: 10px;
 }
 
 .view-toggle {
@@ -688,6 +687,8 @@
   .search-bar, .filter-wrapper, .view-toggle-group {
     width: 100%;
     justify-content: center;
+    margin: 0;
+    padding: 0;
   }
 
   .all-notes-label {
@@ -857,6 +858,7 @@
 
 .all-notes-label {
   margin: 0;
+  padding: 0;
   white-space: nowrap;
 }
 
