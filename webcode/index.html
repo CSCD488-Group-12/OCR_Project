@@ -690,8 +690,13 @@
         // Load logged in user's most recent notes
         function renderRecentNotes(notes) {
             const container = document.querySelector(".recent-notes");
-            container.innerHTML = ""; // Clear previous
-        
+            const label = document.createElement("label");
+            label.className = "recent-notes-label requires-login";
+            label.textContent = "Recent Notes";
+
+            container.innerHTML = "";
+            container.appendChild(label);
+
             notes.forEach(note => {
                 const card = document.createElement("div");
                 card.className = "note-card";
@@ -773,11 +778,16 @@
 
         function renderAllNotes(notes) {
             const container = document.querySelector(".all-notes");
+            const label = document.createElement("label");
+            label.className = "all-notes-label requires-login";
+            label.textContent = "All Notes";
 
             const existingSearchBar = container.querySelector(".search-bar");
             const existingViewToggle = container.querySelector(".view-toggle-group");
-        
+
             container.innerHTML = "";
+            container.appendChild(label);
+            
             if (existingSearchBar) container.appendChild(existingSearchBar);
             if (existingViewToggle) container.appendChild(existingViewToggle);
         
