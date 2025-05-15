@@ -120,31 +120,49 @@
     <div class="all-notes requires-login hidden">
         <label class="all-notes-label requires-login">All Notes</label>
 
-            <div class="search-and-toggle">
-                <div class="search-bar">
-                    <input type="text" placeholder="Search your notes..." id="noteSearch" />
+        <div class="search-and-toggle">
+            <div class="search-bar">
+                <input type="text" placeholder="Search your notes..." id="noteSearch" />
+            </div>
+        
+            <div class="filter-wrapper">
+                <button id="filterNotesBtn" class="filter-btn">
+                    <img src="assets/filter.png" alt="Filter" />
+                </button>
+        
+                <div id="filterDropdown" class="filter-dropdown hidden">
+                    <label for="filterCategory">Category:</label>
+                    <select id="filterCategory">
+                        <option value="">All</option>
+                        <option value="Math">Math</option>
+                        <option value="Science">Science</option>
+                        <option value="History">History</option>
+                        <option value="English">English</option>
+                        <option value="Personal">Personal</option>
+                    </select>
+        
+                    <label for="filterDate">Date:</label>
+                    <select id="filterDate">
+                        <option value="">All Time</option>
+                        <option value="7">Last 7 Days</option>
+                        <option value="30">Last 30 Days</option>
+                        <option value="90">Last 90 Days</option>
+                    </select>
+        
+                    <button id="applyFiltersBtn" class="btn-confirm">Apply</button>
                 </div>
-                <div class="view-toggle-group">
-                    <button id="filterBtn" class="filter-btn"><img src="assets/filter-list.png"></button>
-                    <div id="filterDropdown" class="filter-dropdown hidden">
-                        <label>Category:</label>
-                        <select id="filterCategory">
-                          <option value="">All</option>
-                        </select>
-                      
-                        <label>Start Date:</label>
-                        <input type="date" id="filterStartDate" />
-                      
-                        <label>End Date:</label>
-                        <input type="date" id="filterEndDate" />
-                      
-                        <button class="btn-confirm" onclick="applyFilters()">Apply</button>
-                      </div>
-                      
-
-                    <button id="listViewBtn" class="view-toggle active"><img src="assets/menu-burger.png"> List</button>
-                    <button id="gridViewBtn" class="view-toggle"><img src="assets/apps.png"> Grid</button>
-                </div>
+            </div>
+        
+            <div class="view-toggle-group">
+                <button id="listViewBtn" class="view-toggle active">
+                    <img src="assets/menu-burger.png" alt="List View"> List
+                </button>
+                <button id="gridViewBtn" class="view-toggle">
+                    <img src="assets/apps.png" alt="Grid View"> Grid
+                </button>
+            </div>
+        </div>
+        
         </div>
     </div>
 
@@ -1013,10 +1031,23 @@
         });
         
         // filtering
-        document.getElementById("filterBtn").addEventListener("click", () => {
-            const dropdown = document.getElementById("filterDropdown");
-            dropdown.classList.toggle("hidden");
+        const filterBtn = document.getElementById("filterNotesBtn");
+        const filterDropdown = document.getElementById("filterDropdown");
+
+        filterBtn.addEventListener("click", (e) => {
+            e.stopPropagation(); // Prevent document click from closing it immediately
+            filterDropdown.classList.toggle("hidden");
+            filterDropdown.classList.toggle("visible");
         });
+
+        document.addEventListener("click", (e) => {
+            const wrapper = document.querySelector(".filter-wrapper");
+            if (!wrapper.contains(e.target)) {
+                filterDropdown.classList.add("hidden");
+                filterDropdown.classList.remove("visible");
+            }
+        });
+
 
         function populateFilterCategoryOptions() {
             const select = document.getElementById("filterCategory");
@@ -1048,6 +1079,17 @@
             renderAllNotes(filtered);
             document.getElementById("filterDropdown").classList.add("hidden");
         }
+
+        document.addEventListener("click", (event) => {
+            const filterWrapper = document.querySelector(".filter-wrapper");
+            const filterDropdown = document.getElementById("filterDropdown");
+        
+            // If the click is outside the filter wrapper, hide the dropdown
+            if (!filterWrapper.contains(event.target)) {
+                filterDropdown.classList.add("hidden");
+            }
+        });
+        
 
 
         // improved search bar

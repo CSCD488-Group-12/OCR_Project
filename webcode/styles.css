@@ -691,21 +691,42 @@
   height: 18px;
 }
 
+.filter-wrapper {
+  position: relative;
+  display: inline-block;
+}
+
 .filter-dropdown {
   position: absolute;
-  right: 20px;
-  top: 60px;
-  background: rgba(30,30,60,0.95);
-  border: 1px solid #555;
-  border-radius: 10px;
+  top: 100%;
+  left: 0;
+  margin-top: 8px;
+  background: rgba(255, 255, 255, 0.05);
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  opacity: 0;
+  transform: scaleY(0.95);
+  transform-origin: top;
+  transition: opacity 0.2s ease, transform 0.2s ease;
+  pointer-events: none;
   padding: 16px;
+  border-radius: 10px;
+  width: 250px;
   z-index: 100;
-  box-shadow: 0 4px 10px rgba(0,0,0,0.3);
+  color: #fff;
   display: flex;
   flex-direction: column;
-  gap: 10px;
-  animation: fadeIn 0.3s ease-in-out;
-  min-width: 200px;
+  gap: 12px;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.4);
+}
+
+.filter-dropdown.visible {
+  opacity: 1;
+  transform: scaleY(1);
+  pointer-events: auto;
+}
+
+.filter-dropdown.hidden {
+  display: none;
 }
 
 .filter-dropdown select,
