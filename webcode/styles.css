@@ -656,15 +656,17 @@
 
 .search-and-toggle {
   display: flex;
-  flex-wrap: wrap;
-  gap: 16px;
-  justify-content: space-between;
+  gap: 12px;
+  justify-content: flex-start;
   align-items: center;
   margin: 20px 0;
+  flex-wrap: nowrap;
+  flex-direction: row;
 }
 
+
 .search-bar {
-  flex: 1 1 400px;
+  flex: 0 1 auto;
   display: flex;
   align-items: center;
 }

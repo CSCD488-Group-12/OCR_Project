@@ -128,6 +128,7 @@
                 <button id="filterNotesBtn" class="filter-btn requires-login hidden">
                     <img src="assets/filter-list.png" style="filter: invert(1);" alt="Filter" />
                 </button>
+                <button id="cancelSearchBtn" class="cancel-search-btn hidden">✖</button>
         
                 <div id="filterDropdown" class="filter-dropdown hidden">
                     <label for="filterCategory">Category:</label>
@@ -1118,23 +1119,28 @@
         
         document.addEventListener("DOMContentLoaded", () => {
             const searchInput = document.getElementById("noteSearch");
-            if (searchInput) {
-                searchInput.addEventListener("input", debounce(function () {
-                    const query = this.value.toLowerCase().trim();
-                    if (query === "") {
-                        renderAllNotes(allUserNotes);
-                        return;
-                    }
-                
-                    const filteredNotes = allUserNotes.filter(note =>
-                        note.title.toLowerCase().includes(query) ||
-                        note.preview.toLowerCase().includes(query) ||
-                        (note.category || "").toLowerCase().includes(query)
-                    );
-                    renderAllNotes(filteredNotes);
-                }, 250));
-                
-            }
+            const cancelSearchBtn = document.getElementById("cancelSearchBtn");
+
+            searchInput.addEventListener("input", debounce(function () {
+                const query = this.value.toLowerCase().trim();
+
+                if (query === "") {
+                    renderAllNotes(allUserNotes);
+                    cancelSearchBtn.classList.add("hidden");
+                    cancelSearchBtn.classList.remove("visible");
+                    return;
+                }
+
+                const filteredNotes = allUserNotes.filter(note =>
+                    note.title.toLowerCase().includes(query) ||
+                    note.preview.toLowerCase().includes(query) ||
+                    (note.category || "").toLowerCase().includes(query)
+                );
+                renderAllNotes(filteredNotes);
+                cancelSearchBtn.classList.remove("hidden");
+                cancelSearchBtn.classList.add("visible");
+            }, 250));
+
         });
 
         document.addEventListener("DOMContentLoaded", () => {
@@ -1151,6 +1157,19 @@
             sections.forEach(section => observer.observe(section));
           });
           
+          cancelSearchBtn.addEventListener("click", () => {
+            searchInput.value = "";
+            renderAllNotes(allUserNotes);
+            cancelSearchBtn.classList.add("hidden");
+            cancelSearchBtn.classList.remove("visible");
+        });
+        
+        searchInput.addEventListener("blur", () => {
+            if (searchInput.value.trim() === "") {
+                cancelSearchBtn.classList.add("hidden");
+                cancelSearchBtn.classList.remove("visible");
+            }
+        });
         
 
         
