@@ -691,6 +691,33 @@
   height: 18px;
 }
 
+.filter-dropdown {
+  position: absolute;
+  right: 20px;
+  top: 60px;
+  background: rgba(30,30,60,0.95);
+  border: 1px solid #555;
+  border-radius: 10px;
+  padding: 16px;
+  z-index: 100;
+  box-shadow: 0 4px 10px rgba(0,0,0,0.3);
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  animation: fadeIn 0.3s ease-in-out;
+  min-width: 200px;
+}
+
+.filter-dropdown select,
+.filter-dropdown input {
+  padding: 8px;
+  border-radius: 6px;
+  border: 1px solid #ccc;
+  background: rgba(255,255,255,0.1);
+  color: #fff;
+}
+
+
 
 
 .btn-new-collection {

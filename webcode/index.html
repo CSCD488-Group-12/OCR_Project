@@ -126,6 +126,24 @@
                 </div>
                 <div class="view-toggle-group">
                     <button id="filterBtn"><img src="assets/filter-list.png"></button>
+                    <div id="filterDropdown" class="filter-dropdown hidden">
+                        <label>Category:</label>
+                        <select id="filterCategory">
+                          <option value="">All</option>
+                        </select>
+                      
+                        <label>Start Date:</label>
+                        <input type="date" id="filterStartDate" />
+                      
+                        <label>End Date:</label>
+                        <input type="date" id="filterEndDate" />
+                      
+                        <button class="btn-confirm" onclick="applyFilters()">Apply</button>
+                      </div>
+                      
+
+
+
                     <button id="listViewBtn" class="view-toggle active"><img src="assets/menu-burger.png"> List</button>
                     <button id="gridViewBtn" class="view-toggle"><img src="assets/apps.png"> Grid</button>
                 </div>
@@ -767,8 +785,10 @@
                 item.textContent = cat;
         
                 item.addEventListener("click", () => {
-                    alert(`Filter notes by: ${cat}`);
+                    document.getElementById("filterCategory").value = cat;
+                    applyFilters();
                 });
+                
         
                 container.appendChild(item);
             });
@@ -990,6 +1010,43 @@
             }
         });
         
+        // filtering
+        document.getElementById("filterBtn").addEventListener("click", () => {
+            const dropdown = document.getElementById("filterDropdown");
+            dropdown.classList.toggle("hidden");
+        });
+
+        function populateFilterCategoryOptions() {
+            const select = document.getElementById("filterCategory");
+            select.innerHTML = `<option value="">All</option>`;
+            allCategories.forEach(cat => {
+                const opt = document.createElement("option");
+                opt.value = cat;
+                opt.textContent = cat;
+                select.appendChild(opt);
+            });
+        }
+        populateFilterCategoryOptions();
+
+        function applyFilters() {
+            const cat = document.getElementById("filterCategory").value;
+            const start = new Date(document.getElementById("filterStartDate").value);
+            const end = new Date(document.getElementById("filterEndDate").value);
+
+            const filtered = allUserNotes.filter(note => {
+                const matchesCategory = !cat || note.category === cat;
+
+                const noteDate = new Date(note.lastEdited.replace(/(Last Edited: |Saved on )/, ""));
+                const matchesDate = (!isNaN(start) ? noteDate >= start : true) &&
+                                    (!isNaN(end) ? noteDate <= end : true);
+
+                return matchesCategory && matchesDate;
+            });
+
+            renderAllNotes(filtered);
+            document.getElementById("filterDropdown").classList.add("hidden");
+        }
+
 
         
     </script>
