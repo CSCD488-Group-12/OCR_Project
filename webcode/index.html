@@ -713,7 +713,7 @@
         let currentlyOpenNote = null;
 
         function openNoteDetailModal(note) {
-            if (!note || !note.image) return;
+            if (!note || !note.image || !note.preview) return;
 
             currentlyOpenNote = note;
 

@@ -363,13 +363,16 @@
   }
   
   #noteSearch {
-    padding: 10px 16px;
-    border-radius: 8px;
-    border: 1px solid #444;
-    background: rgba(255,255,255,0.05);
+    width: 100%;
+    padding: 12px 18px;
+    border-radius: 10px;
+    border: 1px solid #555;
+    background: rgba(255,255,255,0.08);
     color: #fff;
-    flex: 1 1 300px;
+    font-size: 1rem;
+    max-width: 500px;
   }
+  
   
   .view-toggle {
     display: flex;
@@ -639,20 +642,37 @@
 
 .search-and-toggle {
   display: flex;
+  flex-wrap: wrap;
+  gap: 16px;
   justify-content: space-between;
   align-items: center;
-  flex-wrap: wrap;
+  margin: 20px 0;
+}
+
+.search-bar {
+  flex: 1 1 400px;
+  display: flex;
+  align-items: center;
+}
+
+.view-toggle-group {
+  display: flex;
   gap: 10px;
-  margin-bottom: 20px;
-}
-
-.search-and-toggle .search-bar {
-  flex: 1 1 auto;
-}
-
-.search-and-toggle .view-toggle-group {
   flex-shrink: 0;
 }
+
+@media (max-width: 600px) {
+  .search-and-toggle {
+    flex-direction: column;
+    align-items: stretch;
+  }
+
+  .view-toggle-group {
+    justify-content: center;
+  }
+}
+
+
 
 .btn-new-collection {
   background: linear-gradient(135deg, #1db954, #1ea954);
