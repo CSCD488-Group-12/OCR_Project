@@ -794,9 +794,23 @@
                 item.textContent = cat;
         
                 item.addEventListener("click", () => {
-                    document.getElementById("filterCategory").value = cat;
+                    const filterDropdown = document.getElementById("filterDropdown");
+                    const filterSelect = document.getElementById("filterCategory");
+                
+                    if (filterSelect.value === cat) {
+                        filterSelect.value = "";
+                    } else {
+                        filterSelect.value = cat;
+                    }
+                
+                    if (filterDropdown) {
+                        filterDropdown.classList.remove("hidden");
+                        filterDropdown.classList.add("visible");
+                    }
+                
                     applyFilters();
                 });
+                
                 
         
                 container.appendChild(item);
@@ -1107,6 +1121,11 @@
             if (searchInput) {
                 searchInput.addEventListener("input", debounce(function () {
                     const query = this.value.toLowerCase().trim();
+                    if (query === "") {
+                        renderAllNotes(allUserNotes);
+                        return;
+                    }
+                
                     const filteredNotes = allUserNotes.filter(note =>
                         note.title.toLowerCase().includes(query) ||
                         note.preview.toLowerCase().includes(query) ||
@@ -1114,6 +1133,7 @@
                     );
                     renderAllNotes(filteredNotes);
                 }, 250));
+                
             }
         });
 
