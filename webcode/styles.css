@@ -377,7 +377,8 @@
   }
   
   #noteSearch {
-    width: 100%;
+    max-width: 300px;
+    min-width: 200px;
     padding: 12px 18px;
     border-radius: 10px;
     border: 1px solid #555;
@@ -669,6 +670,7 @@
   flex: 0 1 auto;
   display: flex;
   align-items: center;
+  gap: 8px;
 }
 
 .view-toggle-group {
@@ -677,14 +679,20 @@
   flex-shrink: 0;
 }
 
-@media (max-width: 600px) {
+@media (max-width: 768px) {
   .search-and-toggle {
     flex-direction: column;
     align-items: stretch;
   }
 
-  .view-toggle-group {
+  .search-bar, .filter-wrapper, .view-toggle-group {
+    width: 100%;
     justify-content: center;
+  }
+
+  .all-notes-label {
+    text-align: center;
+    margin-bottom: 10px;
   }
 }
 
@@ -845,6 +853,11 @@
     margin-bottom: 16px;
     text-align: left;
     color: #a5b4fc;
+}
+
+.all-notes-label {
+  margin: 0;
+  white-space: nowrap;
 }
 
 .cancel-search-btn {
