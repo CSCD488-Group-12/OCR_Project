@@ -125,7 +125,7 @@
             </div>
         
             <div class="filter-wrapper">
-                <button id="filterNotesBtn" class="filter-btn">
+                <button id="filterNotesBtn" class="filter-btn requires-login hidden">
                     <img src="assets/filter-list.png" style="filter: invert(1);" alt="Filter" />
                 </button>
         
@@ -846,7 +846,7 @@
                             <div class="note-overlay">
                                 <p class="note-title">${note.title}</p>
                                 <p class="note-category">${note.category || "Uncategorized"}</p>
-                                <p class="note-date">${note.date}</p>
+                                <p class="note-date">${note.lastEdited}</p>
                             </div>
                         </div>
                     `;
@@ -857,7 +857,7 @@
                             <span class="note-category">${note.category || "Uncategorized"}</span>
                         </div>
                         <p class="note-preview">${note.preview}</p>
-                        <p class="note-date">${note.date}</p>
+                        <p class="note-date">${note.lastEdited}</p>
                     `;
                 }
         
