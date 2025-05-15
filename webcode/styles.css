@@ -712,6 +712,20 @@
   font-size: 1rem;
 }
 
+.search-save-row {
+  display: flex;
+  gap: 12px;
+  align-items: flex-end;
+  margin-bottom: 1em;
+  flex-wrap: wrap;
+}
+
+.search-save-row .combo-box-container {
+  flex: 1;
+  margin-bottom: 0;
+}
+
+
 
 
 

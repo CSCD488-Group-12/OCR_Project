@@ -140,14 +140,17 @@
           <span id="closeNoteModal" class="close">&times;</span>
           <img id="noteDetailImage" src="" alt="Note Image" />
           <h2 id="noteDetailTitle"></h2>
-          <div class="combo-box-container">
-            <label for="noteDetailCategoryInput">Change Category:</label>
-            <div class="combo-box">
-                <input type="text" id="noteDetailCategoryInput" placeholder="Start typing or select..." oninput="filterDetailComboOptions()" onfocus="showDetailComboOptions()" />
-                <ul id="detailComboBoxOptions" class="combo-options hidden"></ul>
+          <div class="search-save-row">
+            <div class="combo-box-container">
+                <label for="noteDetailCategoryInput">Change Category:</label>
+                <div class="combo-box">
+                    <input type="text" id="noteDetailCategoryInput" placeholder="Start typing or select..." oninput="filterDetailComboOptions()" onfocus="showDetailComboOptions()" />
+                    <ul id="detailComboBoxOptions" class="combo-options hidden"></ul>
+                </div>
             </div>
+            <button class="btn-confirm" onclick="saveCategoryChange()">Save</button>
         </div>
-        <button class="btn-confirm" onclick="saveCategoryChange()">Save Category</button>
+        
         
           <p id="noteDetailText"></p>
           <p id="noteDetailDate" class="note-date"></p>
