@@ -92,13 +92,13 @@
 
     <!-- Recent Notes -->
     <div class="recent-notes requires-login hidden">
-        <label class="recent-notes-label requires-login">Recent Notes</h2>
+        <label class="recent-notes-label requires-login">Recent Notes</label>
     <!-- Recent notes content here -->
     </div>
 
     <!-- Collections -->
     <div class="collections requires-login hidden">
-        <label class="collections-label requires-login">Your Collections</h2>
+        <label class="collections-label requires-login">Your Collections</label>
 
             <button id="newCollectionBtn" class="btn-new-collection requires-login">+ New Collection</button>
 
@@ -118,7 +118,7 @@
     
     <!-- All Notes and Search -->
     <div class="all-notes requires-login hidden">
-        <label class="all-notes-label requires-login">All Notes</h2>
+        <label class="all-notes-label requires-login">All Notes</label>
 
             <div class="search-and-toggle">
                 <div class="search-bar">
@@ -847,18 +847,23 @@
             if (listBtn && !listBtn.dataset.listenerAdded) {
                 listBtn.addEventListener("click", () => {
                     currentView = "list";
+                    listBtn.classList.add("active");
+                    gridBtn.classList.remove("active");
                     renderAllNotes(notes);
                 });
                 listBtn.dataset.listenerAdded = "true";
             }
-        
+            
             if (gridBtn && !gridBtn.dataset.listenerAdded) {
                 gridBtn.addEventListener("click", () => {
                     currentView = "grid";
+                    gridBtn.classList.add("active");
+                    listBtn.classList.remove("active");
                     renderAllNotes(notes);
                 });
                 gridBtn.dataset.listenerAdded = "true";
             }
+            
         }
  
         document.getElementById("closeNoteModal").addEventListener("click", () => {
