@@ -811,18 +811,18 @@
             const label = document.createElement("label");
             label.className = "all-notes-label requires-login";
             label.textContent = "All Notes";
-
-            const existingSearchBar = container.querySelector(".search-bar");
-            const existingViewToggle = container.querySelector(".view-toggle-group");
+            
+            const searchBar = document.getElementById("noteSearch")?.parentElement;
+            const viewToggleGroup = container.querySelector(".view-toggle-group");
             const filterWrapper = container.querySelector(".filter-wrapper");
-
+            
             container.innerHTML = "";
             container.appendChild(label);
-
-            if (existingSearchBar) container.appendChild(existingSearchBar);
+            
+            if (searchBar) container.appendChild(searchBar);
             if (filterWrapper) container.appendChild(filterWrapper);
-            if (existingViewToggle) container.appendChild(existingViewToggle);
-
+            if (viewToggleGroup) container.appendChild(viewToggleGroup);
+            
             if (notes.length === 0) {
                 const noResults = document.createElement("p");
                 noResults.textContent = "No notes found.";
