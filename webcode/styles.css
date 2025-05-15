@@ -686,6 +686,11 @@
   }
 }
 
+.filter-btn img {
+  width: 18px;
+  height: 18px;
+}
+
 
 
 .btn-new-collection {

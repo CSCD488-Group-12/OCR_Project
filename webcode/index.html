@@ -125,8 +125,9 @@
                     <input type="text" placeholder="Search your notes..." id="noteSearch" />
                 </div>
                 <div class="view-toggle-group">
-                    <button id="listViewBtn" class="view-toggle active"><img src="../assets/menu-burger.png"> List</button>
-                    <button id="gridViewBtn" class="view-toggle"><img src="../assets/apps.png"> Grid</button>
+                    <button id="filterBtn"><img src="assets/filter-list.png"></button>
+                    <button id="listViewBtn" class="view-toggle active"><img src="assets/menu-burger.png"> List</button>
+                    <button id="gridViewBtn" class="view-toggle"><img src="assets/apps.png"> Grid</button>
                 </div>
         </div>
     </div>
@@ -787,7 +788,7 @@
 
             container.innerHTML = "";
             container.appendChild(label);
-            
+
             if (existingSearchBar) container.appendChild(existingSearchBar);
             if (existingViewToggle) container.appendChild(existingViewToggle);
         
