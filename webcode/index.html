@@ -233,6 +233,8 @@
         document.querySelectorAll(".requires-login").forEach(el => el.classList.remove("hidden"));
         document.querySelectorAll(".requires-logout").forEach(el => el.classList.add("hidden"));
         
+        document.getElementById("noteDetailModal").classList.add("hidden");
+        
         renderRecentNotes(testNotes);
         renderCollections(allCategories);
         renderAllNotes(allUserNotes);
