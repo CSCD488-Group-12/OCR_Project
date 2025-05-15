@@ -778,6 +778,67 @@
   margin-bottom: 0;
 }
 
+.section {
+  opacity: 0;
+  transform: translateY(40px);
+  transition: opacity 0.6s ease, transform 0.6s ease;
+}
+
+.section.visible {
+  opacity: 1;
+  transform: translateY(0);
+}
+
+.btn-hero, .btn-login, .btn-confirm, .btn-cancel {
+  transition: transform 0.2s ease, box-shadow 0.3s ease;
+}
+
+.btn-hero:hover, .btn-login:hover, .btn-confirm:hover, .btn-cancel:hover {
+  transform: scale(1.05);
+  box-shadow: 0 4px 20px rgba(255, 255, 255, 0.15);
+}
+
+.hero-title {
+  opacity: 0;
+  transform: translateY(-20px);
+  animation: heroFade 1s ease forwards;
+}
+
+@keyframes heroFade {
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+.modal-content {
+  animation: scaleIn 0.3s ease-out;
+}
+
+@keyframes scaleIn {
+  from {
+    transform: scale(0.9);
+    opacity: 0;
+  }
+  to {
+    transform: scale(1);
+    opacity: 1;
+  }
+}
+
+.note-card {
+  backdrop-filter: blur(12px);
+  background: rgba(255, 255, 255, 0.05);
+  border: 1px solid rgba(255, 255, 255, 0.08);
+  transition: transform 0.3s ease, box-shadow 0.3s ease;
+}
+
+.note-card:hover {
+  box-shadow: 0 8px 24px rgba(0, 0, 0, 0.4);
+}
+
+
+
 
 
 
