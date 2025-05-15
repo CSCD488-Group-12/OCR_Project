@@ -73,7 +73,6 @@
                 </div>
 
             <!-- OCR results -->
-            <!-- Kat: Add copy to clipboard button -->
                 <div id="ocrResult" class="hidden">
                     <p>Extracted Text:</p>
                     <textarea id="ocrTextOutput" class = "editable-area" rows="10"></textarea>
@@ -141,7 +140,15 @@
           <span id="closeNoteModal" class="close">&times;</span>
           <img id="noteDetailImage" src="" alt="Note Image" />
           <h2 id="noteDetailTitle"></h2>
-          <p id="noteDetailCategory" class="note-category"></p>
+          <div class="combo-box-container">
+            <label for="noteDetailCategoryInput">Change Category:</label>
+            <div class="combo-box">
+                <input type="text" id="noteDetailCategoryInput" placeholder="Start typing or select..." oninput="filterDetailComboOptions()" onfocus="showDetailComboOptions()" />
+                <ul id="detailComboBoxOptions" class="combo-options hidden"></ul>
+            </div>
+        </div>
+        <button class="btn-confirm" onclick="saveCategoryChange()">Save Category</button>
+        
           <p id="noteDetailText"></p>
           <p id="noteDetailDate" class="note-date"></p>
         </div>
@@ -682,21 +689,34 @@
             });
         }
 
+        let currentlyOpenNote = null;
+
         function openNoteDetailModal(note) {
             if (!note || !note.image) return;
 
-            const modal = document.getElementById("noteDetailModal");
-
-            if (!modal.classList.contains("hidden")) return;
+            currentlyOpenNote = note;
 
             document.getElementById("noteDetailTitle").textContent = note.title || "Untitled Note";
-            document.getElementById("noteDetailCategory").textContent = note.category || "Uncategorized";
             document.getElementById("noteDetailText").textContent = note.preview || "Sample note content goes here.";
             document.getElementById("noteDetailDate").textContent = note.date || note.lastEdited || "Unknown date";
             document.getElementById("noteDetailImage").src = note.image || "https://via.placeholder.com/280x180?text=Note";
+            document.getElementById("noteDetailCategoryInput").value = note.category || "";
 
-            modal.classList.remove("hidden");
+            document.getElementById("noteDetailModal").classList.remove("hidden");
         }
+
+        function saveCategoryChange() {
+            const newCat = document.getElementById("noteDetailCategoryInput").value.trim();
+            if (!newCat || !currentlyOpenNote) return;
+
+            currentlyOpenNote.category = newCat;
+            renderAllNotes(allUserNotes);
+            document.getElementById("noteDetailModal").classList.add("hidden");
+
+            showToast("Category updated!");
+        }
+
+        
         
 
         //Load logged in user's collections
@@ -886,6 +906,51 @@
         }
     
         document.getElementById("newCollectionBtn").addEventListener("click", openNewCollectionModal);
+
+
+        function populateDetailComboBoxOptions(categories) {
+            const optionsList = document.getElementById("detailComboBoxOptions");
+            optionsList.innerHTML = "";
+            categories.forEach(cat => {
+                const li = document.createElement("li");
+                li.textContent = cat;
+                li.addEventListener("click", () => {
+                    document.getElementById("noteDetailCategoryInput").value = cat;
+                    hideDetailComboOptions();
+                });
+                optionsList.appendChild(li);
+            });
+        }
+        
+        populateDetailComboBoxOptions(allCategories);
+
+        function filterDetailComboOptions() {
+            const input = document.getElementById("noteDetailCategoryInput").value.toLowerCase();
+            const options = document.querySelectorAll("#detailComboBoxOptions li");
+            options.forEach(option => {
+                const match = option.textContent.toLowerCase().includes(input);
+                option.style.display = match ? "block" : "none";
+            });
+            showDetailComboOptions();
+        }
+        
+        function showDetailComboOptions() {
+            document.getElementById("detailComboBoxOptions").classList.remove("hidden");
+            document.getElementById("detailComboBoxOptions").classList.add("visible");
+        }
+        
+        function hideDetailComboOptions() {
+            document.getElementById("detailComboBoxOptions").classList.add("hidden");
+            document.getElementById("detailComboBoxOptions").classList.remove("visible");
+        }
+        
+        document.addEventListener("click", function (event) {
+            const comboBox = document.querySelector("#noteDetailModal .combo-box");
+            if (comboBox && !comboBox.contains(event.target)) {
+                hideDetailComboOptions();
+            }
+        });
+        
 
         
     </script>
