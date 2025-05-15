@@ -1053,7 +1053,10 @@
             const { category = "", startDate = null, endDate = null } = filters;
         
             return notes.filter(note => {
-                const noteDate = new Date(note.lastEdited.replace(/(Saved on |Last Edited: )/, ""));
+                let noteDate = new Date(note.lastEdited?.replace(/(Saved on |Last Edited: )/, "") || "");
+
+                if (isNaN(noteDate)) return false;
+
         
                 const matchesCategory = !category || note.category === category;
                 const matchesStart = !startDate || noteDate >= new Date(startDate);
