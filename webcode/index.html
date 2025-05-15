@@ -814,13 +814,15 @@
 
             const existingSearchBar = container.querySelector(".search-bar");
             const existingViewToggle = container.querySelector(".view-toggle-group");
+            const filterWrapper = container.querySelector(".filter-wrapper");
 
             container.innerHTML = "";
             container.appendChild(label);
 
             if (existingSearchBar) container.appendChild(existingSearchBar);
+            if (filterWrapper) container.appendChild(filterWrapper);
             if (existingViewToggle) container.appendChild(existingViewToggle);
-        
+
             if (notes.length === 0) {
                 const noResults = document.createElement("p");
                 noResults.textContent = "No notes found.";
