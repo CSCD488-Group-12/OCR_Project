@@ -282,13 +282,15 @@
     display: flex;
     gap: 20px;
     flex-wrap: wrap;
-    justify-content: center;
+    justify-content: flex-start;
     margin: 40px 0;
+    padding: 0 40px;
+    max-width: 1400px;
   }
   
   .note-card {
     position: relative;
-    width: 280px;
+    width: 320px;
     height: 180px;
     border-radius: 12px;
     overflow: hidden;
@@ -334,9 +336,10 @@
     display: flex;
     gap: 16px;
     flex-wrap: wrap;
-    justify-content: center;
+    justify-content: flex-start;
     margin: 40px auto;
-    max-width: 1000px;
+    padding: 0 40px;
+    max-width: 1400px;
   }
   
   .collection-card {
@@ -357,7 +360,8 @@
 
   /*All Notes Section*/
   .all-notes {
-    max-width: 1000px;
+    width: 100%;
+    max-width: 1400px;
     margin: 40px auto;
     padding: 0 20px;
     padding-bottom: 100px;
@@ -642,7 +646,7 @@
 }
 
 .note-history-card.grid {
-  width: 280px;
+  width: 320px;
   height: auto;
   background: rgba(255,255,255,0.05);
   border-radius: 12px;
@@ -660,8 +664,7 @@
   justify-content: flex-start;
   align-items: center;
   margin: 20px 0;
-  flex-wrap: nowrap;
-  flex-direction: row;
+  flex-wrap: wrap;
 }
 
 
@@ -676,25 +679,6 @@
   display: flex;
   gap: 10px;
   flex-shrink: 0;
-}
-
-@media (max-width: 768px) {
-  .search-and-toggle {
-    flex-direction: column;
-    align-items: stretch;
-  }
-
-  .search-bar, .filter-wrapper, .view-toggle-group {
-    width: 100%;
-    justify-content: center;
-    margin: 0;
-    padding: 0;
-  }
-
-  .all-notes-label {
-    text-align: center;
-    margin-bottom: 10px;
-  }
 }
 
 .filter-btn img {
@@ -860,6 +844,7 @@
   margin: 0;
   padding: 0;
   white-space: nowrap;
+  margin-right: 16px;
 }
 
 .cancel-search-btn {
@@ -913,5 +898,21 @@
     .hero-title { font-size: 2rem; }
     .account-details-box { flex-direction: column; }
     .upload-form { width: 95%; }
+ 
+    .search-and-toggle {
+      flex-direction: column;
+      align-items: stretch;
+    }
+  
+    .search-bar,
+    .filter-wrapper,
+    .view-toggle-group,
+    .all-notes-label {
+      width: 100%;
+      text-align: center;
+      margin: 8px 0;
+      justify-content: center;
+    }
   }
+  
   
