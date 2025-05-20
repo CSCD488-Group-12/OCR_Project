@@ -1073,47 +1073,50 @@
             };
         }
 
-        const searchInput = document.getElementById("noteSearch");
-        const cancelSearchBtn = document.getElementById("cancelSearchBtn");
-
-        searchInput.addEventListener("input", debounce(function () {
-            const query = this.value.toLowerCase().trim();
-
-            if (query === "") {
-                currentFilteredNotes = [...allUserNotes];
-            } else {
-                currentFilteredNotes = allUserNotes.filter(note =>
-                    note.title.toLowerCase().includes(query) ||
-                    note.preview.toLowerCase().includes(query) ||
-                    (note.category || "").toLowerCase().includes(query)
-                );
-            }
-
-            renderAllNotes(currentFilteredNotes);
-
-            if (query === "") {
+        document.addEventListener("DOMContentLoaded", () => {
+            const searchInput = document.getElementById("noteSearch");
+            const cancelSearchBtn = document.getElementById("cancelSearchBtn");
+          
+            searchInput.addEventListener("input", debounce(function () {
+              const query = this.value.toLowerCase().trim();
+          
+              if (query === "") {
+                  currentFilteredNotes = [...allUserNotes];
+              } else {
+                  currentFilteredNotes = allUserNotes.filter(note =>
+                      note.title.toLowerCase().includes(query) ||
+                      note.preview.toLowerCase().includes(query) ||
+                      (note.category || "").toLowerCase().includes(query)
+                  );
+              }
+          
+              renderAllNotes(currentFilteredNotes);
+          
+              if (query === "") {
+                  cancelSearchBtn.classList.add("hidden");
+                  cancelSearchBtn.classList.remove("visible");
+              } else {
+                  cancelSearchBtn.classList.remove("hidden");
+                  cancelSearchBtn.classList.add("visible");
+              }
+            }, 250));
+          
+            cancelSearchBtn.addEventListener("click", () => {
+              searchInput.value = "";
+              currentFilteredNotes = [...allUserNotes];
+              renderAllNotes(currentFilteredNotes);
+              cancelSearchBtn.classList.add("hidden");
+              cancelSearchBtn.classList.remove("visible");
+            });
+          
+            searchInput.addEventListener("blur", () => {
+              if (searchInput.value.trim() === "") {
                 cancelSearchBtn.classList.add("hidden");
                 cancelSearchBtn.classList.remove("visible");
-            } else {
-                cancelSearchBtn.classList.remove("hidden");
-                cancelSearchBtn.classList.add("visible");
-            }
-        }, 250));
-
-        cancelSearchBtn.addEventListener("click", () => {
-            searchInput.value = "";
-            currentFilteredNotes = [...allUserNotes];
-            renderAllNotes(currentFilteredNotes);
-            cancelSearchBtn.classList.add("hidden");
-            cancelSearchBtn.classList.remove("visible");
-        });
-
-        searchInput.addEventListener("blur", () => {
-            if (searchInput.value.trim() === "") {
-                cancelSearchBtn.classList.add("hidden");
-                cancelSearchBtn.classList.remove("visible");
-            }
-        });
+              }
+            });
+          });
+          
 
 
 
