@@ -332,6 +332,14 @@
         const allCategories = ["Math", "Science", "English", "Personal", "History"];
 
         // end testing data
+
+        let currentFilters = {
+            category: "",
+            startDate: null,
+            endDate: null,
+            searchQuery: ""
+        };
+        
         function displayDisclaimer() {
             const uploadInfo = document.getElementById("upload-info");
             const uploadedImage = document.getElementById("imageCanvas");
@@ -1052,17 +1060,34 @@
         }
         
         function applyFilters() {
-            const category = document.getElementById("filterCategory").value;
-            const start = document.getElementById("filterStartDate")?.value || null;
-            const end = document.getElementById("filterEndDate")?.value || null;
+            currentFilters.category = document.getElementById("filterCategory").value;
+            currentFilters.startDate = document.getElementById("filterStartDate").value || null;
+            currentFilters.endDate = document.getElementById("filterEndDate").value || null;
         
-            const filters = { category, startDate: start, endDate: end };
-            const filtered = applyNoteFilters(allUserNotes, filters);
+            applyAllFiltersAndSearch();
+            document.getElementById("filterDropdown").classList.add("hidden");
+        }
+        
+        function applyAllFiltersAndSearch() {
+            const { category, startDate, endDate, searchQuery } = currentFilters;
+        
+            let filtered = applyNoteFilters(allUserNotes, {
+                category,
+                startDate,
+                endDate
+            });
+        
+            if (searchQuery) {
+                filtered = filtered.filter(note =>
+                    note.title.toLowerCase().includes(searchQuery) ||
+                    note.preview.toLowerCase().includes(searchQuery) ||
+                    (note.category || "").toLowerCase().includes(searchQuery)
+                );
+            }
         
             renderAllNotes(filtered);
-            document.getElementById("filterDropdown").classList.add("hidden");
-            document.getElementById("filterDropdown").classList.remove("visible");
         }
+        
         
 
         document.addEventListener("click", (event) => {
@@ -1089,25 +1114,11 @@
         const cancelSearchBtn = document.getElementById("cancelSearchBtn");
 
         searchInput.addEventListener("input", debounce(function () {
-            const query = this.value.toLowerCase().trim();
-
-            if (query === "") {
-                renderAllNotes(allUserNotes);
-                cancelSearchBtn.classList.add("hidden");
-                cancelSearchBtn.classList.remove("visible");
-                return;
-            }
-
-            const filteredNotes = allUserNotes.filter(note =>
-                note.title.toLowerCase().includes(query) ||
-                note.preview.toLowerCase().includes(query) ||
-                (note.category || "").toLowerCase().includes(query)
-            );
-
-            renderAllNotes(filteredNotes);
-            cancelSearchBtn.classList.remove("hidden");
-            cancelSearchBtn.classList.add("visible");
+            currentFilters.searchQuery = this.value.toLowerCase().trim();
+            applyAllFiltersAndSearch();
+            cancelSearchBtn.classList.toggle("visible", currentFilters.searchQuery !== "");
         }, 250));
+        
 
         document.addEventListener("DOMContentLoaded", () => {
             const sections = document.querySelectorAll('.section');
@@ -1123,12 +1134,13 @@
             sections.forEach(section => observer.observe(section));
           });
           
-        cancelSearchBtn.addEventListener("click", () => {
+          cancelSearchBtn.addEventListener("click", () => {
             searchInput.value = "";
-            renderAllNotes(allUserNotes);
-            cancelSearchBtn.classList.add("hidden");
+            currentFilters.searchQuery = "";
+            applyAllFiltersAndSearch();
             cancelSearchBtn.classList.remove("visible");
         });
+        
         
         searchInput.addEventListener("blur", () => {
             if (searchInput.value.trim() === "") {
@@ -1137,6 +1149,7 @@
             }
         });
         
+        document.getElementById("applyFiltersBtn").addEventListener("click", applyFilters);
 
         
     </script>
