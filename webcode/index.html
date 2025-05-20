@@ -93,14 +93,14 @@
     <!-- Recent Notes -->
     <div class="recent-notes section requires-login hidden">
         <h2 class="recent-notes-label requires-login">Recent Notes</h2>
-    <!-- Recent notes content here -->
+        <div id = "recentNotesGrid"></div>
     </div>
 
     <!-- Collections -->
     <div class="collections section requires-login hidden">
         <h2 class="collections-label requires-login">Your Collections</h2>
         <button id="newCollectionBtn" class="btn-new-collection requires-login">+ New Collection</button>
-
+        <div id="collectionsGrid"></div>
     </div>
 
     <div id="newCollectionModal" class="modal hidden">
@@ -718,17 +718,9 @@
 
         // Load logged in user's most recent notes
         function renderRecentNotes(notes) {
-            const container = document.querySelector(".recent-notes");
-            container.innerHTML = "";
-
-            const label = document.createElement("h2");
-            label.className = "recent-notes-label requires-login";
-            label.textContent = "Recent Notes";
-            container.appendChild(label);
-
-            const wrapper = document.createElement("div");
-            wrapper.className = "recent-notes-wrapper";
-
+            const grid = document.getElementById("recentNotesGrid");
+            grid.innerHTML = "";
+        
             notes.forEach(note => {
                 const card = document.createElement("div");
                 card.className = "note-card";
@@ -739,15 +731,11 @@
                         <p class="note-date">${note.lastEdited}</p>
                     </div>
                 `;
-                card.addEventListener("click", () => {
-                    openNoteDetailModal(note);
-                });
-                wrapper.appendChild(card);
+                card.addEventListener("click", () => openNoteDetailModal(note));
+                grid.appendChild(card);
             });
-
-            container.appendChild(wrapper);
-
         }
+        
 
         let currentlyOpenNote = null;
 
@@ -781,41 +769,32 @@
 
         //Load logged in user's collections
         function renderCollections(categories) {
-            const container = document.querySelector(".collections");
-
-            container.innerHTML = `
-                <h2 class="collections-label requires-login">Your Collections</h2>
-                <button id="newCollectionBtn" class="btn-new-collection requires-login">+ New Collection</button>
-            `;
-
-            const wrapper = document.createElement("div");
-            wrapper.className = "collections-wrapper";
-
+            const grid = document.getElementById("collectionsGrid");
+            grid.innerHTML = ""; // just clear the grid
+        
             categories.forEach(cat => {
                 const item = document.createElement("div");
                 item.className = "collection-card";
                 item.textContent = cat;
-
+        
                 item.addEventListener("click", () => {
                     const filterDropdown = document.getElementById("filterDropdown");
                     const filterSelect = document.getElementById("filterCategory");
-
+        
                     filterSelect.value = filterSelect.value === cat ? "" : cat;
-
+        
                     if (filterDropdown) {
                         filterDropdown.classList.remove("hidden");
                         filterDropdown.classList.add("visible");
                     }
-
+        
                     applyFilters();
                 });
-
-                wrapper.appendChild(item);
+        
+                grid.appendChild(item);
             });
-
-            container.appendChild(wrapper);
-
         }
+        
 
         //Load logged in user's entire history of notes (saved to the database)
         let currentView = "list"; // default
