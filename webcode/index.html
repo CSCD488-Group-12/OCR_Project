@@ -245,7 +245,10 @@
         renderRecentNotes(testNotes);
         renderCollections(allCategories);
         renderAllNotes(allUserNotes);
-        setupSearchAndFiltering();
+        
+        window.requestAnimationFrame(() => {
+            setupSearchAndFiltering();
+        });
     }
 
     function onUserLogout() {
