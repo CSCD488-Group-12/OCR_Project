@@ -120,44 +120,44 @@
     <!-- All Notes and Search -->
     <div class="all-notes section requires-login hidden">
     
-        <div class="search-and-toggle">
-            <label class="all-notes-label requires-login">All Notes</label>
-            <div class="search-bar">
-                <input type="text" placeholder="Search your notes..." id="noteSearch" />
+        <div class="search-header-wrapper">
+            <div class="all-notes-label-wrapper">
+              <label class="all-notes-label requires-login">All Notes</label>
             </div>
-        
-            <div class="filter-wrapper">
+            <div class="search-and-toggle">
+              <div class="search-bar">
+                <input type="text" placeholder="Search your notes..." id="noteSearch" />
+              </div>
+          
+              <div class="filter-wrapper">
                 <button id="filterNotesBtn" class="filter-btn requires-login hidden">
-                    <img src="assets/filter-list.png" style="filter: invert(1);" alt="Filter" />
+                  <img src="assets/filter-list.png" style="filter: invert(1);" alt="Filter" />
                 </button>
                 <button id="cancelSearchBtn" class="cancel-search-btn hidden">✖</button>
-        
+          
                 <div id="filterDropdown" class="filter-dropdown hidden">
-                    <label for="filterCategory">Category:</label>
-                    <select id="filterCategory"></select>
-        
-                    <label for="filterStartDate">Start Date:</label>
-                    <input type="date" id="filterStartDate" />
-
-                    <label for="filterEndDate">End Date:</label>
-                    <input type="date" id="filterEndDate" />
-
-        
-                    <button id="applyFiltersBtn" class="btn-confirm">Apply</button>
+                  <label for="filterCategory">Category:</label>
+                  <select id="filterCategory"></select>
+                  <label for="filterStartDate">Start Date:</label>
+                  <input type="date" id="filterStartDate" />
+                  <label for="filterEndDate">End Date:</label>
+                  <input type="date" id="filterEndDate" />
+                  <button id="applyFiltersBtn" class="btn-confirm">Apply</button>
                 </div>
-            </div>
-        
-            <div class="view-toggle-group">
+              </div>
+          
+              <div class="view-toggle-group">
                 <button id="listViewBtn" class="view-toggle active">
-                    <img src="assets/menu-burger.png" alt="List View" style="filter: invert(1);"> List
+                  <img src="assets/menu-burger.png" alt="List View" style="filter: invert(1);"> List
                 </button>
                 <button id="gridViewBtn" class="view-toggle">
-                    <img src="assets/apps.png" alt="Grid View" style="filter: invert(1);"> Grid
+                  <img src="assets/apps.png" alt="Grid View" style="filter: invert(1);"> Grid
                 </button>
+              </div>
             </div>
-        </div>
-        
-        </div>
+          </div>
+          
+       
     </div>
 
     <!-- Floating button for logged-in users -->
@@ -803,21 +803,12 @@
 
         function renderAllNotes(notes) {
             const container = document.querySelector(".all-notes");
-            const label = document.createElement("label");
-            label.className = "all-notes-label requires-login";
-            label.textContent = "All Notes";
-            
-            const searchBar = document.getElementById("noteSearch")?.parentElement;
-            const viewToggleGroup = container.querySelector(".view-toggle-group");
-            const filterWrapper = container.querySelector(".filter-wrapper");
-            
-            container.innerHTML = "";
-            container.appendChild(label);
-            
-            if (searchBar) container.appendChild(searchBar);
-            if (filterWrapper) container.appendChild(filterWrapper);
-            if (viewToggleGroup) container.appendChild(viewToggleGroup);
-            
+
+            const oldList = container.querySelector(".all-notes-grid") || container.querySelector(".all-notes-list");
+            if (oldList) {
+                container.removeChild(oldList);
+            }
+
             if (notes.length === 0) {
                 const noResults = document.createElement("p");
                 noResults.textContent = "No notes found.";
@@ -828,14 +819,14 @@
                 container.appendChild(noResults);
                 return;
             }
-        
+
             const list = document.createElement("div");
             list.className = currentView === "grid" ? "all-notes-grid" : "all-notes-list";
-        
+
             notes.forEach(note => {
                 const card = document.createElement("div");
                 card.className = `note-history-card ${currentView === "grid" ? "grid" : ""}`;
-        
+
                 if (currentView === "grid") {
                     card.innerHTML = `
                         <div class="note-card-grid-image-wrapper">
@@ -857,19 +848,19 @@
                         <p class="note-date">${note.lastEdited}</p>
                     `;
                 }
-        
+
                 card.addEventListener("click", () => {
-                   openNoteDetailModal(note)
+                    openNoteDetailModal(note);
                 });
-        
+
                 list.appendChild(card);
             });
-        
+
             container.appendChild(list);
-        
+
             const listBtn = document.getElementById("listViewBtn");
             const gridBtn = document.getElementById("gridViewBtn");
-        
+
             if (listBtn && !listBtn.dataset.listenerAdded) {
                 listBtn.addEventListener("click", () => {
                     currentView = "list";
@@ -879,7 +870,7 @@
                 });
                 listBtn.dataset.listenerAdded = "true";
             }
-            
+
             if (gridBtn && !gridBtn.dataset.listenerAdded) {
                 gridBtn.addEventListener("click", () => {
                     currentView = "grid";
@@ -889,8 +880,8 @@
                 });
                 gridBtn.dataset.listenerAdded = "true";
             }
-            
         }
+
  
         document.getElementById("closeNoteModal").addEventListener("click", () => {
             document.getElementById("noteDetailModal").classList.add("hidden");
