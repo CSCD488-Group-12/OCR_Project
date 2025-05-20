@@ -1078,7 +1078,6 @@
         }
         
         
-
         document.addEventListener("click", (event) => {
             const filterWrapper = document.querySelector(".filter-wrapper");
             const filterDropdown = document.getElementById("filterDropdown");
@@ -1125,7 +1124,14 @@
             searchInput.addEventListener("input", debounce(function () {
                 currentFilters.searchQuery = this.value.toLowerCase().trim();
                 applyAllFiltersAndSearch();
-                cancelSearchBtn.classList.toggle("visible", currentFilters.searchQuery !== "");
+                
+                if (currentFilters.searchQuery !== "") {
+                    cancelSearchBtn.classList.add("visible");
+                    cancelSearchBtn.classList.remove("hidden");
+                } else {
+                    cancelSearchBtn.classList.remove("visible");
+                    cancelSearchBtn.classList.add("hidden");
+                }
             }, 250));
         
 
@@ -1134,6 +1140,7 @@
                 currentFilters.searchQuery = "";
                 applyAllFiltersAndSearch();
                 cancelSearchBtn.classList.remove("visible");
+                cancelSearchBtn.classList.add("hidden");
             });
         
             searchInput.addEventListener("blur", () => {
