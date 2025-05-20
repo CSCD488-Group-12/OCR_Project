@@ -291,13 +291,14 @@
     border-radius: 12px;
     overflow: hidden;
     background-color: #1e1e2f;
-    box-shadow: 0 4px 10px rgba(0,0,0,0.3);
+    box-shadow: 0 12px 30px rgba(0, 0, 0, 0.5);
     cursor: pointer;
     transition: transform 0.3s ease;
   }
   
   .note-card:hover {
     transform: scale(1.03);
+    box-shadow: 0 16px 40px rgba(0, 0, 0, 0.7);
   }
   
   .note-card img {
