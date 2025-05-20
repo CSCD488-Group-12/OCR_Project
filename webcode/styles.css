@@ -279,9 +279,6 @@
   
   /* Recent Notes */
   .recent-notes {
-    display: grid;
-    grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
-    gap: 20px;
     margin: 40px 0;
     padding: 0 40px;
     max-width: 1400px;
@@ -332,10 +329,6 @@
 
   /* Collections*/
   .collections {
-    display: grid;
-    grid-template-columns: repeat(auto-fill, minmax(140px, 1fr));
-    gap: 16px;
-    justify-content: center;
     margin: 40px auto;
     padding: 0 40px;
     max-width: 1400px;
@@ -864,6 +857,19 @@
   transform: scale(1);
 }
 
+#recentNotesGrid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+  gap: 20px;
+  margin-top: 20px;
+}
+
+#collectionsGrid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(140px, 1fr));
+  gap: 16px;
+  margin-top: 20px;
+}
 
 
 
