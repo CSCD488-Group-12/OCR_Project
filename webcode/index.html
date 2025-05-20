@@ -1115,32 +1115,32 @@
                 timer = setTimeout(() => func.apply(this, args), delay);
             };
         }
+
+        const searchInput = document.getElementById("noteSearch");
+        const cancelSearchBtn = document.getElementById("cancelSearchBtn");
+
+        searchInput.addEventListener("input", debounce(function () {
+            const query = this.value.toLowerCase().trim();
+
+            if (query === "") {
+                renderAllNotes(allUserNotes);
+                cancelSearchBtn.classList.add("hidden");
+                cancelSearchBtn.classList.remove("visible");
+                return;
+            }
+
+            const filteredNotes = allUserNotes.filter(note =>
+                note.title.toLowerCase().includes(query) ||
+                note.preview.toLowerCase().includes(query) ||
+                (note.category || "").toLowerCase().includes(query)
+            );
+
+            renderAllNotes(filteredNotes);
+            cancelSearchBtn.classList.remove("hidden");
+            cancelSearchBtn.classList.add("visible");
+        }, 250));
+
         
-        document.addEventListener("DOMContentLoaded", () => {
-            const searchInput = document.getElementById("noteSearch");
-            const cancelSearchBtn = document.getElementById("cancelSearchBtn");
-
-            searchInput.addEventListener("input", debounce(function () {
-                const query = this.value.toLowerCase().trim();
-
-                if (query === "") {
-                    renderAllNotes(allUserNotes);
-                    cancelSearchBtn.classList.add("hidden");
-                    cancelSearchBtn.classList.remove("visible");
-                    return;
-                }
-
-                const filteredNotes = allUserNotes.filter(note =>
-                    note.title.toLowerCase().includes(query) ||
-                    note.preview.toLowerCase().includes(query) ||
-                    (note.category || "").toLowerCase().includes(query)
-                );
-                renderAllNotes(filteredNotes);
-                cancelSearchBtn.classList.remove("hidden");
-                cancelSearchBtn.classList.add("visible");
-            }, 250));
-
-        });
 
         document.addEventListener("DOMContentLoaded", () => {
             const sections = document.querySelectorAll('.section');
@@ -1156,7 +1156,7 @@
             sections.forEach(section => observer.observe(section));
           });
           
-          cancelSearchBtn.addEventListener("click", () => {
+        cancelSearchBtn.addEventListener("click", () => {
             searchInput.value = "";
             renderAllNotes(allUserNotes);
             cancelSearchBtn.classList.add("hidden");
