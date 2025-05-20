@@ -235,23 +235,7 @@
         onUserLogout();
     });
 
-    function onUserLogin() {
-        console.log("User is logged in:", loggedInUser.username);
-        document.querySelectorAll(".requires-login").forEach(el => el.classList.remove("hidden"));
-        document.querySelectorAll(".requires-logout").forEach(el => el.classList.add("hidden"));
-        
-        document.getElementById("noteDetailModal").classList.add("hidden");
-        
-        renderRecentNotes(testNotes);
-        renderCollections(allCategories);
-        renderAllNotes(allUserNotes);
-    }
-
-    function onUserLogout() {
-        console.log("User is not logged in");
-        document.querySelectorAll(".requires-login").forEach(el => el.classList.add("hidden"));
-        document.querySelectorAll(".requires-logout").forEach(el => el.classList.remove("hidden"));
-    }
+    /* onUserLogin() and logout moved to bottom of scripts due to load errors that occur otherwise */
 </script>
 <!--END OF MICROSOFT STUFF-->
 
@@ -331,7 +315,7 @@
         // User-made categories population        
         const allCategories = ["Math", "Science", "English", "Personal", "History"];
 
-        let currentFilteredNotes = [allUserNotes];
+        let currentFilteredNotes = [...allUserNotes];
 
 
         // end testing data
@@ -1131,6 +1115,28 @@
             }
         });
 
+
+
+
+        //User login and logout
+
+        function onUserLogin() {
+            console.log("User is logged in:", loggedInUser.username);
+            document.querySelectorAll(".requires-login").forEach(el => el.classList.remove("hidden"));
+            document.querySelectorAll(".requires-logout").forEach(el => el.classList.add("hidden"));
+            
+            document.getElementById("noteDetailModal").classList.add("hidden");
+            
+            renderRecentNotes(testNotes);
+            renderCollections(allCategories);
+            renderAllNotes(allUserNotes);
+        }
+    
+        function onUserLogout() {
+            console.log("User is not logged in");
+            document.querySelectorAll(".requires-login").forEach(el => el.classList.add("hidden"));
+            document.querySelectorAll(".requires-logout").forEach(el => el.classList.remove("hidden"));
+        }
         
 
         
