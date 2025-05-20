@@ -239,7 +239,7 @@
         console.log("User is logged in:", loggedInUser.username);
         document.querySelectorAll(".requires-login").forEach(el => el.classList.remove("hidden"));
         document.querySelectorAll(".requires-logout").forEach(el => el.classList.add("hidden"));
-        
+        document.querySelector('.homepage-wrapper')?.classList.add('logged-in');
         document.getElementById("noteDetailModal").classList.add("hidden");
         
         renderRecentNotes(testNotes);
@@ -255,6 +255,7 @@
         console.log("User is not logged in");
         document.querySelectorAll(".requires-login").forEach(el => el.classList.add("hidden"));
         document.querySelectorAll(".requires-logout").forEach(el => el.classList.remove("hidden"));
+        document.querySelector('.homepage-wrapper')?.classList.remove('logged-in');
     }
 </script>
 <!--END OF MICROSOFT STUFF-->

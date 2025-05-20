@@ -42,6 +42,11 @@
     text-align: center;
     padding: 80px 20px;
   }
+
+  .homepage-wrapper.logged-in {
+    padding: 0;
+  }
+  
   
   .hero-section {
     max-width: 800px;
