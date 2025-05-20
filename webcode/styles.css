@@ -279,7 +279,7 @@
   
   /* Recent Notes */
   .recent-notes {
-    margin: 40px 0;
+    margin: 40px auto;
     padding: 0 40px;
     max-width: 1400px;
   }
@@ -870,11 +870,11 @@
 }
 
 #recentNotesGrid {
-  display: grid;
-  grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+  display: flex;
   gap: 20px;
   margin-top: 20px;
   justify-content: center;
+  flex-wrap: nowrap;
 }
 
 .collections-wrapper {
@@ -964,4 +964,10 @@
     }
   }
   
+  @media screen and (max-width: 1024px) {
+    #recentNotesGrid {
+      flex-wrap: wrap;
+      justify-content: center;
+    }
+  }
   
