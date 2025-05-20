@@ -1121,7 +1121,7 @@
         
             if (!searchInput || !cancelSearchBtn || !filterBtn || !filterDropdown || !applyFiltersBtn) return;
         
-            searchInput.addEventListener("input", debounce(function () {
+            searchInput.addEventListener("input", debounce(function (event) {
                 const value = event.target.value.toLowerCase().trim();
                 currentFilters.searchQuery = value;
                 applyAllFiltersAndSearch();
