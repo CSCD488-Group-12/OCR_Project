@@ -1122,10 +1122,11 @@
             if (!searchInput || !cancelSearchBtn || !filterBtn || !filterDropdown || !applyFiltersBtn) return;
         
             searchInput.addEventListener("input", debounce(function () {
-                currentFilters.searchQuery = this.value.toLowerCase().trim();
+                const value = event.value.toLowerCase().trim();
+                currentFilters.searchQuery = value;
                 applyAllFiltersAndSearch();
                 
-                if (currentFilters.searchQuery !== "") {
+                if (value!== "") {
                     cancelSearchBtn.classList.add("visible");
                     cancelSearchBtn.classList.remove("hidden");
                 } else {
