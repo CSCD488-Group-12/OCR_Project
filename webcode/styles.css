@@ -841,7 +841,7 @@
 .recent-notes-label,
 .collections-label {
     font-size: 1.5rem;
-    font-weight: bold;
+    font-weight: 600;
     margin-bottom: 16px;
     text-align: left;
     color: #a5b4fc;
@@ -851,12 +851,32 @@
 .all-notes-label {
   white-space: nowrap;
   font-size: 1.5rem;
-  font-weight: bold;
+  font-weight: 600;
   color: #a5b4fc;
   margin-right: 16px;
   text-align: left;
   margin-left: 40px;
 }
+
+.note-card .note-date,
+.note-category,
+.note-preview,
+.note-date {
+  font-weight: 400;
+}
+
+.btn-hero,
+.btn-login,
+.btn-confirm,
+.btn-cancel,
+.btn-new-collection {
+  font-weight: 600;
+}
+
+.modal-content h2 {
+  font-weight: 600;
+}
+
 
 .cancel-search-btn {
   background: rgba(255, 255, 255, 0.1);
