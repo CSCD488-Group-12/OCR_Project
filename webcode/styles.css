@@ -337,6 +337,13 @@
     padding: 0 40px;
     max-width: 1400px;
   }
+
+  .collections-section {
+    max-width: 1400px;
+    margin: 40px auto;
+    padding: 0 40px;
+  }
+  
   
   .collection-card {
     background: linear-gradient(135deg, #3c00d6, #5f0f80);
@@ -659,7 +666,7 @@
   gap: 16px;
   justify-content: flex-start;
   align-items: center;
-  flex-wrap: nowrap;
+  flex-wrap: wrap;
   padding: 0 40px;
   margin-bottom: 20px;
 }
@@ -841,7 +848,7 @@
   font-size: 1.5rem;
   font-weight: bold;
   color: #a5b4fc;
-  
+  margin-right: 16px;
 }
 
 .cancel-search-btn {
