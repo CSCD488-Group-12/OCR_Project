@@ -245,7 +245,7 @@
         renderRecentNotes(testNotes);
         renderCollections(allCategories);
         renderAllNotes(allUserNotes);
-        
+
         window.requestAnimationFrame(() => {
             setupSearchAndFiltering();
         });
@@ -1067,10 +1067,11 @@
         
             if (searchQuery) {
                 filtered = filtered.filter(note =>
-                    note.title.toLowerCase().includes(searchQuery) ||
-                    note.preview.toLowerCase().includes(searchQuery) ||
+                    (note.title || "").toLowerCase().includes(searchQuery) ||
+                    (note.preview || "").toLowerCase().includes(searchQuery) ||
                     (note.category || "").toLowerCase().includes(searchQuery)
                 );
+
             }
         
             renderAllNotes(filtered);
