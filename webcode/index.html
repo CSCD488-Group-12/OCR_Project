@@ -331,6 +331,9 @@
         // User-made categories population        
         const allCategories = ["Math", "Science", "English", "Personal", "History"];
 
+        let currentFilteredNotes = [...allUserNotes];
+
+
         // end testing data
         function displayDisclaimer() {
             const uploadInfo = document.getElementById("upload-info");
@@ -863,7 +866,7 @@
                     currentView = "list";
                     listBtn.classList.add("active");
                     gridBtn.classList.remove("active");
-                    renderAllNotes(notes);
+                    renderAllNotes(currentFilteredNotes);
                 });
                 listBtn.dataset.listenerAdded = "true";
             }
@@ -873,7 +876,7 @@
                     currentView = "grid";
                     gridBtn.classList.add("active");
                     listBtn.classList.remove("active");
-                    renderAllNotes(notes);
+                    renderAllNotes(currentFilteredNotes);
                 });
                 gridBtn.dataset.listenerAdded = "true";
             }
@@ -1057,12 +1060,13 @@
             const end = document.getElementById("filterEndDate")?.value || null;
         
             const filters = { category, startDate: start, endDate: end };
-            const filtered = applyNoteFilters(allUserNotes, filters);
+            currentFilteredNotes = applyNoteFilters(allUserNotes, filters);
         
-            renderAllNotes(filtered);
+            renderAllNotes(currentFilteredNotes);
             document.getElementById("filterDropdown").classList.add("hidden");
             document.getElementById("filterDropdown").classList.remove("visible");
         }
+        
         
 
         document.addEventListener("click", (event) => {
@@ -1092,52 +1096,41 @@
             const query = this.value.toLowerCase().trim();
 
             if (query === "") {
-                renderAllNotes(allUserNotes);
-                cancelSearchBtn.classList.add("hidden");
-                cancelSearchBtn.classList.remove("visible");
-                return;
+                currentFilteredNotes = [...allUserNotes];
+            } else {
+                currentFilteredNotes = allUserNotes.filter(note =>
+                    note.title.toLowerCase().includes(query) ||
+                    note.preview.toLowerCase().includes(query) ||
+                    (note.category || "").toLowerCase().includes(query)
+                );
             }
 
-            const filteredNotes = allUserNotes.filter(note =>
-                note.title.toLowerCase().includes(query) ||
-                note.preview.toLowerCase().includes(query) ||
-                (note.category || "").toLowerCase().includes(query)
-            );
+            renderAllNotes(currentFilteredNotes);
 
-            renderAllNotes(filteredNotes);
-            cancelSearchBtn.classList.remove("hidden");
-            cancelSearchBtn.classList.add("visible");
+            if (query === "") {
+                cancelSearchBtn.classList.add("hidden");
+                cancelSearchBtn.classList.remove("visible");
+            } else {
+                cancelSearchBtn.classList.remove("hidden");
+                cancelSearchBtn.classList.add("visible");
+            }
         }, 250));
 
-        
-
-        document.addEventListener("DOMContentLoaded", () => {
-            const sections = document.querySelectorAll('.section');
-            const observer = new IntersectionObserver(entries => {
-              entries.forEach(entry => {
-                if (entry.isIntersecting) {
-                  entry.target.classList.add('visible');
-                  observer.unobserve(entry.target);
-                }
-              });
-            }, { threshold: 0.1 });
-          
-            sections.forEach(section => observer.observe(section));
-          });
-          
         cancelSearchBtn.addEventListener("click", () => {
             searchInput.value = "";
-            renderAllNotes(allUserNotes);
+            currentFilteredNotes = [...allUserNotes];
+            renderAllNotes(currentFilteredNotes);
             cancelSearchBtn.classList.add("hidden");
             cancelSearchBtn.classList.remove("visible");
         });
-        
+
         searchInput.addEventListener("blur", () => {
             if (searchInput.value.trim() === "") {
                 cancelSearchBtn.classList.add("hidden");
                 cancelSearchBtn.classList.remove("visible");
             }
         });
+
         
 
         
