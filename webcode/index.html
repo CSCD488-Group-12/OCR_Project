@@ -235,7 +235,23 @@
         onUserLogout();
     });
 
-    /* onUserLogin() and logout moved to bottom of scripts due to load errors that occur otherwise */
+    function onUserLogin() {
+        console.log("User is logged in:", loggedInUser.username);
+        document.querySelectorAll(".requires-login").forEach(el => el.classList.remove("hidden"));
+        document.querySelectorAll(".requires-logout").forEach(el => el.classList.add("hidden"));
+        
+        document.getElementById("noteDetailModal").classList.add("hidden");
+        
+        renderRecentNotes(testNotes);
+        renderCollections(allCategories);
+        renderAllNotes(allUserNotes);
+    }
+
+    function onUserLogout() {
+        console.log("User is not logged in");
+        document.querySelectorAll(".requires-login").forEach(el => el.classList.add("hidden"));
+        document.querySelectorAll(".requires-logout").forEach(el => el.classList.remove("hidden"));
+    }
 </script>
 <!--END OF MICROSOFT STUFF-->
 
@@ -314,9 +330,6 @@
 
         // User-made categories population        
         const allCategories = ["Math", "Science", "English", "Personal", "History"];
-
-        let currentFilteredNotes = [...allUserNotes];
-
 
         // end testing data
         function displayDisclaimer() {
@@ -850,7 +863,7 @@
                     currentView = "list";
                     listBtn.classList.add("active");
                     gridBtn.classList.remove("active");
-                    renderAllNotes(currentFilteredNotes);
+                    renderAllNotes(notes);
                 });
                 listBtn.dataset.listenerAdded = "true";
             }
@@ -860,7 +873,7 @@
                     currentView = "grid";
                     gridBtn.classList.add("active");
                     listBtn.classList.remove("active");
-                    renderAllNotes(currentFilteredNotes);
+                    renderAllNotes(notes);
                 });
                 gridBtn.dataset.listenerAdded = "true";
             }
@@ -1044,13 +1057,12 @@
             const end = document.getElementById("filterEndDate")?.value || null;
         
             const filters = { category, startDate: start, endDate: end };
-            currentFilteredNotes = applyNoteFilters(allUserNotes, filters);
+            const filtered = applyNoteFilters(allUserNotes, filters);
         
-            renderAllNotes(currentFilteredNotes);
+            renderAllNotes(filtered);
             document.getElementById("filterDropdown").classList.add("hidden");
             document.getElementById("filterDropdown").classList.remove("visible");
         }
-        
         
 
         document.addEventListener("click", (event) => {
@@ -1073,73 +1085,59 @@
             };
         }
 
-        document.addEventListener("DOMContentLoaded", () => {
-            const searchInput = document.getElementById("noteSearch");
-            const cancelSearchBtn = document.getElementById("cancelSearchBtn");
-          
-            searchInput.addEventListener("input", debounce(function () {
-              const query = this.value.toLowerCase().trim();
-          
-              if (query === "") {
-                  currentFilteredNotes = [...allUserNotes];
-              } else {
-                  currentFilteredNotes = allUserNotes.filter(note =>
-                      note.title.toLowerCase().includes(query) ||
-                      note.preview.toLowerCase().includes(query) ||
-                      (note.category || "").toLowerCase().includes(query)
-                  );
-              }
-          
-              renderAllNotes(currentFilteredNotes);
-          
-              if (query === "") {
-                  cancelSearchBtn.classList.add("hidden");
-                  cancelSearchBtn.classList.remove("visible");
-              } else {
-                  cancelSearchBtn.classList.remove("hidden");
-                  cancelSearchBtn.classList.add("visible");
-              }
-            }, 250));
-          
-            cancelSearchBtn.addEventListener("click", () => {
-              searchInput.value = "";
-              currentFilteredNotes = [...allUserNotes];
-              renderAllNotes(currentFilteredNotes);
-              cancelSearchBtn.classList.add("hidden");
-              cancelSearchBtn.classList.remove("visible");
-            });
-          
-            searchInput.addEventListener("blur", () => {
-              if (searchInput.value.trim() === "") {
+        const searchInput = document.getElementById("noteSearch");
+        const cancelSearchBtn = document.getElementById("cancelSearchBtn");
+
+        searchInput.addEventListener("input", debounce(function () {
+            const query = this.value.toLowerCase().trim();
+
+            if (query === "") {
+                renderAllNotes(allUserNotes);
                 cancelSearchBtn.classList.add("hidden");
                 cancelSearchBtn.classList.remove("visible");
-              }
-            });
+                return;
+            }
+
+            const filteredNotes = allUserNotes.filter(note =>
+                note.title.toLowerCase().includes(query) ||
+                note.preview.toLowerCase().includes(query) ||
+                (note.category || "").toLowerCase().includes(query)
+            );
+
+            renderAllNotes(filteredNotes);
+            cancelSearchBtn.classList.remove("hidden");
+            cancelSearchBtn.classList.add("visible");
+        }, 250));
+
+        
+
+        document.addEventListener("DOMContentLoaded", () => {
+            const sections = document.querySelectorAll('.section');
+            const observer = new IntersectionObserver(entries => {
+              entries.forEach(entry => {
+                if (entry.isIntersecting) {
+                  entry.target.classList.add('visible');
+                  observer.unobserve(entry.target);
+                }
+              });
+            }, { threshold: 0.1 });
+          
+            sections.forEach(section => observer.observe(section));
           });
           
-
-
-
-
-        //User login and logout
-
-        function onUserLogin() {
-            console.log("User is logged in:", loggedInUser.username);
-            document.querySelectorAll(".requires-login").forEach(el => el.classList.remove("hidden"));
-            document.querySelectorAll(".requires-logout").forEach(el => el.classList.add("hidden"));
-            
-            document.getElementById("noteDetailModal").classList.add("hidden");
-            
-            renderRecentNotes(testNotes);
-            renderCollections(allCategories);
+        cancelSearchBtn.addEventListener("click", () => {
+            searchInput.value = "";
             renderAllNotes(allUserNotes);
-        }
-    
-        function onUserLogout() {
-            console.log("User is not logged in");
-            document.querySelectorAll(".requires-login").forEach(el => el.classList.add("hidden"));
-            document.querySelectorAll(".requires-logout").forEach(el => el.classList.remove("hidden"));
-        }
+            cancelSearchBtn.classList.add("hidden");
+            cancelSearchBtn.classList.remove("visible");
+        });
+        
+        searchInput.addEventListener("blur", () => {
+            if (searchInput.value.trim() === "") {
+                cancelSearchBtn.classList.add("hidden");
+                cancelSearchBtn.classList.remove("visible");
+            }
+        });
         
 
         
