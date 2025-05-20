@@ -942,6 +942,73 @@
   justify-content: flex-start;
 }
 
+.note-modal-content {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  padding: 40px;
+  background: rgba(20, 20, 40, 0.95);
+  border-radius: 16px;
+  max-width: 600px;
+  margin: auto;
+  animation: scaleIn 0.4s ease;
+}
+
+.note-modal-content h2 {
+  font-size: 1.5rem;
+  font-weight: 600;
+  color: #a5b4fc;
+  margin-bottom: 16px;
+  text-align: center;
+}
+
+.note-modal-content img {
+  width: 100%;
+  max-width: 320px;
+  height: auto;
+  object-fit: cover;
+  border-radius: 12px;
+  margin-bottom: 20px;
+  box-shadow: 0 8px 20px rgba(0,0,0,0.4);
+}
+
+.note-modal-content .search-save-row {
+  justify-content: center;
+  gap: 12px;
+  margin: 20px 0;
+}
+
+.note-modal-content input[type=\"text\"] {
+  padding: 10px;
+  border-radius: 6px;
+  border: 1px solid #ccc;
+  width: 200px;
+}
+
+
+.note-modal-content .note-date {
+  font-size: 0.85rem;
+  color: #888;
+  text-align: center;
+  margin-top: 10px;
+}
+
+.note-textarea {
+  width: 100%;
+  max-width: 500px;
+  padding: 12px;
+  border-radius: 8px;
+  resize: vertical;
+  background: rgba(255, 255, 255, 0.05);
+  color: #fff;
+  border: 1px solid #555;
+  font-family: 'Inter', sans-serif;
+  font-size: 1rem;
+  margin: 16px 0;
+  line-height: 1.5;
+}
+
+
 
 
 

@@ -163,24 +163,26 @@
     <!-- Open full note -->
     <div id="noteDetailModal" class="modal hidden requires-login">
         <div class="modal-content note-modal-content">
-          <span id="closeNoteModal" class="close">&times;</span>
-          <img id="noteDetailImage" src="" alt="Note Image" />
-          <h2 id="noteDetailTitle"></h2>
-          <div class="search-save-row">
-            <div class="combo-box-container">
+            <img id="noteDetailImage" />
+            <h2 id="noteDetailTitle"></h2>
+          
+            <div class="search-save-row">
+              <div class="combo-box-container">
                 <label for="noteDetailCategoryInput">Change Category:</label>
                 <div class="combo-box">
-                    <input type="text" id="noteDetailCategoryInput" placeholder="Start typing or select..." oninput="filterDetailComboOptions()" onfocus="showDetailComboOptions()" />
-                    <ul id="detailComboBoxOptions" class="combo-options hidden"></ul>
+                  <input type="text" id="noteDetailCategoryInput" />
+                  <ul id="detailComboBoxOptions" class="combo-options hidden"></ul>
                 </div>
+              </div>
+              <button class="btn-confirm" onclick="saveCategoryChange()">Save</button>
             </div>
-            <button class="btn-confirm" onclick="saveCategoryChange()">Save</button>
-        </div>
-        
-        
-          <p id="noteDetailText"></p>
-          <p id="noteDetailDate" class="note-date"></p>
-        </div>
+          
+            <textarea id="noteDetailText" class="note-textarea" rows="10" readonly></textarea>
+            <button id="copyNoteBtn" class="btn-confirm">Copy to Clipboard</button>
+
+            <p id="noteDetailDate" class="note-date"></p>
+          </div>
+          
       </div>
 
       <div id="toast" class="toast hidden">Copied to clipboard!</div>
@@ -757,7 +759,7 @@
             currentlyOpenNote = note;
 
             document.getElementById("noteDetailTitle").textContent = note.title || "Untitled Note";
-            document.getElementById("noteDetailText").textContent = note.preview || "Sample note content goes here.";
+            document.getElementById("noteDetailText").value = note.preview || "Sample note content goes here.";
             document.getElementById("noteDetailDate").textContent = note.date || note.lastEdited || "Unknown date";
             document.getElementById("noteDetailImage").src = note.image || "https://picsum.photos/200/300";
             document.getElementById("noteDetailCategoryInput").value = note.category || "";
@@ -896,19 +898,29 @@
         document.getElementById("closeNoteModal").addEventListener("click", () => {
             document.getElementById("noteDetailModal").classList.add("hidden");
         });
+
+        function copyTextFromElement(id) {
+            const text = document.getElementById(id).value;
+        
+            if (!text) {
+                showToast("Nothing to copy.", true);
+                return;
+            }
+        
+            navigator.clipboard.writeText(text)
+                .then(() => showToast("Copied to clipboard!"))
+                .catch(() => showToast("Failed to copy.", true));
+        }
+        
+        document.getElementById("copyNoteBtn").addEventListener("click", () => {
+            copyTextFromElement("noteDetailText");
+        });
         
 
         const copyBtn = document.getElementById("copyToClipboardBtn");
         if (copyBtn) {
             copyBtn.addEventListener("click", async () => {
-                const text = document.getElementById("ocrTextOutput").value;
-
-                try {
-                    await navigator.clipboard.writeText(text);
-                    showToast("Copied to clipboard!");
-                } catch (err) {
-                    showToast("Failed to copy.", true);
-                }
+                copyTextFromElement("ocrTextOutput")
             });
         }
       
