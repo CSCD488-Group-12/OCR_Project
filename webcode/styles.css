@@ -859,7 +859,9 @@
   border-radius: 8px;
   color: white;
   cursor: pointer;
-  margin-left: 8px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
   opacity: 0;
   transform: scale(0.8);
   transition: opacity 0.3s ease, transform 0.3s ease;
