@@ -354,7 +354,7 @@
     background: linear-gradient(135deg, #3c00d6, #5f0f80);
     color: white;
     padding: 16px 24px;
-    border-radius: 20px;
+    border-radius: 10px;
     font-weight: bold;
     cursor: pointer;
     transition: transform 0.2s ease;
@@ -644,7 +644,6 @@
   background: linear-gradient(135deg, #5f0f80, #3c00d6);
 }
 
-/* Grid-style notes */
 .all-notes-grid {
   display: flex;
   flex-wrap: wrap;
@@ -738,12 +737,10 @@
   background: linear-gradient(135deg, #1db954, #1ea954);
   color: white;
   border: none;
-  padding: 12px 20px;
+  padding: 16px 24px;
   border-radius: 10px;
-  height: 64px;
   font-weight: bold;
   cursor: pointer;
-  margin-bottom: 20px;
   transition: transform 0.2s ease;
 }
 
