@@ -28,7 +28,7 @@
         <div class="hero-section section requires-logout">
             <h1 class="hero-title requires-logout">Capture. Convert. Create.</h1>
             <p class="hero-subtitle requires-logout">Upload and crop your image, then extract text with ease.</p>
-            <button type="button" class="btn-hero requires-logout" id="newnote" onclick="changeUploadForm()">New Note</button>
+            <button type="button" class="btn-hero requires-logout" id="newnote" onclick="changeUploadForm()"><img src="assets/add-document-2.png" style="filter: invert(1);"> New Note</button>
         </div>
 
         <!-- Upload Form -->
@@ -78,7 +78,7 @@
                     <textarea id="ocrTextOutput" class = "editable-area" rows="10"></textarea>
                     <button id="downloadTxtBtn" class="btn-confirm">Download .txt</button>
                     <button id="downloadPdfBtn" class="btn-confirm">Download .pdf</button>
-                    <button id="copyToClipboardBtn" class="btn-confirm">Copy to Clipboard</button>
+                    <button id="copyToClipboardBtn" class="btn-confirm"><img src="assets/copy-alt.png" style="filter: invert(1);"> Copy to Clipboard</button>
                     <button id="shareBtn" class="btn-confirm">Share</button>
 
                 </div>
@@ -100,7 +100,7 @@
     <div class="collections-section section fade-in requires-login hidden">
         <h2 class="collections-label requires-login">Your Collections</h2>
         <div class="collections-wrapper">
-            <button id="newCollectionBtn" class="btn-new-collection requires-login">+ New Collection</button>
+            <button id="newCollectionBtn" class="btn-new-collection requires-login"><img src="assets/plus.png" style="filter: invert(1);"> New Collection</button>
             <div id="collectionsGrid" class="collections-grid"></div>
         </div>
     </div>
@@ -127,7 +127,7 @@
             <input type="text" placeholder="Search your notes..." id="noteSearch" />
           </div>
       
-          <button id="cancelSearchBtn" class="cancel-search-btn hidden">✖</button>
+          <button id="cancelSearchBtn" class="cancel-search-btn hidden"><img src = "assets/cross.png" style="filter: invert(1);"></button>
           <div class="filter-wrapper">
             <button id="filterNotesBtn" class="filter-btn requires-login hidden">
               <img src="assets/filter-list.png" style="filter: invert(1);" alt="Filter" />
@@ -159,7 +159,7 @@
       
 
     <!-- Floating button for logged-in users -->
-    <button id="floatingNewNoteBtn" class="floating-newnote requires-login hidden" onclick="changeUploadForm()">+ New Note</button>
+    <button id="floatingNewNoteBtn" class="floating-newnote requires-login hidden" onclick="changeUploadForm()"><img src="assets/add-document-2.png" style="filter: invert(1);"> New Note</button>
 
     <!-- Open full note -->
     <div id="noteDetailModal" class="modal hidden requires-login">
@@ -176,11 +176,11 @@
                   <ul id="detailComboBoxOptions" class="combo-options hidden"></ul>
                 </div>
               </div>
-              <button class="btn-confirm" onclick="saveCategoryChange()">Save</button>
+              <button class="btn-confirm" onclick="saveCategoryChange()"><img src="assets/disk.png" style="filter: invert(1);"> Save</button>
             </div>
           
             <textarea id="noteDetailText" class="note-textarea" rows="10" readonly></textarea>
-            <button id="copyNoteBtn" class="btn-confirm">Copy to Clipboard</button>
+            <button id="copyNoteBtn" class="btn-confirm"><img src="assets/copy-alt.png" style="filter: invert(1);"> Copy to Clipboard</button>
 
             <p id="noteDetailDate" class="note-date"></p>
           </div>
