@@ -433,6 +433,11 @@
             croppedCanvas.width = 0;
             croppedCanvas.height = 0;
             isCropped = false;
+
+            document.getElementById("ocrTextOutput").value = "";
+            document.getElementById("categoryComboBoxInput").value = "";
+            document.getElementById("ocrResult").classList.add("hidden");
+
             
         }
         let cropperEnabled = false;
