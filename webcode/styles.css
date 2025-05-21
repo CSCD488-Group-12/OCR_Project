@@ -996,6 +996,26 @@
   line-height: 1.5;
 }
 
+button img,
+.btn-confirm img,
+.btn-cancel img,
+.btn-hero img,
+.btn-new-collection img,
+.view-toggle img,
+.cancel-search-btn img,
+.filter-btn img {
+  width: 18px;
+  height: 18px;
+  object-fit: contain;
+  vertical-align: middle;
+}
+
+button img {
+  display: inline-block;
+}
+
+
+
 
 
 
