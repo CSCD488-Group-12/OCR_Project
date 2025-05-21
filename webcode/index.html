@@ -818,6 +818,11 @@
         function renderAllNotes(notes) {
             const container = document.querySelector(".all-notes");
 
+            const oldNoResults = container.querySelector("p");
+            if (oldNoResults && oldNoResults.textContent === "No notes found.") {
+                container.removeChild(oldNoResults);
+            }
+
             const oldList = container.querySelector(".all-notes-grid") || container.querySelector(".all-notes-list");
             if (oldList) {
                 container.removeChild(oldList);
