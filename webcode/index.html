@@ -374,8 +374,8 @@
             if (isOpen) {
                 uploadForm.style.display = "none";
                 uploadForm.classList.remove("expanded");
-                heroNewNoteBtn.textContent = `<img src="assets/add-document-2.png" style="filter: invert(1);"> New Note`;
-                floatingNewNoteBtn.textContent = `<img src="assets/add-document-2.png" style="filter: invert(1);"> New Note`;
+                heroNewNoteBtn.innerHTML = `<img src="assets/add-document-2.png" style="filter: invert(1);"> New Note`;
+                floatingNewNoteBtn.innerHTML = `<img src="assets/add-document-2.png" style="filter: invert(1);"> New Note`;
             } else {
                 uploadForm.style.display = "block";
                 uploadForm.classList.add("expanded");
