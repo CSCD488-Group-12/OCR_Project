@@ -1051,6 +1051,16 @@ button img {
   box-shadow: 0 4px 20px rgba(160, 130, 255, 0.3);
 }
 
+.note-modal-content .btn-confirm {
+  height: 40px;
+  padding: 8px 16px;
+  font-size: 0.95rem;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+}
+
 
 
 
