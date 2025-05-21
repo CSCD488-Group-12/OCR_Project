@@ -1119,6 +1119,12 @@
                 timer = setTimeout(() => func.apply(this, args), delay);
             };
         }
+        document.getElementById("noteDetailModal").addEventListener("click", function(event) {
+            const modalContent = document.querySelector(".note-modal-content");
+            if (!modalContent.contains(event.target)) {
+              document.getElementById("noteDetailModal").classList.add("hidden");
+            }
+          });          
 
         document.addEventListener("DOMContentLoaded", () => {
             const sections = document.querySelectorAll('.section');
