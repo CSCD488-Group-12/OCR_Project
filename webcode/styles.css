@@ -285,7 +285,7 @@
   .recent-notes {
     margin: 40px auto;
     padding: 0 40px;
-    max-width: 1400px;
+    max-width: 1200px;
   }
   
   .note-card {
@@ -344,7 +344,7 @@
   }
 
   .collections-section {
-    max-width: 1400px;
+    max-width: 1200px;
     margin: 40px auto;
     padding: 0 40px;
   }
@@ -369,7 +369,7 @@
   /*All Notes Section*/
   .all-notes {
     width: 100%;
-    max-width: 1400px;
+    max-width: 1200px;
     margin: 40px auto;
     padding: 0 20px;
     padding-bottom: 100px;
@@ -757,6 +757,9 @@
   opacity: 0;
   transform: translateY(40px);
   transition: opacity 0.6s ease, transform 0.6s ease;
+  max-width: 1200px;
+  margin: 0 auto 40px auto;
+  padding: 0 40px;
 }
 
 .section.visible {
@@ -819,7 +822,8 @@
     margin-bottom: 16px;
     text-align: left;
     color: #a5b4fc;
-    margin-left: 40px;
+    margin-left: 0;
+    padding-left: 0;
 }
 
 .all-notes-label {
@@ -827,9 +831,10 @@
   font-size: 1.5rem;
   font-weight: 600;
   color: #a5b4fc;
-  margin-right: 16px;
+  margin-right: 8px;
   text-align: left;
-  margin-left: 40px;
+  margin-left: 0;
+  padding-left: 0;
 }
 
 .note-card .note-date,
