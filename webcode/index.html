@@ -372,25 +372,22 @@
             const isOpen = uploadForm.style.display === "block";
         
             if (isOpen) {
-                uploadForm.style.display = "none";
-                uploadForm.classList.remove("expanded");
-                heroNewNoteBtn.innerHTML = `<img src="assets/add-document-2.png" style="filter: invert(1);"> New Note`;
-                floatingNewNoteBtn.innerHTML = `<img src="assets/add-document-2.png" style="filter: invert(1);"> New Note`;
+                closeUploadForm()
             } else {
                 uploadForm.style.display = "block";
                 uploadForm.classList.add("expanded");
                 heroNewNoteBtn.textContent = "Cancel";
                 floatingNewNoteBtn.textContent = "Cancel";
             }
-        
+            
             displayDisclaimer();
         }
         
         
         function closeUploadForm() {
             document.getElementById("new-note-form").style.display = "none";
-            document.getElementById("newnote").textContent = "New Note";
-            document.getElementById("floatingNewNoteBtn").textContent = `<img src="assets/add-document-2.png" style="filter: invert(1);"> New Note`;
+            document.getElementById("newnote").innerHTML = `<img src="assets/add-document-2.png" style="filter: invert(1);"> New Note`;
+            document.getElementById("floatingNewNoteBtn").innerHTML = `<img src="assets/add-document-2.png" style="filter: invert(1);"> New Note`;
             resetCanvas();
         }
 
