@@ -380,23 +380,25 @@
   }
   
   .search-bar {
+    flex: 1;
     display: flex;
     align-items: center;
-    gap: 10px;
-    flex-wrap: wrap;
-    justify-content: center;
+    gap: 8px;
+    min-width: 300px;
+    justify-content: flex-start;
   }
   
   #noteSearch {
-    max-width: 300px;
+    max-width: 100%;
     min-width: 200px;
+    flex: 1;
+    width: 100%;
     padding: 12px 18px;
     border-radius: 10px;
-    border: 1px solid #555;
+    border: 1px solid rgba(85, 85, 85, 0.441);
     background: rgba(255,255,255,0.08);
     color: #fff;
-    font-size: 1rem;
-    max-width: 500px;
+    transition: all 0.3s ease;
   }
   
   
@@ -577,17 +579,7 @@
 }
 
 
-  #noteSearch {
-    padding: 12px 18px;
-    border-radius: 10px;
-    border: 1px solid #555;
-    background: rgba(255,255,255,0.08);
-    color: #fff;
-    font-size: 1rem;
-    width: 100%;
-    max-width: 500px;
-    transition: all 0.3s ease;
-  }
+  
   
   #noteSearch:focus {
     outline: none;
@@ -665,14 +657,6 @@
   transform: scale(1.03);
 }
 
-
-
-.search-bar {
-  flex: none;
-  display: flex;
-  align-items: center;
-  gap: 8px;
-}
 
 .view-toggle-group {
   display: flex;
