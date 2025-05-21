@@ -374,8 +374,8 @@
             if (isOpen) {
                 uploadForm.style.display = "none";
                 uploadForm.classList.remove("expanded");
-                heroNewNoteBtn.textContent = "New Note";
-                floatingNewNoteBtn.textContent = "+ New Note";
+                heroNewNoteBtn.textContent = `<img src="assets/add-document-2.png" style="filter: invert(1);"> New Note`;
+                floatingNewNoteBtn.textContent = `<img src="assets/add-document-2.png" style="filter: invert(1);"> New Note`;
             } else {
                 uploadForm.style.display = "block";
                 uploadForm.classList.add("expanded");
@@ -390,7 +390,7 @@
         function closeUploadForm() {
             document.getElementById("new-note-form").style.display = "none";
             document.getElementById("newnote").textContent = "New Note";
-            document.getElementById("floatingNewNoteBtn").textContent = "+ New Note";
+            document.getElementById("floatingNewNoteBtn").textContent = `<img src="assets/add-document-2.png" style="filter: invert(1);"> New Note`;
             resetCanvas();
         }
 
