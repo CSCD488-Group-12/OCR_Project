@@ -56,9 +56,11 @@
     min-height: 320px;
     backdrop-filter: blur(15px);
     display: flex;
+    flex-direction: column;
     justify-content: center;
     align-items: center;
     text-align: center;
+    gap: 20px
   }
   
   .hero-title {
