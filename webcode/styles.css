@@ -52,7 +52,8 @@
     margin: 0 auto;
     background: rgba(255,255,255,0.05);
     border-radius: 12px;
-    padding: 80px 40px;
+    padding: 120px 40px;
+    min-height: 400px;
     backdrop-filter: blur(15px);
   }
   
@@ -119,7 +120,8 @@
     max-width: 90%;
     background: rgba(255,255,255,0.05);
     border: 2px dashed rgba(255,255,255,0.2);
-    padding: 60px 40px;
+    padding: 80px 50px;
+    min-height: 350px;
     border-radius: 10px;
     text-align: center;
     display: none;
