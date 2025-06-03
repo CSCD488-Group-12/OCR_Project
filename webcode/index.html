@@ -208,6 +208,8 @@
 
     const msalInstance = new msal.PublicClientApplication(msalConfig);
 
+    
+
     function login() {
         console.log("Login button clicked");
         try {
@@ -243,6 +245,20 @@
 
     function onUserLogin() {
         console.log("User is logged in:", loggedInUser.username);
+        
+        //NEW ADDITION TO STORE USER INFO IN DB ONCE LOGGED IN
+        // 🆕 Store the user (only if new) in DB
+        fetch(`${API_BASE}/users`, {
+            method: "POST",
+            headers: { "Content-Type": "application/json" },
+            body: JSON.stringify({
+                userId:      loggedInUser.homeAccountId,
+                displayName: loggedInUser.name,
+                email:       loggedInUser.username
+            })
+        }).catch(e => console.error("UsersApi error:", e));
+        
+        
         document.querySelectorAll(".requires-login").forEach(el => el.classList.remove("hidden"));
         document.querySelectorAll(".requires-logout").forEach(el => el.classList.add("hidden"));
         document.querySelector('.homepage-wrapper')?.classList.add('logged-in');
@@ -265,6 +281,109 @@
     }
 </script>
 <!--END OF MICROSOFT STUFF-->
+
+
+<!-- ▼ START: Azure Functions API integration (IIFE) ▼ -->
+<script>
+(function(){
+  'use strict';
+
+  // 🎯 Your Function App base URL
+  const API_BASE = "https://ocr-func-app.azurewebsites.net/api";
+
+  // 1️⃣ Wrap original onUserLogin, then extend it
+  const _origOnUserLogin = window.onUserLogin;
+  window.onUserLogin = async function() {
+    // Insert user into dbo.Users
+    fetch(`${API_BASE}/users`, {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({
+        userId:      loggedInUser.homeAccountId,
+        displayName: loggedInUser.name,
+        email:       loggedInUser.username
+      })
+    }).catch(e => console.error("UsersApi error:", e));
+
+    // Call your existing UI logic
+    _origOnUserLogin();
+
+    // Then load collections & images
+    try {
+      const colResp = await fetch(
+        `${API_BASE}/collections?userId=${encodeURIComponent(loggedInUser.homeAccountId)}`
+      );
+      const _cols = await colResp.json();
+      renderCollections(_cols);
+      populateComboBoxOptions(_cols.map(c=>c.Name));
+      populateDetailComboBoxOptions(_cols.map(c=>c.Name));
+
+      if (_cols.length) {
+        const imgResp = await fetch(`${API_BASE}/images?collectionId=${_cols[0].CollectionId}`);
+        const _imgs = await imgResp.json();
+        renderRecentNotes(_imgs.map(img => ({
+          title: img.FileName,
+          image: `data:${img.ContentType};base64,${img.ImageDataBase64}`,
+          preview: "",
+          lastEdited: new Date(img.UploadedAt).toLocaleString()
+        })));
+      }
+    } catch(err) {
+      console.error("Collections/Images load error:", err);
+    }
+  };
+
+  // 2️⃣ Capture the file once
+  let __apiSelectedFile = null;
+  document.getElementById("fileInput")
+          .addEventListener("change", e => __apiSelectedFile = e.target.files[0]);
+
+  // 3️⃣ On “Confirm” send to /images and reload
+  document.getElementById("confirmBtn")
+          .addEventListener("click", async () => {
+    const colName = document.getElementById("categoryComboBoxInput").value.trim();
+    try {
+      const colResp = await fetch(
+        `${API_BASE}/collections?userId=${encodeURIComponent(loggedInUser.homeAccountId)}`
+      );
+      const _cols = await colResp.json();
+      const col = _cols.find(c => c.Name === colName);
+      if (!col) return alert("Pick a valid collection.");
+      if (!__apiSelectedFile) return alert("No image selected.");
+
+      const reader = new FileReader();
+      reader.onload = async ev => {
+        const b64 = ev.target.result.split(",")[1];
+        await fetch(`${API_BASE}/images`, {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify({
+            collectionId: col.CollectionId,
+            fileName:     __apiSelectedFile.name,
+            contentType:  __apiSelectedFile.type,
+            imageDataBase64: b64
+          })
+        });
+        showToast("Saved!");
+        const reload = await fetch(`${API_BASE}/images?collectionId=${col.CollectionId}`);
+        const _imgs2 = await reload.json();
+        renderRecentNotes(_imgs2.map(img => ({
+          title: img.FileName,
+          image: `data:${img.ContentType};base64,${img.ImageDataBase64}`,
+          preview: "",
+          lastEdited: new Date(img.UploadedAt).toLocaleString()
+        })));
+      };
+      reader.readAsDataURL(__apiSelectedFile);
+    } catch(e) {
+      console.error("Upload error:", e);
+      alert("Upload failed: " + e.message);
+    }
+  });
+
+})();
+</script>
+<!-- ▲ END: Azure Functions API integration (IIFE) ▲ -->
 
 
     <script>
