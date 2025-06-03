@@ -1158,21 +1158,4 @@ button img {
     }
   }
   
-  /* ▼ START: Notes card styling ▼ */
-.note-card {
-  border-radius: 8px;
-  box-shadow: 0 2px 6px rgba(0,0,0,.2);
-  overflow: hidden;
-  transition: transform .2s;
-}
-.note-card:hover {
-  transform: scale(1.03);
-}
-.note-overlay {
-  position: absolute;
-  bottom: 0; left: 0; right: 0;
-  background: rgba(0,0,0,.6);
-  color: #fff;
-  padding: 8px;
-}
-/* ▲ END: Notes card styling ▲ */
+  
